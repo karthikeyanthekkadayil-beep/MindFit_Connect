@@ -100,6 +100,57 @@ export type Database = {
           },
         ]
       }
+      daily_activities: {
+        Row: {
+          activity_type: string
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          is_ai_recommended: boolean | null
+          priority: string | null
+          scheduled_date: string
+          scheduled_time: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          activity_type: string
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_ai_recommended?: boolean | null
+          priority?: string | null
+          scheduled_date: string
+          scheduled_time?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          activity_type?: string
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_ai_recommended?: boolean | null
+          priority?: string | null
+          scheduled_date?: string
+          scheduled_time?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       event_rsvps: {
         Row: {
           event_id: string

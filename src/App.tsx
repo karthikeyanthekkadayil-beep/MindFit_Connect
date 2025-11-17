@@ -8,6 +8,7 @@ import Auth from "./pages/Auth";
 import HealthAssessment from "./pages/register/Health";
 import Preferences from "./pages/register/Preferences";
 import Dashboard from "./pages/Dashboard";
+import DailyPlanner from "./pages/DailyPlanner";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/register/health" element={<HealthAssessment />} />
           <Route path="/register/preferences" element={<Preferences />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/planner" element={<DailyPlanner />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
