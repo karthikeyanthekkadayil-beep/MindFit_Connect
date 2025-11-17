@@ -5,13 +5,11 @@ import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Home, Calendar, Users, Star, UserCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { BottomNav } from "@/components/BottomNav";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-  const [activeTab, setActiveTab] = useState("home");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -43,14 +41,6 @@ const Dashboard = () => {
     toast.success("Logged out successfully");
     navigate("/auth");
   };
-
-  const tabs = [
-    { id: "home", icon: Home, label: "Home" },
-    { id: "plan", icon: Calendar, label: "Plan" },
-    { id: "social", icon: Users, label: "Social" },
-    { id: "events", icon: Star, label: "Events" },
-    { id: "profile", icon: UserCircle, label: "Profile" },
-  ];
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -108,28 +98,7 @@ const Dashboard = () => {
         </div>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-around items-center h-16">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  "flex flex-col items-center justify-center flex-1 h-full transition-colors",
-                  activeTab === tab.id
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                <tab.icon className="h-6 w-6" />
-                <span className="text-xs mt-1">{tab.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </nav>
+      <BottomNav />
     </div>
   );
 };
