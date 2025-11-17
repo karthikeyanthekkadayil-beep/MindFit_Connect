@@ -1,11 +1,68 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Activity, Users, Heart } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate("/dashboard");
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center space-y-8 max-w-4xl mx-auto">
+          <h1 className="text-5xl md:text-6xl font-heading font-bold gradient-hero bg-clip-text text-transparent">
+            Welcome to SocialVibe
+          </h1>
+          <p className="text-xl md:text-2xl text-muted-foreground">
+            Connect, stay active, and build meaningful relationships through wellness
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
+            <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-8">
+              Get Started
+            </Button>
+            <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="text-lg px-8">
+              Learn More
+            </Button>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 pt-16">
+            <div className="space-y-4 p-6 rounded-lg bg-card shadow-md">
+              <Activity className="h-12 w-12 text-primary mx-auto" />
+              <h3 className="text-xl font-heading font-semibold">Personalized Wellness</h3>
+              <p className="text-muted-foreground">
+                AI-powered activity plans tailored to your health and fitness goals
+              </p>
+            </div>
+
+            <div className="space-y-4 p-6 rounded-lg bg-card shadow-md">
+              <Users className="h-12 w-12 text-secondary mx-auto" />
+              <h3 className="text-xl font-heading font-semibold">Community Building</h3>
+              <p className="text-muted-foreground">
+                Connect with like-minded people and join interest-based communities
+              </p>
+            </div>
+
+            <div className="space-y-4 p-6 rounded-lg bg-card shadow-md">
+              <Heart className="h-12 w-12 text-accent mx-auto" />
+              <h3 className="text-xl font-heading font-semibold">Health Tracking</h3>
+              <p className="text-muted-foreground">
+                Monitor your progress with comprehensive health and activity analytics
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
