@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { BottomNav } from "@/components/BottomNav";
+import { AddActivityDialog } from "@/components/AddActivityDialog";
 
 type Activity = {
   id: string;
@@ -228,10 +229,10 @@ const DailyPlanner = () => {
                     )}
                     AI Suggest
                   </Button>
-                  <Button size="sm">
-                    <Plus className="h-4 w-4" />
-                    Add Task
-                  </Button>
+                  <AddActivityDialog 
+                    selectedDate={selectedDate}
+                    onActivityAdded={() => fetchActivities(selectedDate)}
+                  />
                 </div>
               </div>
             </CardHeader>
