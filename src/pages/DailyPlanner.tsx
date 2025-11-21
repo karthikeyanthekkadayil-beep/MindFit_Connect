@@ -99,15 +99,44 @@ const DailyPlanner = () => {
   const generateAIRecommendations = async () => {
     setGeneratingAI(true);
     try {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("*")
-        .single();
+      const { data, error } = await supabase.functions.invoke(
+        'generate-activity-recommendations',
+        {
+          body: { date: format(selectedDate, "yyyy-MM-dd") }
+        }
+      );
 
-      // This will be implemented with edge function
-      toast.info("AI recommendations feature coming soon!");
+      if (error) throw error;
+
+      const recommendations = data.recommendations;
+      
+      // Insert recommendations into database
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      const activitiesToInsert = recommendations.map((rec: any) => ({
+        user_id: user.id,
+        title: rec.title,
+        description: rec.description,
+        activity_type: rec.activity_type,
+        scheduled_date: format(selectedDate, "yyyy-MM-dd"),
+        scheduled_time: rec.scheduled_time || null,
+        duration_minutes: rec.duration_minutes,
+        priority: rec.priority,
+        is_ai_recommended: true,
+      }));
+
+      const { error: insertError } = await supabase
+        .from("daily_activities")
+        .insert(activitiesToInsert);
+
+      if (insertError) throw insertError;
+
+      toast.success(`Added ${recommendations.length} AI-recommended activities!`);
+      fetchActivities(selectedDate);
       
     } catch (error) {
+      console.error("Error generating recommendations:", error);
       toast.error("Failed to generate recommendations");
     } finally {
       setGeneratingAI(false);

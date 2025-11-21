@@ -1,1 +1,4 @@
 project_id = "qkxjhtmnxtmpctqlkdrt"
+
+[functions.generate-activity-recommendations]
+verify_jwt = true
