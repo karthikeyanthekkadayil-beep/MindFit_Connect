@@ -7,7 +7,7 @@ const tabs = [
   { id: "plan", icon: Calendar, label: "Plan", path: "/planner" },
   { id: "social", icon: Users, label: "Social", path: "/dashboard" },
   { id: "events", icon: Star, label: "Events", path: "/dashboard" },
-  { id: "profile", icon: UserCircle, label: "Profile", path: "/dashboard" },
+  { id: "profile", icon: UserCircle, label: "Profile", path: "/profile" },
 ];
 
 export const BottomNav = () => {
@@ -16,6 +16,7 @@ export const BottomNav = () => {
 
   const getActiveTab = () => {
     if (location.pathname === "/planner") return "plan";
+    if (location.pathname === "/profile") return "profile";
     if (location.pathname === "/dashboard") return "home";
     return "home";
   };

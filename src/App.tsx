@@ -9,6 +9,7 @@ import HealthAssessment from "./pages/register/Health";
 import Preferences from "./pages/register/Preferences";
 import Dashboard from "./pages/Dashboard";
 import DailyPlanner from "./pages/DailyPlanner";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/register/preferences" element={<Preferences />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/planner" element={<DailyPlanner />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
