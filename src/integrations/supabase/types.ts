@@ -262,6 +262,54 @@ export type Database = {
           },
         ]
       }
+      exercises: {
+        Row: {
+          calories_burned: number | null
+          created_at: string | null
+          description: string | null
+          difficulty_level: string
+          duration_minutes: number | null
+          equipment_needed: string[] | null
+          id: string
+          instructions: string
+          muscle_groups: string[]
+          name: string
+          thumbnail_url: string | null
+          updated_at: string | null
+          video_url: string | null
+        }
+        Insert: {
+          calories_burned?: number | null
+          created_at?: string | null
+          description?: string | null
+          difficulty_level: string
+          duration_minutes?: number | null
+          equipment_needed?: string[] | null
+          id?: string
+          instructions: string
+          muscle_groups: string[]
+          name: string
+          thumbnail_url?: string | null
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          calories_burned?: number | null
+          created_at?: string | null
+          description?: string | null
+          difficulty_level?: string
+          duration_minutes?: number | null
+          equipment_needed?: string[] | null
+          id?: string
+          instructions?: string
+          muscle_groups?: string[]
+          name?: string
+          thumbnail_url?: string | null
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           activity_interests: string[] | null
@@ -322,6 +370,44 @@ export type Database = {
         }
         Relationships: []
       }
+      user_custom_workouts: {
+        Row: {
+          completion_count: number | null
+          created_at: string | null
+          id: string
+          is_favorite: boolean | null
+          last_completed_at: string | null
+          user_id: string
+          workout_id: string
+        }
+        Insert: {
+          completion_count?: number | null
+          created_at?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          last_completed_at?: string | null
+          user_id: string
+          workout_id: string
+        }
+        Update: {
+          completion_count?: number | null
+          created_at?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          last_completed_at?: string | null
+          user_id?: string
+          workout_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_custom_workouts_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -337,6 +423,102 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      workout_exercises: {
+        Row: {
+          created_at: string | null
+          duration_seconds: number | null
+          exercise_id: string
+          id: string
+          notes: string | null
+          order_index: number
+          reps: number | null
+          rest_seconds: number | null
+          sets: number | null
+          workout_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          duration_seconds?: number | null
+          exercise_id: string
+          id?: string
+          notes?: string | null
+          order_index: number
+          reps?: number | null
+          rest_seconds?: number | null
+          sets?: number | null
+          workout_id: string
+        }
+        Update: {
+          created_at?: string | null
+          duration_seconds?: number | null
+          exercise_id?: string
+          id?: string
+          notes?: string | null
+          order_index?: number
+          reps?: number | null
+          rest_seconds?: number | null
+          sets?: number | null
+          workout_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_exercises_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workout_exercises_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workouts: {
+        Row: {
+          category: string
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          difficulty_level: string
+          id: string
+          image_url: string | null
+          is_public: boolean | null
+          name: string
+          total_duration_minutes: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          difficulty_level: string
+          id?: string
+          image_url?: string | null
+          is_public?: boolean | null
+          name: string
+          total_duration_minutes?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          difficulty_level?: string
+          id?: string
+          image_url?: string | null
+          is_public?: boolean | null
+          name?: string
+          total_duration_minutes?: number | null
+          updated_at?: string | null
         }
         Relationships: []
       }
