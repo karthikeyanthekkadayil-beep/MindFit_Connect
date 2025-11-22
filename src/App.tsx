@@ -10,6 +10,9 @@ import Preferences from "./pages/register/Preferences";
 import Dashboard from "./pages/Dashboard";
 import DailyPlanner from "./pages/DailyPlanner";
 import Profile from "./pages/Profile";
+import WorkoutLibrary from "./pages/WorkoutLibrary";
+import WorkoutDetail from "./pages/WorkoutDetail";
+import WorkoutBuilder from "./pages/WorkoutBuilder";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +31,9 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/planner" element={<DailyPlanner />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/workouts" element={<WorkoutLibrary />} />
+          <Route path="/workouts/:id" element={<WorkoutDetail />} />
+          <Route path="/workouts/builder" element={<WorkoutBuilder />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

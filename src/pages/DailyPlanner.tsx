@@ -191,13 +191,16 @@ const DailyPlanner = () => {
               <p className="text-xs text-muted-foreground">Tasks Completed</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card 
+            className="cursor-pointer hover:shadow-lg transition-shadow"
+            onClick={() => navigate("/workouts")}
+          >
             <CardContent className="pt-6">
               <div className="flex items-center gap-2">
                 <Dumbbell className="h-5 w-5 text-primary" />
                 <div className="text-2xl font-bold">{stats.workout}</div>
               </div>
-              <p className="text-xs text-muted-foreground">Workouts</p>
+              <p className="text-xs text-muted-foreground">Workouts • Browse Library</p>
             </CardContent>
           </Card>
           <Card>
