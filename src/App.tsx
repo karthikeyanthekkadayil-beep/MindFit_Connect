@@ -15,6 +15,8 @@ import WorkoutDetail from "./pages/WorkoutDetail";
 import WorkoutBuilder from "./pages/WorkoutBuilder";
 import Communities from "./pages/Communities";
 import CommunityDetail from "./pages/CommunityDetail";
+import Events from "./pages/Events";
+import EventDetail from "./pages/EventDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +40,8 @@ const App = () => (
           <Route path="/workouts/builder" element={<WorkoutBuilder />} />
           <Route path="/communities" element={<Communities />} />
           <Route path="/communities/:id" element={<CommunityDetail />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/events/:id" element={<EventDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

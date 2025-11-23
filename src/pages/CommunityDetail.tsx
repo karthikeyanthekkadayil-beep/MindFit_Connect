@@ -6,9 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Users, UserPlus, UserMinus, Calendar } from "lucide-react";
+import { ArrowLeft, Users, UserPlus, UserMinus, Calendar, MapPin, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
+import { format } from "date-fns";
 
 export default function CommunityDetail() {
   const { id } = useParams<{ id: string }>();
@@ -68,6 +69,22 @@ export default function CommunityDetail() {
       return !!data;
     },
     enabled: !!id && !!currentUserId,
+  });
+
+  const { data: communityEvents } = useQuery({
+    queryKey: ["community-events", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("events")
+        .select("*, creator:profiles!events_creator_id_fkey(full_name, avatar_url)")
+        .eq("community_id", id!)
+        .gte("start_time", new Date().toISOString())
+        .order("start_time", { ascending: true });
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!id,
   });
 
   const joinMutation = useMutation({
@@ -231,13 +248,65 @@ export default function CommunityDetail() {
           </TabsContent>
 
           <TabsContent value="events" className="space-y-4">
-            <div className="text-center py-12">
-              <Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-lg font-semibold mb-2">No events yet</h3>
-              <p className="text-muted-foreground">
-                Community events will appear here
-              </p>
-            </div>
+            {communityEvents && communityEvents.length > 0 ? (
+              <div className="grid gap-4">
+                {communityEvents.map((event) => (
+                  <Card
+                    key={event.id}
+                    className="cursor-pointer hover:shadow-lg transition-shadow"
+                    onClick={() => navigate(`/events/${event.id}`)}
+                  >
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg">{event.title}</CardTitle>
+                          <CardDescription className="line-clamp-2 mb-3">
+                            {event.description}
+                          </CardDescription>
+                          <div className="space-y-2 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-2">
+                              <Calendar className="h-4 w-4" />
+                              <span>{format(new Date(event.start_time), "PPP")}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Clock className="h-4 w-4" />
+                              <span>{format(new Date(event.start_time), "p")}</span>
+                            </div>
+                            {event.location && (
+                              <div className="flex items-center gap-2">
+                                <MapPin className="h-4 w-4" />
+                                <span className="line-clamp-1">{event.location}</span>
+                              </div>
+                            )}
+                            <div className="flex items-center gap-2">
+                              <Users className="h-4 w-4" />
+                              <span>
+                                {event.current_participants || 0}
+                                {event.max_participants && ` / ${event.max_participants}`} attending
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <Badge variant="secondary">{event.event_type}</Badge>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-lg font-semibold mb-2">No upcoming events</h3>
+                <p className="text-muted-foreground mb-4">
+                  Be the first to create an event for this community
+                </p>
+                {isMember && (
+                  <Button onClick={() => navigate("/events")}>
+                    Create Event
+                  </Button>
+                )}
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>
