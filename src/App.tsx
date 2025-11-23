@@ -13,6 +13,8 @@ import Profile from "./pages/Profile";
 import WorkoutLibrary from "./pages/WorkoutLibrary";
 import WorkoutDetail from "./pages/WorkoutDetail";
 import WorkoutBuilder from "./pages/WorkoutBuilder";
+import Communities from "./pages/Communities";
+import CommunityDetail from "./pages/CommunityDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +36,8 @@ const App = () => (
           <Route path="/workouts" element={<WorkoutLibrary />} />
           <Route path="/workouts/:id" element={<WorkoutDetail />} />
           <Route path="/workouts/builder" element={<WorkoutBuilder />} />
+          <Route path="/communities" element={<Communities />} />
+          <Route path="/communities/:id" element={<CommunityDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
