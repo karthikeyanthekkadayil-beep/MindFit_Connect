@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 const tabs = [
   { id: "home", icon: Home, label: "Home", path: "/dashboard" },
   { id: "plan", icon: Calendar, label: "Plan", path: "/planner" },
-  { id: "social", icon: Users, label: "Social", path: "/dashboard" },
+  { id: "social", icon: Users, label: "Social", path: "/communities" },
   { id: "events", icon: Star, label: "Events", path: "/dashboard" },
   { id: "profile", icon: UserCircle, label: "Profile", path: "/profile" },
 ];
@@ -17,6 +17,7 @@ export const BottomNav = () => {
   const getActiveTab = () => {
     if (location.pathname === "/planner") return "plan";
     if (location.pathname === "/profile") return "profile";
+    if (location.pathname.startsWith("/communities")) return "social";
     if (location.pathname === "/dashboard") return "home";
     return "home";
   };
