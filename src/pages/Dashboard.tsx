@@ -69,30 +69,48 @@ const Dashboard = () => {
         </Card>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/planner")}>
             <CardHeader>
               <CardTitle className="text-lg">Today's Activities</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">No activities scheduled yet</p>
+              <p className="text-sm text-muted-foreground">Plan your daily wellness activities</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/events")}>
             <CardHeader>
               <CardTitle className="text-lg">Upcoming Events</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">No upcoming events</p>
+              <p className="text-sm text-muted-foreground">Discover and join fitness events</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/communities")}>
             <CardHeader>
               <CardTitle className="text-lg">Your Communities</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Join a community to get started</p>
+              <p className="text-sm text-muted-foreground">Connect with like-minded people</p>
+            </CardContent>
+          </Card>
+
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/messages")}>
+            <CardHeader>
+              <CardTitle className="text-lg">Messages</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Chat with friends and groups</p>
+            </CardContent>
+          </Card>
+
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/workouts")}>
+            <CardHeader>
+              <CardTitle className="text-lg">Workouts</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Browse workout library</p>
             </CardContent>
           </Card>
         </div>
