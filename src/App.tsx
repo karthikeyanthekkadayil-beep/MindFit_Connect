@@ -17,6 +17,8 @@ import Communities from "./pages/Communities";
 import CommunityDetail from "./pages/CommunityDetail";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
+import Messages from "./pages/Messages";
+import ChatThread from "./pages/ChatThread";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +44,8 @@ const App = () => (
           <Route path="/communities/:id" element={<CommunityDetail />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:id" element={<EventDetail />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages/:id" element={<ChatThread />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
