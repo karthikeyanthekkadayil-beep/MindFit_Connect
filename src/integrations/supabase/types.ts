@@ -472,6 +472,41 @@ export type Database = {
         }
         Relationships: []
       }
+      goal_milestones: {
+        Row: {
+          achieved_at: string | null
+          created_at: string | null
+          goal_id: string
+          id: string
+          milestone_value: number
+          notes: string | null
+        }
+        Insert: {
+          achieved_at?: string | null
+          created_at?: string | null
+          goal_id: string
+          id?: string
+          milestone_value: number
+          notes?: string | null
+        }
+        Update: {
+          achieved_at?: string | null
+          created_at?: string | null
+          goal_id?: string
+          id?: string
+          milestone_value?: number
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_milestones_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "user_goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       meditation_programs: {
         Row: {
           audio_url: string | null
@@ -806,6 +841,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_goals: {
+        Row: {
+          created_at: string | null
+          current_value: number | null
+          description: string | null
+          end_date: string
+          goal_type: string
+          id: string
+          is_public: boolean | null
+          priority: string | null
+          start_date: string
+          status: string | null
+          target_value: number
+          title: string
+          unit: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_value?: number | null
+          description?: string | null
+          end_date: string
+          goal_type: string
+          id?: string
+          is_public?: boolean | null
+          priority?: string | null
+          start_date?: string
+          status?: string | null
+          target_value: number
+          title: string
+          unit: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_value?: number | null
+          description?: string | null
+          end_date?: string
+          goal_type?: string
+          id?: string
+          is_public?: boolean | null
+          priority?: string | null
+          start_date?: string
+          status?: string | null
+          target_value?: number
+          title?: string
+          unit?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       user_meal_plans: {
         Row: {

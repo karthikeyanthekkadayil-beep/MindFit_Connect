@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BottomNav } from "@/components/BottomNav";
-import { Activity, Brain, Apple, Users, TrendingUp } from "lucide-react";
+import { Activity, Brain, Apple, Users, TrendingUp, Target } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend } from "recharts";
 import { format, subDays, startOfWeek, endOfWeek } from "date-fns";
@@ -169,9 +170,18 @@ const Progress = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <header className="bg-gradient-hero text-white p-6 shadow-lg">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-heading font-bold">Progress Analytics</h1>
-          <p className="text-white/90 mt-1">Track your wellness journey</p>
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-heading font-bold">Progress Analytics</h1>
+            <p className="text-white/90 mt-1">Track your wellness journey</p>
+          </div>
+          <Button 
+            onClick={() => navigate('/goals')} 
+            className="bg-white text-primary hover:bg-white/90"
+          >
+            <Target className="h-5 w-5 mr-2" />
+            My Goals
+          </Button>
         </div>
       </header>
 
