@@ -14,6 +14,7 @@ import WorkoutLibrary from "./pages/WorkoutLibrary";
 import WorkoutDetail from "./pages/WorkoutDetail";
 import WorkoutBuilder from "./pages/WorkoutBuilder";
 import Nutrition from "./pages/Nutrition";
+import Mindfulness from "./pages/Mindfulness";
 import Communities from "./pages/Communities";
 import CommunityDetail from "./pages/CommunityDetail";
 import Events from "./pages/Events";
@@ -42,6 +43,7 @@ const App = () => (
           <Route path="/workouts/:id" element={<WorkoutDetail />} />
           <Route path="/workouts/builder" element={<WorkoutBuilder />} />
           <Route path="/nutrition" element={<Nutrition />} />
+          <Route path="/mindfulness" element={<Mindfulness />} />
           <Route path="/communities" element={<Communities />} />
           <Route path="/communities/:id" element={<CommunityDetail />} />
           <Route path="/events" element={<Events />} />
