@@ -6,16 +6,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Users, UserPlus, UserMinus, Calendar, MapPin, Clock } from "lucide-react";
+import { ArrowLeft, Users, UserPlus, UserMinus, Calendar, MapPin, Clock, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
+import { CreatePostDialog } from "@/components/CreatePostDialog";
+import { CommunityFeed } from "@/components/CommunityFeed";
 
 export default function CommunityDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [showCreatePost, setShowCreatePost] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -215,11 +218,36 @@ export default function CommunityDetail() {
           )}
         </div>
 
-        <Tabs defaultValue="members" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+        <Tabs defaultValue="feed" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="feed">Feed</TabsTrigger>
             <TabsTrigger value="members">Members</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="feed" className="space-y-4">
+            {isMember ? (
+              <>
+                <Button
+                  onClick={() => setShowCreatePost(true)}
+                  className="w-full gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  Create Post
+                </Button>
+                <CommunityFeed communityId={id!} />
+                <CreatePostDialog
+                  open={showCreatePost}
+                  onOpenChange={setShowCreatePost}
+                  communityId={id!}
+                />
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">Join this community to see and create posts</p>
+              </div>
+            )}
+          </TabsContent>
 
           <TabsContent value="members" className="space-y-4">
             <div className="grid gap-4">
