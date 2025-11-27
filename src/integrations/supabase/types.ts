@@ -472,6 +472,48 @@ export type Database = {
         }
         Relationships: []
       }
+      goal_interactions: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          goal_id: string
+          id: string
+          interaction_type: string
+          user_id: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          goal_id: string
+          id?: string
+          interaction_type: string
+          user_id: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          goal_id?: string
+          id?: string
+          interaction_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_interactions_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "shared_goals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goal_interactions_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "user_goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goal_milestones: {
         Row: {
           achieved_at: string | null
@@ -500,6 +542,52 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "goal_milestones_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "shared_goals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goal_milestones_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "user_goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      goal_shares: {
+        Row: {
+          created_at: string | null
+          goal_id: string
+          id: string
+          shared_with_id: string | null
+          shared_with_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          goal_id: string
+          id?: string
+          shared_with_id?: string | null
+          shared_with_type: string
+        }
+        Update: {
+          created_at?: string | null
+          goal_id?: string
+          id?: string
+          shared_with_id?: string | null
+          shared_with_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_shares_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "shared_goals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goal_shares_goal_id_fkey"
             columns: ["goal_id"]
             isOneToOne: false
             referencedRelation: "user_goals"
@@ -1122,7 +1210,30 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      shared_goals_view: {
+        Row: {
+          cheer_count: number | null
+          comment_count: number | null
+          created_at: string | null
+          current_value: number | null
+          description: string | null
+          end_date: string | null
+          goal_type: string | null
+          id: string | null
+          is_public: boolean | null
+          owner_avatar: string | null
+          owner_name: string | null
+          priority: string | null
+          start_date: string | null
+          status: string | null
+          target_value: number | null
+          title: string | null
+          unit: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
