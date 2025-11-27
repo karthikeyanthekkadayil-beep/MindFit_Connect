@@ -113,6 +113,15 @@ const Dashboard = () => {
               <p className="text-sm text-muted-foreground">Browse workout library</p>
             </CardContent>
           </Card>
+
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/nutrition")}>
+            <CardHeader>
+              <CardTitle className="text-lg">Nutrition</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Plan your meals and nutrition</p>
+            </CardContent>
+          </Card>
         </div>
       </main>
 
