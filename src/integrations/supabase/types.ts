@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      breathing_exercises: {
+        Row: {
+          benefits: string[] | null
+          created_at: string
+          cycles: number | null
+          description: string
+          difficulty_level: string
+          duration_minutes: number
+          exhale_seconds: number
+          hold_seconds: number | null
+          id: string
+          inhale_seconds: number
+          instructions: string
+          name: string
+          rest_seconds: number | null
+          technique_type: string
+          updated_at: string
+        }
+        Insert: {
+          benefits?: string[] | null
+          created_at?: string
+          cycles?: number | null
+          description: string
+          difficulty_level: string
+          duration_minutes: number
+          exhale_seconds: number
+          hold_seconds?: number | null
+          id?: string
+          inhale_seconds: number
+          instructions: string
+          name: string
+          rest_seconds?: number | null
+          technique_type: string
+          updated_at?: string
+        }
+        Update: {
+          benefits?: string[] | null
+          created_at?: string
+          cycles?: number | null
+          description?: string
+          difficulty_level?: string
+          duration_minutes?: number
+          exhale_seconds?: number
+          hold_seconds?: number | null
+          id?: string
+          inhale_seconds?: number
+          instructions?: string
+          name?: string
+          rest_seconds?: number | null
+          technique_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       communities: {
         Row: {
           category: string
@@ -418,6 +472,69 @@ export type Database = {
         }
         Relationships: []
       }
+      meditation_programs: {
+        Row: {
+          audio_url: string | null
+          benefits: string[] | null
+          category: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          difficulty_level: string
+          duration_minutes: number
+          id: string
+          instructions: string
+          is_guided: boolean | null
+          is_public: boolean | null
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          video_url: string | null
+          voice_gender: string | null
+        }
+        Insert: {
+          audio_url?: string | null
+          benefits?: string[] | null
+          category: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty_level: string
+          duration_minutes: number
+          id?: string
+          instructions: string
+          is_guided?: boolean | null
+          is_public?: boolean | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          video_url?: string | null
+          voice_gender?: string | null
+        }
+        Update: {
+          audio_url?: string | null
+          benefits?: string[] | null
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty_level?: string
+          duration_minutes?: number
+          id?: string
+          instructions?: string
+          is_guided?: boolean | null
+          is_public?: boolean | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+          voice_gender?: string | null
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
@@ -736,6 +853,66 @@ export type Database = {
             columns: ["recipe_id"]
             isOneToOne: false
             referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_meditation_sessions: {
+        Row: {
+          completed: boolean | null
+          created_at: string
+          duration_minutes: number
+          exercise_id: string | null
+          id: string
+          mood_after: string | null
+          mood_before: string | null
+          notes: string | null
+          program_id: string | null
+          session_date: string
+          session_type: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          created_at?: string
+          duration_minutes: number
+          exercise_id?: string | null
+          id?: string
+          mood_after?: string | null
+          mood_before?: string | null
+          notes?: string | null
+          program_id?: string | null
+          session_date?: string
+          session_type: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          created_at?: string
+          duration_minutes?: number
+          exercise_id?: string | null
+          id?: string
+          mood_after?: string | null
+          mood_before?: string | null
+          notes?: string | null
+          program_id?: string | null
+          session_date?: string
+          session_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_meditation_sessions_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "breathing_exercises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_meditation_sessions_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "meditation_programs"
             referencedColumns: ["id"]
           },
         ]
