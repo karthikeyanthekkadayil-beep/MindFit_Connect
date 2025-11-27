@@ -7,8 +7,9 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BottomNav } from "@/components/BottomNav";
-import { Plus, Target, TrendingUp, Calendar, CheckCircle2, Pause, Archive } from "lucide-react";
+import { Plus, Target, TrendingUp, Calendar, CheckCircle2, Pause, Archive, Share2, Users } from "lucide-react";
 import { CreateGoalDialog } from "@/components/CreateGoalDialog";
+import { ShareGoalDialog } from "@/components/ShareGoalDialog";
 import { toast } from "sonner";
 import { format, differenceInDays } from "date-fns";
 
@@ -33,6 +34,7 @@ const Goals = () => {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
+  const [showShareDialog, setShowShareDialog] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -236,6 +238,17 @@ const Goals = () => {
             )}
             <Button
               size="sm"
+              variant="outline"
+              onClick={() => {
+                setSelectedGoal(goal);
+                setShowShareDialog(true);
+              }}
+            >
+              <Share2 className="h-4 w-4 mr-1" />
+              Share
+            </Button>
+            <Button
+              size="sm"
               variant="ghost"
               onClick={() => deleteGoal(goal.id)}
             >
@@ -270,10 +283,20 @@ const Goals = () => {
             <h1 className="text-3xl font-heading font-bold">My Goals</h1>
             <p className="text-white/90 mt-1">Set targets and track your progress</p>
           </div>
-          <Button onClick={() => setShowCreateDialog(true)} className="bg-white text-primary hover:bg-white/90">
-            <Plus className="h-5 w-5 mr-2" />
-            New Goal
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => navigate('/goals/shared')} 
+              variant="outline" 
+              className="bg-transparent border-white text-white hover:bg-white/10"
+            >
+              <Users className="h-5 w-5 mr-2" />
+              Community
+            </Button>
+            <Button onClick={() => setShowCreateDialog(true)} className="bg-white text-primary hover:bg-white/90">
+              <Plus className="h-5 w-5 mr-2" />
+              New Goal
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -365,6 +388,15 @@ const Goals = () => {
           checkAuth();
         }}
       />
+
+      {selectedGoal && (
+        <ShareGoalDialog
+          open={showShareDialog}
+          onOpenChange={setShowShareDialog}
+          goalId={selectedGoal.id}
+          currentIsPublic={selectedGoal.is_public}
+        />
+      )}
 
       <BottomNav />
     </div>
