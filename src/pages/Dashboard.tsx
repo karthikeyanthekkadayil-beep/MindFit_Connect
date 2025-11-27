@@ -131,6 +131,15 @@ const Dashboard = () => {
               <p className="text-sm text-muted-foreground">Meditation and breathing exercises</p>
             </CardContent>
           </Card>
+
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/progress")}>
+            <CardHeader>
+              <CardTitle className="text-lg">Progress Analytics</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Track your wellness trends</p>
+            </CardContent>
+          </Card>
         </div>
       </main>
 
