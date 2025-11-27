@@ -580,6 +580,78 @@ export type Database = {
         }
         Relationships: []
       }
+      recipes: {
+        Row: {
+          calories_per_serving: number | null
+          carbs_grams: number | null
+          cook_time_minutes: number | null
+          created_at: string
+          created_by: string | null
+          cuisine_type: string | null
+          description: string | null
+          dietary_tags: string[] | null
+          fat_grams: number | null
+          fiber_grams: number | null
+          id: string
+          image_url: string | null
+          ingredients: Json
+          instructions: string
+          is_public: boolean | null
+          meal_type: string
+          name: string
+          prep_time_minutes: number | null
+          protein_grams: number | null
+          servings: number | null
+          updated_at: string
+        }
+        Insert: {
+          calories_per_serving?: number | null
+          carbs_grams?: number | null
+          cook_time_minutes?: number | null
+          created_at?: string
+          created_by?: string | null
+          cuisine_type?: string | null
+          description?: string | null
+          dietary_tags?: string[] | null
+          fat_grams?: number | null
+          fiber_grams?: number | null
+          id?: string
+          image_url?: string | null
+          ingredients: Json
+          instructions: string
+          is_public?: boolean | null
+          meal_type: string
+          name: string
+          prep_time_minutes?: number | null
+          protein_grams?: number | null
+          servings?: number | null
+          updated_at?: string
+        }
+        Update: {
+          calories_per_serving?: number | null
+          carbs_grams?: number | null
+          cook_time_minutes?: number | null
+          created_at?: string
+          created_by?: string | null
+          cuisine_type?: string | null
+          description?: string | null
+          dietary_tags?: string[] | null
+          fat_grams?: number | null
+          fiber_grams?: number | null
+          id?: string
+          image_url?: string | null
+          ingredients?: Json
+          instructions?: string
+          is_public?: boolean | null
+          meal_type?: string
+          name?: string
+          prep_time_minutes?: number | null
+          protein_grams?: number | null
+          servings?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_custom_workouts: {
         Row: {
           completion_count: number | null
@@ -614,6 +686,56 @@ export type Database = {
             columns: ["workout_id"]
             isOneToOne: false
             referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_meal_plans: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          meal_type: string
+          notes: string | null
+          planned_date: string
+          recipe_id: string
+          servings: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          meal_type: string
+          notes?: string | null
+          planned_date: string
+          recipe_id: string
+          servings?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          meal_type?: string
+          notes?: string | null
+          planned_date?: string
+          recipe_id?: string
+          servings?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_meal_plans_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
             referencedColumns: ["id"]
           },
         ]
