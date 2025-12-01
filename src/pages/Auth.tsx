@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +14,7 @@ import { Loader2 } from "lucide-react";
 const Auth = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -20,15 +22,17 @@ const Auth = () => {
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
       if (session) {
         navigate("/dashboard");
       }
-    };
-    checkSession();
+    });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
       if (session) {
         navigate("/dashboard");
       }
@@ -48,12 +52,18 @@ const Auth = () => {
       });
 
       if (error) {
-        toast.error(error.message);
+        if (error.message.includes("Invalid login credentials")) {
+          toast.error("Invalid email or password. Please try again.");
+        } else if (error.message.includes("Email not confirmed")) {
+          toast.error("Please verify your email before logging in.");
+        } else {
+          toast.error(error.message);
+        }
       } else {
         toast.success("Welcome back!");
       }
     } catch (error) {
-      toast.error("An unexpected error occurred");
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -78,12 +88,18 @@ const Auth = () => {
       });
 
       if (error) {
-        toast.error(error.message);
+        if (error.message.includes("User already registered")) {
+          toast.error("This email is already registered. Please log in instead.");
+        } else if (error.message.includes("Password")) {
+          toast.error("Password must be at least 6 characters long.");
+        } else {
+          toast.error(error.message);
+        }
       } else {
         toast.success("Account created! Please check your email to verify.");
       }
     } catch (error) {
-      toast.error("An unexpected error occurred");
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/supabase-js";
+import { User, Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -9,27 +9,27 @@ import { BottomNav } from "@/components/BottomNav";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
-      
-      setUser(session.user);
-    };
-
-    checkAuth();
-
+    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      
       if (!session) {
         navigate("/auth");
-      } else {
-        setUser(session.user);
+      }
+    });
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      if (!session) {
+        navigate("/auth");
       }
     });
 
