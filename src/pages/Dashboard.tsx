@@ -11,6 +11,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -30,11 +31,24 @@ const Dashboard = () => {
       
       if (!session) {
         navigate("/auth");
+      } else {
+        checkAdminRole(session.user.id);
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  const checkAdminRole = async (userId: string) => {
+    const { data } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .eq("role", "admin")
+      .single();
+    
+    setIsAdmin(!!data);
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -149,6 +163,20 @@ const Dashboard = () => {
               <p className="text-sm text-muted-foreground">Set and track your targets</p>
             </CardContent>
           </Card>
+
+          {isAdmin && (
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-primary" onClick={() => navigate("/admin")}>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  Admin Panel
+                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">ADMIN</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">Manage users and platform settings</p>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </main>
 

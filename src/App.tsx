@@ -24,6 +24,7 @@ import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import Messages from "./pages/Messages";
 import ChatThread from "./pages/ChatThread";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -56,6 +57,7 @@ const App = () => (
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/messages/:id" element={<ChatThread />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
