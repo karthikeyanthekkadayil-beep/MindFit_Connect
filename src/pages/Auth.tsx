@@ -7,19 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, Mail } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [resetEmail, setResetEmail] = useState("");
-  const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -41,26 +37,24 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const redirectUrl = `${window.location.origin}/dashboard`;
+      
+      const { error } = await supabase.auth.signInWithOtp({
         email,
-        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+        }
       });
 
       if (error) {
-        if (error.message.includes("Invalid login credentials")) {
-          toast.error("Invalid email or password. Please try again.");
-        } else if (error.message.includes("Email not confirmed")) {
-          toast.error("Please verify your email before logging in.");
-        } else {
-          toast.error(error.message);
-        }
+        toast.error(error.message);
       } else {
-        toast.success("Welcome back!");
+        toast.success("Check your email for the magic link!");
       }
     } catch (error) {
       toast.error("An unexpected error occurred. Please try again.");
@@ -76,9 +70,8 @@ const Auth = () => {
     try {
       const redirectUrl = `${window.location.origin}/register/health`;
       
-      const { error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signInWithOtp({
         email,
-        password,
         options: {
           emailRedirectTo: redirectUrl,
           data: {
@@ -88,15 +81,9 @@ const Auth = () => {
       });
 
       if (error) {
-        if (error.message.includes("User already registered")) {
-          toast.error("This email is already registered. Please log in instead.");
-        } else if (error.message.includes("Password")) {
-          toast.error("Password must be at least 6 characters long.");
-        } else {
-          toast.error(error.message);
-        }
+        toast.error(error.message);
       } else {
-        toast.success("Account created! Please check your email to verify.");
+        toast.success("Check your email for the magic link to complete registration!");
       }
     } catch (error) {
       toast.error("An unexpected error occurred. Please try again.");
@@ -125,29 +112,6 @@ const Auth = () => {
     }
   };
 
-  const handlePasswordReset = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/auth`,
-      });
-
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success("Password reset link sent! Check your email.");
-        setIsResetDialogOpen(false);
-        setResetEmail("");
-      }
-    } catch (error) {
-      toast.error("An unexpected error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
       <Card className="w-full max-w-md">
@@ -165,7 +129,7 @@ const Auth = () => {
             </TabsList>
             
             <TabsContent value="login">
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleSendOTP} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="login-email">Email</Label>
                   <Input
@@ -177,52 +141,17 @@ const Auth = () => {
                     required
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
-                  <Input
-                    id="login-password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Login
+                  {isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Mail className="mr-2 h-4 w-4" />
+                  )}
+                  Send Magic Link
                 </Button>
-                <Dialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="link" className="w-full mt-2" type="button">
-                      Forgot password?
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Reset Password</DialogTitle>
-                      <DialogDescription>
-                        Enter your email address and we'll send you a link to reset your password.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handlePasswordReset} className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="reset-email">Email</Label>
-                        <Input
-                          id="reset-email"
-                          type="email"
-                          placeholder="you@example.com"
-                          value={resetEmail}
-                          onChange={(e) => setResetEmail(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <Button type="submit" className="w-full" disabled={isLoading}>
-                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Send Reset Link
-                      </Button>
-                    </form>
-                  </DialogContent>
-                </Dialog>
+                <p className="text-sm text-muted-foreground text-center mt-4">
+                  We'll send you a secure link to sign in instantly - no password needed!
+                </p>
               </form>
             </TabsContent>
             
@@ -250,21 +179,17 @@ const Auth = () => {
                     required
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={6}
-                  />
-                </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Mail className="mr-2 h-4 w-4" />
+                  )}
                   Create Account
                 </Button>
+                <p className="text-sm text-muted-foreground text-center mt-4">
+                  We'll send you a magic link to complete your registration.
+                </p>
               </form>
             </TabsContent>
           </Tabs>
