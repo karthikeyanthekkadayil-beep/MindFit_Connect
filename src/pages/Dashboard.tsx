@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
+import { Calendar, Users, MessageSquare, Dumbbell, Utensils, Brain, TrendingUp, Target, LogOut } from "lucide-react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -31,24 +31,11 @@ const Dashboard = () => {
       
       if (!session) {
         navigate("/auth");
-      } else {
-        checkAdminRole(session.user.id);
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
-
-  const checkAdminRole = async (userId: string) => {
-    const { data } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "admin")
-      .single();
-    
-    setIsAdmin(!!data);
-  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -56,127 +43,70 @@ const Dashboard = () => {
     navigate("/auth");
   };
 
+  const dashboardItems = [
+    { title: "Today's Activities", description: "Plan your daily wellness activities", icon: Calendar, path: "/planner" },
+    { title: "Upcoming Events", description: "Discover and join fitness events", icon: Calendar, path: "/events" },
+    { title: "Your Communities", description: "Connect with like-minded people", icon: Users, path: "/communities" },
+    { title: "Messages", description: "Chat with friends and groups", icon: MessageSquare, path: "/messages" },
+    { title: "Workouts", description: "Browse workout library", icon: Dumbbell, path: "/workouts" },
+    { title: "Nutrition", description: "Plan your meals and nutrition", icon: Utensils, path: "/nutrition" },
+    { title: "Mindfulness", description: "Meditation and breathing exercises", icon: Brain, path: "/mindfulness" },
+    { title: "Progress Analytics", description: "Track your wellness trends", icon: TrendingUp, path: "/progress" },
+    { title: "My Goals", description: "Set and track your targets", icon: Target, path: "/goals" },
+  ];
+
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <header className="bg-gradient-hero text-white p-6 shadow-lg">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-heading font-bold">SocialVibe</h1>
-          <p className="text-white/90 mt-1">Welcome back!</p>
+      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold">SocialVibe</h1>
+            <p className="text-white/90 mt-1 text-sm sm:text-base">Welcome back!</p>
+          </div>
+          <Button 
+            onClick={handleLogout} 
+            variant="ghost" 
+            size="sm"
+            className="text-white hover:bg-white/20"
+          >
+            <LogOut className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Logout</span>
+          </Button>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto p-6 space-y-6">
+      <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
         <Card>
-          <CardHeader>
-            <CardTitle className="font-heading">Daily Overview</CardTitle>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="font-heading text-lg sm:text-xl">Daily Overview</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
+          <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
+            <p className="text-muted-foreground text-sm sm:text-base">
               Your personalized dashboard is being set up. Start exploring your wellness journey!
             </p>
-            <Button onClick={handleLogout} variant="outline" className="mt-4">
-              Logout
-            </Button>
           </CardContent>
         </Card>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/planner")}>
-            <CardHeader>
-              <CardTitle className="text-lg">Today's Activities</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Plan your daily wellness activities</p>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/events")}>
-            <CardHeader>
-              <CardTitle className="text-lg">Upcoming Events</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Discover and join fitness events</p>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/communities")}>
-            <CardHeader>
-              <CardTitle className="text-lg">Your Communities</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Connect with like-minded people</p>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/messages")}>
-            <CardHeader>
-              <CardTitle className="text-lg">Messages</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Chat with friends and groups</p>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/workouts")}>
-            <CardHeader>
-              <CardTitle className="text-lg">Workouts</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Browse workout library</p>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/nutrition")}>
-            <CardHeader>
-              <CardTitle className="text-lg">Nutrition</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Plan your meals and nutrition</p>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/mindfulness")}>
-            <CardHeader>
-              <CardTitle className="text-lg">Mindfulness</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Meditation and breathing exercises</p>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/progress")}>
-            <CardHeader>
-              <CardTitle className="text-lg">Progress Analytics</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Track your wellness trends</p>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/goals")}>
-            <CardHeader>
-              <CardTitle className="text-lg">My Goals</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Set and track your targets</p>
-            </CardContent>
-          </Card>
-
-          {isAdmin && (
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-primary" onClick={() => navigate("/admin")}>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  Admin Panel
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">ADMIN</span>
-                </CardTitle>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+          {dashboardItems.map((item) => (
+            <Card 
+              key={item.path}
+              className="cursor-pointer hover:shadow-lg transition-shadow active:scale-[0.98]" 
+              onClick={() => navigate(item.path)}
+            >
+              <CardHeader className="p-3 sm:p-6 pb-2 sm:pb-2">
+                <div className="flex items-center gap-2">
+                  <item.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
+                  <CardTitle className="text-sm sm:text-lg leading-tight">{item.title}</CardTitle>
+                </div>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">Manage users and platform settings</p>
+              <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{item.description}</p>
               </CardContent>
             </Card>
-          )}
+          ))}
         </div>
       </main>
 
