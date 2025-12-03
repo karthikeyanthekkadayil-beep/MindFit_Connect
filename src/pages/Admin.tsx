@@ -41,7 +41,7 @@ const Admin = () => {
       
       if (!session) {
         toast.error("Please log in to access this page");
-        navigate("/auth");
+        navigate("/admin/login");
         return;
       }
 
@@ -57,7 +57,7 @@ const Admin = () => {
 
       if (roleError || !roleData) {
         toast.error("Access denied. Admin privileges required.");
-        navigate("/dashboard");
+        navigate("/admin/login");
         return;
       }
 
@@ -154,118 +154,134 @@ const Admin = () => {
     return null;
   }
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast.success("Logged out successfully");
+    navigate("/admin/login");
+  };
+
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <header className="bg-gradient-hero text-white p-6 shadow-lg">
+      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/admin/login")}
+                className="text-white hover:bg-white/20 shrink-0"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 shrink-0" />
+                  <h1 className="text-xl sm:text-3xl font-heading font-bold truncate">Admin Panel</h1>
+                </div>
+                <p className="text-white/90 mt-1 text-xs sm:text-base hidden sm:block">Manage users, content, and platform settings</p>
+              </div>
+            </div>
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => navigate("/dashboard")}
-              className="text-white hover:bg-white/20"
+              onClick={handleLogout}
+              className="text-white hover:bg-white/20 text-xs sm:text-sm shrink-0"
             >
-              <ArrowLeft className="h-4 w-4" />
+              Logout
             </Button>
-            <div>
-              <div className="flex items-center gap-2">
-                <Shield className="h-6 w-6" />
-                <h1 className="text-3xl font-heading font-bold">Admin Panel</h1>
-              </div>
-              <p className="text-white/90 mt-1">Manage users, content, and platform settings</p>
-            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto p-6 space-y-6">
+      <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
         {/* Stats Overview */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium">Total Users</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalUsers}</div>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.totalUsers}</div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Communities</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium">Communities</CardTitle>
               <MessageSquare className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalCommunities}</div>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.totalCommunities}</div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Events</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium">Events</CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalEvents}</div>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.totalEvents}</div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Today</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium">Active Today</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.activeToday}</div>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.activeToday}</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Admin Tabs */}
         <Tabs defaultValue="users" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="users">Users</TabsTrigger>
-            <TabsTrigger value="communities">Communities</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 h-auto">
+            <TabsTrigger value="users" className="text-xs sm:text-sm py-2">Users</TabsTrigger>
+            <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">Communities</TabsTrigger>
+            <TabsTrigger value="events" className="text-xs sm:text-sm py-2">Events</TabsTrigger>
+            <TabsTrigger value="settings" className="text-xs sm:text-sm py-2">Settings</TabsTrigger>
           </TabsList>
 
           <TabsContent value="users" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>User Management</CardTitle>
-                <CardDescription>Manage user roles and permissions</CardDescription>
+              <CardHeader className="p-3 sm:p-6">
+                <CardTitle className="text-base sm:text-lg">User Management</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Manage user roles and permissions</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-0 sm:p-6">
                 <div className="overflow-x-auto">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Role</TableHead>
-                        <TableHead>Joined</TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead className="text-xs sm:text-sm">Name</TableHead>
+                        <TableHead className="text-xs sm:text-sm">Role</TableHead>
+                        <TableHead className="text-xs sm:text-sm hidden sm:table-cell">Joined</TableHead>
+                        <TableHead className="text-xs sm:text-sm">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {users.map((user) => (
                         <TableRow key={user.id}>
-                          <TableCell className="font-medium">{user.full_name}</TableCell>
+                          <TableCell className="font-medium text-xs sm:text-sm max-w-[100px] truncate">{user.full_name}</TableCell>
                           <TableCell>
-                            <Badge variant={user.role === "admin" ? "default" : "secondary"}>
+                            <Badge variant={user.role === "admin" ? "default" : "secondary"} className="text-xs">
                               {user.role}
                             </Badge>
                           </TableCell>
-                          <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
+                          <TableCell className="text-xs sm:text-sm hidden sm:table-cell">{new Date(user.created_at).toLocaleDateString()}</TableCell>
                           <TableCell>
                             <Select
                               value={user.role}
                               onValueChange={(value) => handleRoleChange(user.id, value)}
                             >
-                              <SelectTrigger className="w-32">
+                              <SelectTrigger className="w-24 sm:w-32 h-8 text-xs sm:text-sm">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
