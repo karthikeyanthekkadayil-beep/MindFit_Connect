@@ -74,11 +74,11 @@ export default function Events() {
 
   const EventCard = ({ event }: { event: any }) => (
     <Card
-      className="cursor-pointer hover:shadow-lg transition-shadow"
+      className="cursor-pointer hover:shadow-lg transition-shadow active:scale-[0.98]"
       onClick={() => navigate(`/events/${event.id}`)}
     >
       {event.image_url && (
-        <div className="h-40 overflow-hidden rounded-t-lg">
+        <div className="h-28 sm:h-40 overflow-hidden rounded-t-lg">
           <img
             src={event.image_url}
             alt={event.title}
@@ -86,83 +86,84 @@ export default function Events() {
           />
         </div>
       )}
-      <CardHeader>
+      <CardHeader className="p-3 sm:p-6">
         <div className="flex items-start justify-between gap-2">
-          <div className="flex-1">
-            <CardTitle className="text-lg">{event.title}</CardTitle>
-            <CardDescription className="line-clamp-2">
+          <div className="flex-1 min-w-0">
+            <CardTitle className="text-sm sm:text-lg truncate">{event.title}</CardTitle>
+            <CardDescription className="line-clamp-2 text-xs sm:text-sm">
               {event.description}
             </CardDescription>
           </div>
-          <Badge variant="secondary">{event.event_type}</Badge>
+          <Badge variant="secondary" className="text-xs shrink-0">{event.event_type}</Badge>
         </div>
       </CardHeader>
-      <CardContent className="space-y-2 text-sm text-muted-foreground">
+      <CardContent className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-muted-foreground p-3 pt-0 sm:p-6 sm:pt-0">
         <div className="flex items-center gap-2">
-          <Calendar className="h-4 w-4" />
-          <span>{format(new Date(event.start_time), "PPP")}</span>
+          <Calendar className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
+          <span className="truncate">{format(new Date(event.start_time), "PPP")}</span>
         </div>
         <div className="flex items-center gap-2">
-          <Clock className="h-4 w-4" />
+          <Clock className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
           <span>{format(new Date(event.start_time), "p")}</span>
         </div>
         {event.location && (
           <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4" />
+            <MapPin className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
             <span className="line-clamp-1">{event.location}</span>
           </div>
         )}
         <div className="flex items-center gap-2">
-          <Users className="h-4 w-4" />
+          <Users className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
           <span>
             {event.current_participants || 0}
             {event.max_participants && ` / ${event.max_participants}`} attending
           </span>
         </div>
       </CardContent>
-      <CardFooter>
-        <Badge variant="outline">{event.community?.name}</Badge>
+      <CardFooter className="p-3 pt-0 sm:p-6 sm:pt-0">
+        <Badge variant="outline" className="text-xs">{event.community?.name}</Badge>
       </CardFooter>
     </Card>
   );
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="container mx-auto px-4 py-6 max-w-4xl">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Events</h1>
-            <p className="text-muted-foreground">Discover and join fitness activities</p>
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-4xl">
+        <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-3xl font-bold text-foreground">Events</h1>
+            <p className="text-muted-foreground text-xs sm:text-base">Discover and join fitness activities</p>
           </div>
-          <Button onClick={() => setIsCreateDialogOpen(true)} className="gap-2">
+          <Button onClick={() => setIsCreateDialogOpen(true)} className="gap-1 sm:gap-2 shrink-0 h-9 sm:h-10 text-xs sm:text-sm px-3 sm:px-4">
             <Plus className="h-4 w-4" />
-            Create
+            <span className="hidden sm:inline">Create</span>
           </Button>
         </div>
 
-        <div className="relative mb-6">
+        <div className="relative mb-4 sm:mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search events..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="pl-10 h-10 sm:h-11"
           />
         </div>
 
-        <Tabs defaultValue="discover" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="discover">Discover</TabsTrigger>
-            <TabsTrigger value="my-events">My Events</TabsTrigger>
+        <Tabs defaultValue="discover" className="space-y-4 sm:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 h-10 sm:h-11">
+            <TabsTrigger value="discover" className="text-xs sm:text-sm">Discover</TabsTrigger>
+            <TabsTrigger value="my-events" className="text-xs sm:text-sm">My Events</TabsTrigger>
           </TabsList>
 
           <TabsContent value="discover" className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex gap-1.5 sm:gap-2 flex-wrap">
                 <Button
                   variant={selectedType === "all" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedType("all")}
+                  className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
                 >
                   All
                 </Button>
@@ -172,6 +173,7 @@ export default function Events() {
                     variant={selectedType === type ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedType(type)}
+                    className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
                   >
                     {type}
                   </Button>
@@ -182,6 +184,7 @@ export default function Events() {
                   variant={viewMode === "list" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setViewMode("list")}
+                  className="h-7 sm:h-8 text-xs sm:text-sm"
                 >
                   List
                 </Button>
@@ -189,6 +192,7 @@ export default function Events() {
                   variant={viewMode === "map" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setViewMode("map")}
+                  className="h-7 sm:h-8 text-xs sm:text-sm"
                 >
                   Map
                 </Button>
@@ -196,24 +200,24 @@ export default function Events() {
             </div>
 
             {viewMode === "map" ? (
-              <div className="h-[600px] rounded-lg overflow-hidden border">
+              <div className="h-[400px] sm:h-[600px] rounded-lg overflow-hidden border">
                 <EventsMap events={events || []} onEventClick={(eventId) => navigate(`/events/${eventId}`)} />
               </div>
             ) : (
               <>
                 {isLoading ? (
-                  <div className="text-center py-8 text-muted-foreground">Loading events...</div>
+                  <div className="text-center py-8 text-muted-foreground text-sm">Loading events...</div>
                 ) : events && events.length > 0 ? (
-                  <div className="grid gap-4 md:grid-cols-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     {events.map((event) => (
                       <EventCard key={event.id} event={event} />
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                    <h3 className="text-lg font-semibold mb-2">No events found</h3>
-                    <p className="text-muted-foreground mb-4">
+                  <div className="text-center py-8 sm:py-12">
+                    <Calendar className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
+                    <h3 className="text-base sm:text-lg font-semibold mb-2">No events found</h3>
+                    <p className="text-muted-foreground mb-4 text-sm">
                       Be the first to create an event
                     </p>
                   </div>
@@ -224,16 +228,16 @@ export default function Events() {
 
           <TabsContent value="my-events" className="space-y-4">
             {myEvents && myEvents.length > 0 ? (
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {myEvents.map((event) => (
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12">
-                <Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold mb-2">No events yet</h3>
-                <p className="text-muted-foreground mb-4">
+              <div className="text-center py-8 sm:py-12">
+                <Calendar className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-base sm:text-lg font-semibold mb-2">No events yet</h3>
+                <p className="text-muted-foreground mb-4 text-sm">
                   RSVP to events to see them here
                 </p>
                 <Button onClick={() => {
