@@ -169,97 +169,98 @@ const Progress = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white p-6 shadow-lg">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-heading font-bold">Progress Analytics</h1>
-            <p className="text-white/90 mt-1">Track your wellness journey</p>
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold">Progress Analytics</h1>
+            <p className="text-white/90 mt-1 text-sm sm:text-base">Track your wellness journey</p>
           </div>
           <Button 
             onClick={() => navigate('/goals')} 
-            className="bg-white text-primary hover:bg-white/90"
+            className="bg-white text-primary hover:bg-white/90 w-full sm:w-auto"
+            size="sm"
           >
-            <Target className="h-5 w-5 mr-2" />
+            <Target className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
             My Goals
           </Button>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto p-6 space-y-6">
+      <main className="max-w-7xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
         {/* Weekly Summary Cards */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Fitness Completion</CardTitle>
-              <Activity className="h-4 w-4 text-primary" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Fitness</CardTitle>
+              <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
-              <p className="text-xs text-muted-foreground">This week</p>
+            <CardContent className="p-3 sm:p-6 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">This week</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Meditation Time</CardTitle>
-              <Brain className="h-4 w-4 text-primary" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Meditation</CardTitle>
+              <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{weeklyStats.meditationMinutes} min</div>
-              <p className="text-xs text-muted-foreground">Total this week</p>
+            <CardContent className="p-3 sm:p-6 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-sm sm:text-base">m</span></div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Total this week</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Nutrition Adherence</CardTitle>
-              <Apple className="h-4 w-4 text-primary" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Nutrition</CardTitle>
+              <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
-              <p className="text-xs text-muted-foreground">Meal plan followed</p>
+            <CardContent className="p-3 sm:p-6 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Meal plan</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Community Activity</CardTitle>
-              <Users className="h-4 w-4 text-primary" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Community</CardTitle>
+              <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{weeklyStats.communityEngagement}</div>
-              <p className="text-xs text-muted-foreground">Total interactions</p>
+            <CardContent className="p-3 sm:p-6 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Interactions</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Detailed Charts */}
         <Tabs defaultValue="fitness" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="fitness">Fitness</TabsTrigger>
-            <TabsTrigger value="meditation">Meditation</TabsTrigger>
-            <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
-            <TabsTrigger value="community">Community</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 h-auto">
+            <TabsTrigger value="fitness" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Fitness</TabsTrigger>
+            <TabsTrigger value="meditation" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Meditation</TabsTrigger>
+            <TabsTrigger value="nutrition" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Nutrition</TabsTrigger>
+            <TabsTrigger value="community" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Community</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="fitness" className="space-y-4">
+          <TabsContent value="fitness" className="space-y-3 sm:space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Fitness Activity Trends</CardTitle>
-                <CardDescription>Daily activity completion over the last 7 days</CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-base sm:text-lg">Fitness Activity Trends</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Daily activity completion over the last 7 days</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6 pt-0">
                 <ChartContainer config={{
                   completed: { label: "Completed", color: "hsl(var(--primary))" },
                   total: { label: "Total", color: "hsl(var(--muted))" }
-                }} className="h-[300px]">
+                }} className="h-[200px] sm:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={fitnessData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" />
-                      <YAxis stroke="hsl(var(--foreground))" />
+                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
                       <ChartTooltip content={<ChartTooltipContent />} />
-                      <Legend />
+                      <Legend wrapperStyle={{ fontSize: '12px' }} />
                       <Bar dataKey="completed" fill="hsl(var(--primary))" name="Completed" />
                       <Bar dataKey="total" fill="hsl(var(--muted))" name="Total" />
                     </BarChart>
@@ -269,19 +270,19 @@ const Progress = () => {
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle>Completion Rate</CardTitle>
-                <CardDescription>Percentage of completed activities</CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-base sm:text-lg">Completion Rate</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Percentage of completed activities</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6 pt-0">
                 <ChartContainer config={{
                   completionRate: { label: "Completion Rate", color: "hsl(var(--primary))" }
-                }} className="h-[300px]">
+                }} className="h-[200px] sm:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={fitnessData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" />
-                      <YAxis stroke="hsl(var(--foreground))" />
+                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
                       <ChartTooltip content={<ChartTooltipContent />} />
                       <Line type="monotone" dataKey="completionRate" stroke="hsl(var(--primary))" strokeWidth={2} name="Completion %" />
                     </LineChart>
@@ -291,21 +292,21 @@ const Progress = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="meditation" className="space-y-4">
+          <TabsContent value="meditation" className="space-y-3 sm:space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Meditation Consistency</CardTitle>
-                <CardDescription>Daily meditation minutes over the last 7 days</CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-base sm:text-lg">Meditation Consistency</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Daily meditation minutes over the last 7 days</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6 pt-0">
                 <ChartContainer config={{
                   minutes: { label: "Minutes", color: "hsl(var(--primary))" }
-                }} className="h-[300px]">
+                }} className="h-[200px] sm:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={meditationData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" />
-                      <YAxis stroke="hsl(var(--foreground))" />
+                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
                       <ChartTooltip content={<ChartTooltipContent />} />
                       <Bar dataKey="minutes" fill="hsl(var(--primary))" name="Minutes" />
                     </BarChart>
@@ -315,19 +316,19 @@ const Progress = () => {
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle>Session Frequency</CardTitle>
-                <CardDescription>Number of meditation sessions per day</CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-base sm:text-lg">Session Frequency</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Number of meditation sessions per day</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6 pt-0">
                 <ChartContainer config={{
                   sessions: { label: "Sessions", color: "hsl(var(--secondary))" }
-                }} className="h-[300px]">
+                }} className="h-[200px] sm:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={meditationData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" />
-                      <YAxis stroke="hsl(var(--foreground))" />
+                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
                       <ChartTooltip content={<ChartTooltipContent />} />
                       <Line type="monotone" dataKey="sessions" stroke="hsl(var(--secondary))" strokeWidth={2} name="Sessions" />
                     </LineChart>
@@ -337,24 +338,24 @@ const Progress = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="nutrition" className="space-y-4">
+          <TabsContent value="nutrition" className="space-y-3 sm:space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Nutrition Adherence</CardTitle>
-                <CardDescription>Meal plan completion over the last 7 days</CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-base sm:text-lg">Nutrition Adherence</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Meal plan completion over the last 7 days</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6 pt-0">
                 <ChartContainer config={{
                   completed: { label: "Completed", color: "hsl(var(--primary))" },
                   planned: { label: "Planned", color: "hsl(var(--muted))" }
-                }} className="h-[300px]">
+                }} className="h-[200px] sm:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={nutritionData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" />
-                      <YAxis stroke="hsl(var(--foreground))" />
+                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
                       <ChartTooltip content={<ChartTooltipContent />} />
-                      <Legend />
+                      <Legend wrapperStyle={{ fontSize: '12px' }} />
                       <Bar dataKey="completed" fill="hsl(var(--primary))" name="Completed" />
                       <Bar dataKey="planned" fill="hsl(var(--muted))" name="Planned" />
                     </BarChart>
@@ -364,19 +365,19 @@ const Progress = () => {
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle>Adherence Percentage</CardTitle>
-                <CardDescription>Daily meal plan adherence rate</CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-base sm:text-lg">Adherence Percentage</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Daily meal plan adherence rate</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6 pt-0">
                 <ChartContainer config={{
                   adherence: { label: "Adherence", color: "hsl(var(--primary))" }
-                }} className="h-[300px]">
+                }} className="h-[200px] sm:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={nutritionData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" />
-                      <YAxis stroke="hsl(var(--foreground))" />
+                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
                       <ChartTooltip content={<ChartTooltipContent />} />
                       <Line type="monotone" dataKey="adherence" stroke="hsl(var(--primary))" strokeWidth={2} name="Adherence %" />
                     </LineChart>
@@ -386,18 +387,18 @@ const Progress = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="community" className="space-y-4">
+          <TabsContent value="community" className="space-y-3 sm:space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Community Engagement</CardTitle>
-                <CardDescription>Your social activity breakdown</CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-base sm:text-lg">Community Engagement</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Your social activity breakdown</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6 pt-0">
                 <ChartContainer config={{
                   posts: { label: "Posts", color: "hsl(var(--primary))" },
                   comments: { label: "Comments", color: "hsl(var(--secondary))" },
                   reactions: { label: "Reactions", color: "hsl(var(--accent))" }
-                }} className="h-[300px]">
+                }} className="h-[200px] sm:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -410,7 +411,7 @@ const Progress = () => {
                         cy="50%"
                         labelLine={false}
                         label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                        outerRadius={80}
+                        outerRadius={60}
                         fill="#8884d8"
                         dataKey="value"
                       >
@@ -425,24 +426,24 @@ const Progress = () => {
               </CardContent>
             </Card>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               <Card>
-                <CardHeader>
-                  <CardTitle>Communities Joined</CardTitle>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-sm sm:text-lg">Communities</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-bold text-primary">{communityStats.communities}</div>
-                  <p className="text-sm text-muted-foreground mt-2">Active communities</p>
+                <CardContent className="p-4 sm:p-6 pt-0">
+                  <div className="text-2xl sm:text-4xl font-bold text-primary">{communityStats.communities}</div>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">Active</p>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardHeader>
-                  <CardTitle>Total Interactions</CardTitle>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-sm sm:text-lg">Interactions</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-bold text-primary">{weeklyStats.communityEngagement}</div>
-                  <p className="text-sm text-muted-foreground mt-2">Posts, comments, reactions</p>
+                <CardContent className="p-4 sm:p-6 pt-0">
+                  <div className="text-2xl sm:text-4xl font-bold text-primary">{weeklyStats.communityEngagement}</div>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">Total</p>
                 </CardContent>
               </Card>
             </div>
