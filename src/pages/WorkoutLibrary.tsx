@@ -51,7 +51,6 @@ const WorkoutLibrary = () => {
       return;
     }
 
-    // Fetch user profile for fitness level
     const { data: profile } = await supabase
       .from("profiles")
       .select("fitness_level")
@@ -117,36 +116,39 @@ const WorkoutLibrary = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="container max-w-6xl mx-auto p-4 space-y-6">
+      <div className="container max-w-6xl mx-auto px-3 sm:px-4 py-4 space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex flex-col gap-3">
           <div>
-            <h1 className="text-3xl font-bold">Workout Library</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-2xl sm:text-3xl font-bold">Workout Library</h1>
+            <p className="text-sm text-muted-foreground mt-1">
               {userProfile?.fitness_level && `Recommended for ${userProfile.fitness_level} level`}
             </p>
           </div>
-          <Button onClick={() => navigate("/workouts/builder")}>
+          <Button 
+            onClick={() => navigate("/workouts/builder")}
+            className="w-full sm:w-auto h-10"
+          >
             <Plus className="mr-2 h-4 w-4" />
-            Create Custom Workout
+            Create Workout
           </Button>
         </div>
 
         {/* Filters */}
         <Card>
-          <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 relative">
+          <CardContent className="p-3 sm:pt-6 sm:p-6">
+            <div className="flex flex-col gap-3">
+              <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search exercises and workouts..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 h-10"
                 />
               </div>
               <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-                <SelectTrigger className="w-full md:w-48">
+                <SelectTrigger className="w-full h-10">
                   <SelectValue placeholder="Filter by difficulty" />
                 </SelectTrigger>
                 <SelectContent>
@@ -162,57 +164,57 @@ const WorkoutLibrary = () => {
 
         {/* Content Tabs */}
         <Tabs defaultValue="workouts" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="workouts">
-              <Dumbbell className="h-4 w-4 mr-2" />
-              Workouts ({filteredWorkouts.length})
+          <TabsList className="grid w-full grid-cols-2 h-10">
+            <TabsTrigger value="workouts" className="text-xs sm:text-sm px-2">
+              <Dumbbell className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="hidden xs:inline">Workouts</span> ({filteredWorkouts.length})
             </TabsTrigger>
-            <TabsTrigger value="exercises">
-              <Heart className="h-4 w-4 mr-2" />
-              Exercises ({filteredExercises.length})
+            <TabsTrigger value="exercises" className="text-xs sm:text-sm px-2">
+              <Heart className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="hidden xs:inline">Exercises</span> ({filteredExercises.length})
             </TabsTrigger>
           </TabsList>
 
           {/* Workouts Tab */}
-          <TabsContent value="workouts" className="space-y-4">
+          <TabsContent value="workouts" className="space-y-3 mt-3">
             {filteredWorkouts.length === 0 ? (
               <Card>
-                <CardContent className="pt-6 text-center text-muted-foreground">
+                <CardContent className="py-8 text-center text-muted-foreground text-sm">
                   No workouts found. Try adjusting your filters.
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {filteredWorkouts.map((workout) => (
                   <Card 
                     key={workout.id} 
-                    className="cursor-pointer hover:shadow-lg transition-shadow"
+                    className="cursor-pointer hover:shadow-lg transition-shadow active:scale-[0.98]"
                     onClick={() => navigate(`/workouts/${workout.id}`)}
                   >
-                    <CardHeader className="pb-3">
-                      <div className="aspect-video bg-muted rounded-lg mb-3 overflow-hidden">
+                    <CardHeader className="p-3 sm:p-4 pb-2">
+                      <div className="aspect-video bg-muted rounded-lg mb-2 overflow-hidden">
                         {workout.image_url ? (
                           <img src={workout.image_url} alt={workout.name} className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Dumbbell className="h-12 w-12 text-muted-foreground" />
+                            <Dumbbell className="h-8 sm:h-12 w-8 sm:w-12 text-muted-foreground" />
                           </div>
                         )}
                       </div>
-                      <div className="flex justify-between items-start">
-                        <CardTitle className="text-lg">{workout.name}</CardTitle>
-                        <Badge className={getDifficultyColor(workout.difficulty_level)}>
+                      <div className="flex justify-between items-start gap-2">
+                        <CardTitle className="text-base sm:text-lg line-clamp-1">{workout.name}</CardTitle>
+                        <Badge className={`${getDifficultyColor(workout.difficulty_level)} text-xs shrink-0`}>
                           {workout.difficulty_level}
                         </Badge>
                       </div>
-                      <CardDescription className="line-clamp-2">
+                      <CardDescription className="line-clamp-2 text-xs sm:text-sm">
                         {workout.description}
                       </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <div className="flex justify-between text-sm text-muted-foreground">
+                    <CardContent className="p-3 sm:p-4 pt-0">
+                      <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
                         <span>{workout.total_duration_minutes} min</span>
-                        <Badge variant="outline">{workout.category}</Badge>
+                        <Badge variant="outline" className="text-xs">{workout.category}</Badge>
                       </div>
                     </CardContent>
                   </Card>
@@ -222,51 +224,51 @@ const WorkoutLibrary = () => {
           </TabsContent>
 
           {/* Exercises Tab */}
-          <TabsContent value="exercises" className="space-y-4">
+          <TabsContent value="exercises" className="space-y-3 mt-3">
             {filteredExercises.length === 0 ? (
               <Card>
-                <CardContent className="pt-6 text-center text-muted-foreground">
+                <CardContent className="py-8 text-center text-muted-foreground text-sm">
                   No exercises found. Try adjusting your filters.
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {filteredExercises.map((exercise) => (
                   <Card key={exercise.id} className="hover:shadow-lg transition-shadow">
-                    <CardHeader className="pb-3">
-                      <div className="aspect-video bg-muted rounded-lg mb-3 overflow-hidden">
+                    <CardHeader className="p-3 sm:p-4 pb-2">
+                      <div className="aspect-video bg-muted rounded-lg mb-2 overflow-hidden">
                         {exercise.thumbnail_url ? (
                           <img src={exercise.thumbnail_url} alt={exercise.name} className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Heart className="h-12 w-12 text-muted-foreground" />
+                            <Heart className="h-8 sm:h-12 w-8 sm:w-12 text-muted-foreground" />
                           </div>
                         )}
                       </div>
-                      <div className="flex justify-between items-start">
-                        <CardTitle className="text-lg">{exercise.name}</CardTitle>
-                        <Badge className={getDifficultyColor(exercise.difficulty_level)}>
+                      <div className="flex justify-between items-start gap-2">
+                        <CardTitle className="text-base sm:text-lg line-clamp-1">{exercise.name}</CardTitle>
+                        <Badge className={`${getDifficultyColor(exercise.difficulty_level)} text-xs shrink-0`}>
                           {exercise.difficulty_level}
                         </Badge>
                       </div>
-                      <CardDescription className="line-clamp-2">
+                      <CardDescription className="line-clamp-2 text-xs sm:text-sm">
                         {exercise.description}
                       </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="p-3 sm:p-4 pt-0">
                       <div className="flex flex-wrap gap-1 mb-2">
-                        {exercise.muscle_groups.slice(0, 3).map((group, i) => (
+                        {exercise.muscle_groups.slice(0, 2).map((group, i) => (
                           <Badge key={i} variant="secondary" className="text-xs">
                             {group}
                           </Badge>
                         ))}
-                        {exercise.muscle_groups.length > 3 && (
+                        {exercise.muscle_groups.length > 2 && (
                           <Badge variant="secondary" className="text-xs">
-                            +{exercise.muscle_groups.length - 3}
+                            +{exercise.muscle_groups.length - 2}
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs sm:text-sm text-muted-foreground">
                         {exercise.duration_minutes} min
                       </p>
                     </CardContent>

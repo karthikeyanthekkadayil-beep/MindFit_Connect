@@ -6,8 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { Loader2, Play, Brain, Wind, Heart, Clock, TrendingUp } from "lucide-react";
+import { Loader2, Play, Brain, Wind, Heart, Clock, TrendingUp, ArrowLeft } from "lucide-react";
 import { BreathingExercise } from "@/components/BreathingExercise";
+import { BottomNav } from "@/components/BottomNav";
 import { format } from "date-fns";
 
 interface MeditationProgram {
@@ -195,33 +196,33 @@ const Mindfulness = () => {
 
   if (sessionActive && selectedProgram) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <Card className="w-full max-w-2xl">
-          <CardHeader>
-            <CardTitle className="text-2xl text-center">{selectedProgram.title}</CardTitle>
-            <CardDescription className="text-center">{selectedProgram.description}</CardDescription>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-xl sm:text-2xl text-center">{selectedProgram.title}</CardTitle>
+            <CardDescription className="text-center text-sm">{selectedProgram.description}</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="p-4 sm:p-6 pt-0 space-y-4 sm:space-y-6">
             <div className="text-center">
-              <div className="text-6xl font-bold mb-2">{formatTime(sessionTime)}</div>
-              <div className="text-muted-foreground">
+              <div className="text-5xl sm:text-6xl font-bold mb-2">{formatTime(sessionTime)}</div>
+              <div className="text-sm text-muted-foreground">
                 Target: {selectedProgram.duration_minutes} minutes
               </div>
             </div>
 
             <Progress 
               value={(sessionTime / (selectedProgram.duration_minutes * 60)) * 100} 
-              className="w-full"
+              className="w-full h-2"
             />
 
-            <div className="bg-muted/50 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2">Instructions:</h4>
-              <p className="text-sm text-muted-foreground whitespace-pre-line">
+            <div className="bg-muted/50 p-3 sm:p-4 rounded-lg">
+              <h4 className="font-semibold mb-2 text-sm sm:text-base">Instructions:</h4>
+              <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-line">
                 {selectedProgram.instructions}
               </p>
             </div>
 
-            <Button onClick={endSession} className="w-full" size="lg">
+            <Button onClick={endSession} className="w-full h-11 sm:h-12 text-base" size="lg">
               End Session
             </Button>
           </CardContent>
@@ -232,14 +233,15 @@ const Mindfulness = () => {
 
   if (selectedExercise) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <div className="w-full max-w-2xl space-y-4">
           <Button 
             variant="ghost" 
             onClick={() => setSelectedExercise(null)}
-            className="mb-4"
+            className="mb-2 h-10"
           >
-            ← Back
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back
           </Button>
           <BreathingExercise 
             exercise={selectedExercise} 
@@ -251,163 +253,172 @@ const Mindfulness = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 pb-20 max-w-6xl">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold font-heading mb-2">Mindfulness & Meditation</h1>
-        <p className="text-muted-foreground">
-          Find calm, reduce stress, and improve focus through guided practices
-        </p>
-      </div>
+    <div className="min-h-screen bg-background pb-20">
+      <div className="container mx-auto px-3 sm:px-4 py-4 max-w-6xl">
+        <div className="mb-4 sm:mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold font-heading mb-1 sm:mb-2">Mindfulness</h1>
+          <p className="text-sm text-muted-foreground">
+            Find calm, reduce stress, and improve focus
+          </p>
+        </div>
 
-      <div className="grid gap-4 md:grid-cols-3 mb-6">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Brain className="h-4 w-4" />
-              Total Sessions
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalSessions}</div>
-          </CardContent>
-        </Card>
+        <div className="grid gap-3 grid-cols-3 mb-4 sm:mb-6">
+          <Card>
+            <CardHeader className="p-3 pb-1 sm:pb-3">
+              <CardTitle className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                <Brain className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Sessions</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-3 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.totalSessions}</div>
+              <p className="text-xs text-muted-foreground sm:hidden">Sessions</p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              Total Minutes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalMinutes}</div>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader className="p-3 pb-1 sm:pb-3">
+              <CardTitle className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Minutes</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-3 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.totalMinutes}</div>
+              <p className="text-xs text-muted-foreground sm:hidden">Minutes</p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              This Week
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.weekStreak}</div>
-          </CardContent>
-        </Card>
-      </div>
+          <Card>
+            <CardHeader className="p-3 pb-1 sm:pb-3">
+              <CardTitle className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">This Week</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-3 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.weekStreak}</div>
+              <p className="text-xs text-muted-foreground sm:hidden">Week</p>
+            </CardContent>
+          </Card>
+        </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="browse">
-            <Brain className="h-4 w-4 mr-2" />
-            Meditation
-          </TabsTrigger>
-          <TabsTrigger value="breathing">
-            <Wind className="h-4 w-4 mr-2" />
-            Breathing
-          </TabsTrigger>
-        </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-3 sm:space-y-4">
+          <TabsList className="grid w-full grid-cols-2 h-10">
+            <TabsTrigger value="browse" className="text-xs sm:text-sm">
+              <Brain className="h-4 w-4 mr-1 sm:mr-2" />
+              Meditation
+            </TabsTrigger>
+            <TabsTrigger value="breathing" className="text-xs sm:text-sm">
+              <Wind className="h-4 w-4 mr-1 sm:mr-2" />
+              Breathing
+            </TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="browse" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            {meditationPrograms.map((program) => (
-              <Card key={program.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start mb-2">
-                    <CardTitle className="text-lg">{program.title}</CardTitle>
-                    <Badge variant="secondary">{program.difficulty_level}</Badge>
-                  </div>
-                  <CardDescription>{program.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {program.duration_minutes} min
-                    </span>
-                    <span className="capitalize">{program.category.replace('_', ' ')}</span>
-                  </div>
+          <TabsContent value="browse" className="space-y-3">
+            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
+              {meditationPrograms.map((program) => (
+                <Card key={program.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader className="p-3 sm:p-4 pb-2">
+                    <div className="flex justify-between items-start gap-2 mb-1 sm:mb-2">
+                      <CardTitle className="text-base sm:text-lg line-clamp-1">{program.title}</CardTitle>
+                      <Badge variant="secondary" className="text-xs shrink-0">{program.difficulty_level}</Badge>
+                    </div>
+                    <CardDescription className="text-xs sm:text-sm line-clamp-2">{program.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-3 sm:p-4 pt-0 space-y-2 sm:space-y-3">
+                    <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+                        {program.duration_minutes} min
+                      </span>
+                      <span className="capitalize line-clamp-1">{program.category.replace('_', ' ')}</span>
+                    </div>
 
-                  <div className="flex flex-wrap gap-1">
-                    {program.tags.map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold">Benefits:</p>
-                    <ul className="text-xs text-muted-foreground space-y-1">
-                      {program.benefits.slice(0, 3).map((benefit, idx) => (
-                        <li key={idx}>• {benefit}</li>
+                    <div className="flex flex-wrap gap-1">
+                      {program.tags?.slice(0, 2).map((tag) => (
+                        <Badge key={tag} variant="outline" className="text-xs">
+                          {tag}
+                        </Badge>
                       ))}
-                    </ul>
-                  </div>
+                      {program.tags?.length > 2 && (
+                        <Badge variant="outline" className="text-xs">+{program.tags.length - 2}</Badge>
+                      )}
+                    </div>
 
-                  <Button 
-                    onClick={() => startMeditationSession(program)}
-                    className="w-full"
-                  >
-                    <Play className="h-4 w-4 mr-2" />
-                    Start Session
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
+                    <div className="space-y-1">
+                      <p className="text-xs font-semibold">Benefits:</p>
+                      <ul className="text-xs text-muted-foreground space-y-0.5">
+                        {program.benefits?.slice(0, 2).map((benefit, idx) => (
+                          <li key={idx} className="line-clamp-1">• {benefit}</li>
+                        ))}
+                      </ul>
+                    </div>
 
-        <TabsContent value="breathing" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            {breathingExercises.map((exercise) => (
-              <Card key={exercise.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start mb-2">
-                    <CardTitle className="text-lg">{exercise.name}</CardTitle>
-                    <Badge variant="secondary">{exercise.difficulty_level}</Badge>
-                  </div>
-                  <CardDescription>{exercise.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {exercise.duration_minutes} min
-                    </span>
-                    <span>{exercise.cycles} cycles</span>
-                  </div>
+                    <Button 
+                      onClick={() => startMeditationSession(program)}
+                      className="w-full h-9 sm:h-10"
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      Start Session
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
 
-                  <div className="bg-muted/50 p-3 rounded text-sm space-y-1">
-                    <div>Inhale: {exercise.inhale_seconds}s</div>
-                    {exercise.hold_seconds && <div>Hold: {exercise.hold_seconds}s</div>}
-                    <div>Exhale: {exercise.exhale_seconds}s</div>
-                    {exercise.rest_seconds && <div>Rest: {exercise.rest_seconds}s</div>}
-                  </div>
+          <TabsContent value="breathing" className="space-y-3">
+            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
+              {breathingExercises.map((exercise) => (
+                <Card key={exercise.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader className="p-3 sm:p-4 pb-2">
+                    <div className="flex justify-between items-start gap-2 mb-1 sm:mb-2">
+                      <CardTitle className="text-base sm:text-lg line-clamp-1">{exercise.name}</CardTitle>
+                      <Badge variant="secondary" className="text-xs shrink-0">{exercise.difficulty_level}</Badge>
+                    </div>
+                    <CardDescription className="text-xs sm:text-sm line-clamp-2">{exercise.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-3 sm:p-4 pt-0 space-y-2 sm:space-y-3">
+                    <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+                        {exercise.duration_minutes} min
+                      </span>
+                      <span>{exercise.cycles} cycles</span>
+                    </div>
 
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold">Benefits:</p>
-                    <ul className="text-xs text-muted-foreground space-y-1">
-                      {exercise.benefits.slice(0, 3).map((benefit, idx) => (
-                        <li key={idx}>• {benefit}</li>
-                      ))}
-                    </ul>
-                  </div>
+                    <div className="bg-muted/50 p-2 sm:p-3 rounded text-xs space-y-0.5">
+                      <div>Inhale: {exercise.inhale_seconds}s</div>
+                      {exercise.hold_seconds && <div>Hold: {exercise.hold_seconds}s</div>}
+                      <div>Exhale: {exercise.exhale_seconds}s</div>
+                      {exercise.rest_seconds && <div>Rest: {exercise.rest_seconds}s</div>}
+                    </div>
 
-                  <Button 
-                    onClick={() => setSelectedExercise(exercise)}
-                    className="w-full"
-                  >
-                    <Wind className="h-4 w-4 mr-2" />
-                    Start Exercise
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-      </Tabs>
+                    <div className="space-y-1">
+                      <p className="text-xs font-semibold">Benefits:</p>
+                      <ul className="text-xs text-muted-foreground space-y-0.5">
+                        {exercise.benefits?.slice(0, 2).map((benefit, idx) => (
+                          <li key={idx} className="line-clamp-1">• {benefit}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <Button 
+                      onClick={() => setSelectedExercise(exercise)}
+                      className="w-full h-9 sm:h-10"
+                    >
+                      <Wind className="h-4 w-4 mr-2" />
+                      Start Exercise
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+      <BottomNav />
     </div>
   );
 };
