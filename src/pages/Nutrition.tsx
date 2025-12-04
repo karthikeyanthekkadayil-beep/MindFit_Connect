@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Loader2, Plus, Utensils, Calendar as CalendarIcon, Sparkles } from "lucide-react";
 import { format } from "date-fns";
+import { BottomNav } from "@/components/BottomNav";
 
 interface Recipe {
   id: string;
@@ -112,7 +113,6 @@ const Nutrition = () => {
 
       if (error) throw error;
 
-      // Save suggested recipes to database
       for (const suggestion of data.suggestions) {
         const { error: insertError } = await supabase
           .from("recipes")
@@ -180,60 +180,62 @@ const Nutrition = () => {
 
   const RecipeCard = ({ recipe, showAddButton = false }: { recipe: Recipe; showAddButton?: boolean }) => (
     <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader>
-        <div className="flex justify-between items-start">
-          <div className="flex-1">
-            <CardTitle className="text-lg">{recipe.name}</CardTitle>
-            <CardDescription className="mt-1">{recipe.description}</CardDescription>
+      <CardHeader className="p-3 sm:p-4 pb-2">
+        <div className="flex justify-between items-start gap-2">
+          <div className="flex-1 min-w-0">
+            <CardTitle className="text-base sm:text-lg line-clamp-1">{recipe.name}</CardTitle>
+            <CardDescription className="mt-1 text-xs sm:text-sm line-clamp-2">{recipe.description}</CardDescription>
           </div>
         </div>
         <div className="flex flex-wrap gap-1 mt-2">
-          {recipe.dietary_tags?.map((tag) => (
+          {recipe.dietary_tags?.slice(0, 3).map((tag) => (
             <Badge key={tag} variant="secondary" className="text-xs">
               {tag}
             </Badge>
           ))}
+          {recipe.dietary_tags?.length > 3 && (
+            <Badge variant="secondary" className="text-xs">+{recipe.dietary_tags.length - 3}</Badge>
+          )}
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-3 sm:p-4 pt-0">
         <div className="space-y-2">
-          <div className="grid grid-cols-2 gap-2 text-sm">
+          <div className="grid grid-cols-2 gap-1 sm:gap-2 text-xs sm:text-sm">
             <div>⏱️ Prep: {recipe.prep_time_minutes}min</div>
             <div>🔥 Cook: {recipe.cook_time_minutes}min</div>
             <div>🍽️ {recipe.servings} servings</div>
             <div>📊 {recipe.calories_per_serving} cal</div>
           </div>
-          <div className="flex gap-2 text-xs text-muted-foreground">
+          <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
             <span>P: {recipe.protein_grams}g</span>
             <span>C: {recipe.carbs_grams}g</span>
             <span>F: {recipe.fat_grams}g</span>
-            <span>Fiber: {recipe.fiber_grams}g</span>
           </div>
           {showAddButton && (
-            <div className="flex gap-2 pt-2">
+            <div className="grid grid-cols-3 gap-1 sm:gap-2 pt-2">
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="flex-1"
+                className="text-xs px-1 sm:px-2 h-8"
                 onClick={() => addToMealPlan(recipe, 'breakfast')}
               >
-                Add to Breakfast
+                Breakfast
               </Button>
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="flex-1"
+                className="text-xs px-1 sm:px-2 h-8"
                 onClick={() => addToMealPlan(recipe, 'lunch')}
               >
-                Add to Lunch
+                Lunch
               </Button>
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="flex-1"
+                className="text-xs px-1 sm:px-2 h-8"
                 onClick={() => addToMealPlan(recipe, 'dinner')}
               >
-                Add to Dinner
+                Dinner
               </Button>
             </div>
           )}
@@ -245,10 +247,10 @@ const Nutrition = () => {
   const MealSection = ({ title, mealType }: { title: string; mealType: string }) => {
     const meals = getMealsByType(mealType);
     return (
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold flex items-center gap-2">
-            <Utensils className="h-5 w-5" />
+      <div className="space-y-2 sm:space-y-3">
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+            <Utensils className="h-4 w-4 sm:h-5 sm:w-5" />
             {title}
           </h3>
           <Button
@@ -256,18 +258,19 @@ const Nutrition = () => {
             variant="outline"
             onClick={() => generateMealSuggestions(mealType)}
             disabled={isGenerating}
+            className="h-8 text-xs sm:text-sm px-2 sm:px-3"
           >
             {isGenerating ? (
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin mr-1" />
             ) : (
-              <Sparkles className="h-4 w-4 mr-2" />
+              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
             )}
-            AI Suggest
+            <span className="hidden sm:inline">AI </span>Suggest
           </Button>
         </div>
         {meals.length === 0 ? (
           <Card>
-            <CardContent className="py-8 text-center text-muted-foreground">
+            <CardContent className="py-6 sm:py-8 text-center text-muted-foreground text-xs sm:text-sm">
               No meals planned. Browse recipes or generate AI suggestions!
             </CardContent>
           </Card>
@@ -275,22 +278,21 @@ const Nutrition = () => {
           <div className="space-y-2">
             {meals.map((plan) => (
               <Card key={plan.id} className={plan.completed ? "opacity-60" : ""}>
-                <CardContent className="py-4">
-                  <div className="flex items-start gap-3">
+                <CardContent className="p-3 sm:py-4">
+                  <div className="flex items-start gap-2 sm:gap-3">
                     <input
                       type="checkbox"
                       checked={plan.completed}
                       onChange={() => toggleMealComplete(plan.id, plan.completed)}
-                      className="mt-1 h-5 w-5 rounded border-primary"
+                      className="mt-1 h-4 w-4 sm:h-5 sm:w-5 rounded border-primary shrink-0"
                     />
-                    <div className="flex-1">
-                      <h4 className="font-semibold">{plan.recipe.name}</h4>
-                      <p className="text-sm text-muted-foreground">{plan.recipe.description}</p>
-                      <div className="flex gap-4 text-xs text-muted-foreground mt-2">
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-semibold text-sm sm:text-base line-clamp-1">{plan.recipe.name}</h4>
+                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">{plan.recipe.description}</p>
+                      <div className="flex flex-wrap gap-2 sm:gap-4 text-xs text-muted-foreground mt-1 sm:mt-2">
                         <span>{plan.recipe.calories_per_serving} cal</span>
                         <span>P: {plan.recipe.protein_grams}g</span>
                         <span>C: {plan.recipe.carbs_grams}g</span>
-                        <span>F: {plan.recipe.fat_grams}g</span>
                       </div>
                     </div>
                   </div>
@@ -312,60 +314,63 @@ const Nutrition = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 pb-20 max-w-6xl">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold font-heading mb-2">Nutrition Planning</h1>
-        <p className="text-muted-foreground">
-          Plan your meals and get personalized nutrition recommendations
-        </p>
+    <div className="min-h-screen bg-background pb-20">
+      <div className="container mx-auto px-3 sm:px-4 py-4 max-w-6xl">
+        <div className="mb-4 sm:mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold font-heading mb-1 sm:mb-2">Nutrition Planning</h1>
+          <p className="text-sm text-muted-foreground">
+            Plan your meals and get personalized recommendations
+          </p>
+        </div>
+
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-3 sm:space-y-4">
+          <TabsList className="grid w-full grid-cols-2 h-10">
+            <TabsTrigger value="today" className="text-xs sm:text-sm">
+              <CalendarIcon className="h-4 w-4 mr-1 sm:mr-2" />
+              Today's Plan
+            </TabsTrigger>
+            <TabsTrigger value="browse" className="text-xs sm:text-sm">
+              <Utensils className="h-4 w-4 mr-1 sm:mr-2" />
+              Recipes
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="today" className="space-y-4 sm:space-y-6">
+            <Card>
+              <CardHeader className="p-3 sm:p-4 pb-2">
+                <CardTitle className="text-base sm:text-lg">Select Date</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 sm:p-4 pt-0 flex justify-center">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => date && setSelectedDate(date)}
+                  className="rounded-md border w-fit"
+                />
+              </CardContent>
+            </Card>
+
+            <div className="space-y-4 sm:space-y-6">
+              <MealSection title="Breakfast" mealType="breakfast" />
+              <MealSection title="Lunch" mealType="lunch" />
+              <MealSection title="Dinner" mealType="dinner" />
+              <MealSection title="Snacks" mealType="snack" />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="browse" className="space-y-3 sm:space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg sm:text-2xl font-semibold">Recipe Library</h2>
+            </div>
+            <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
+              {recipes.map((recipe) => (
+                <RecipeCard key={recipe.id} recipe={recipe} showAddButton={true} />
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="today">
-            <CalendarIcon className="h-4 w-4 mr-2" />
-            Today's Plan
-          </TabsTrigger>
-          <TabsTrigger value="browse">
-            <Utensils className="h-4 w-4 mr-2" />
-            Browse Recipes
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="today" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Select Date</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={(date) => date && setSelectedDate(date)}
-                className="rounded-md border"
-              />
-            </CardContent>
-          </Card>
-
-          <div className="space-y-6">
-            <MealSection title="Breakfast" mealType="breakfast" />
-            <MealSection title="Lunch" mealType="lunch" />
-            <MealSection title="Dinner" mealType="dinner" />
-            <MealSection title="Snacks" mealType="snack" />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="browse" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold">Recipe Library</h2>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            {recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} showAddButton={true} />
-            ))}
-          </div>
-        </TabsContent>
-      </Tabs>
+      <BottomNav />
     </div>
   );
 };
