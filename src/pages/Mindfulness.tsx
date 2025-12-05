@@ -254,101 +254,101 @@ const Mindfulness = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="container mx-auto px-3 sm:px-4 py-4 max-w-6xl">
-        <div className="mb-4 sm:mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold font-heading mb-1 sm:mb-2">Mindfulness</h1>
-          <p className="text-sm text-muted-foreground">
+      <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 max-w-6xl">
+        <div className="mb-3 sm:mb-6">
+          <h1 className="text-xl sm:text-3xl font-bold font-heading mb-0.5 sm:mb-2">Mindfulness</h1>
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Find calm, reduce stress, and improve focus
           </p>
         </div>
 
-        <div className="grid gap-3 grid-cols-3 mb-4 sm:mb-6">
+        <div className="grid gap-2 sm:gap-3 grid-cols-3 mb-3 sm:mb-6">
           <Card>
-            <CardHeader className="p-3 pb-1 sm:pb-3">
-              <CardTitle className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+            <CardHeader className="p-2.5 sm:p-3 pb-0.5 sm:pb-2">
+              <CardTitle className="text-[10px] sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
                 <Brain className="h-3 w-3 sm:h-4 sm:w-4" />
                 <span className="hidden sm:inline">Sessions</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-3 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{stats.totalSessions}</div>
-              <p className="text-xs text-muted-foreground sm:hidden">Sessions</p>
+            <CardContent className="p-2.5 sm:p-3 pt-0">
+              <div className="text-lg sm:text-2xl font-bold">{stats.totalSessions}</div>
+              <p className="text-[10px] text-muted-foreground sm:hidden">Sessions</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="p-3 pb-1 sm:pb-3">
-              <CardTitle className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+            <CardHeader className="p-2.5 sm:p-3 pb-0.5 sm:pb-2">
+              <CardTitle className="text-[10px] sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
                 <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                 <span className="hidden sm:inline">Minutes</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-3 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{stats.totalMinutes}</div>
-              <p className="text-xs text-muted-foreground sm:hidden">Minutes</p>
+            <CardContent className="p-2.5 sm:p-3 pt-0">
+              <div className="text-lg sm:text-2xl font-bold">{stats.totalMinutes}</div>
+              <p className="text-[10px] text-muted-foreground sm:hidden">Minutes</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="p-3 pb-1 sm:pb-3">
-              <CardTitle className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+            <CardHeader className="p-2.5 sm:p-3 pb-0.5 sm:pb-2">
+              <CardTitle className="text-[10px] sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
                 <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
                 <span className="hidden sm:inline">This Week</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-3 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{stats.weekStreak}</div>
-              <p className="text-xs text-muted-foreground sm:hidden">Week</p>
+            <CardContent className="p-2.5 sm:p-3 pt-0">
+              <div className="text-lg sm:text-2xl font-bold">{stats.weekStreak}</div>
+              <p className="text-[10px] text-muted-foreground sm:hidden">Week</p>
             </CardContent>
           </Card>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-3 sm:space-y-4">
-          <TabsList className="grid w-full grid-cols-2 h-10">
-            <TabsTrigger value="browse" className="text-xs sm:text-sm">
-              <Brain className="h-4 w-4 mr-1 sm:mr-2" />
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-2 sm:space-y-4">
+          <TabsList className="grid w-full grid-cols-2 h-9 sm:h-10">
+            <TabsTrigger value="browse" className="text-xs sm:text-sm gap-1 sm:gap-2">
+              <Brain className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Meditation
             </TabsTrigger>
-            <TabsTrigger value="breathing" className="text-xs sm:text-sm">
-              <Wind className="h-4 w-4 mr-1 sm:mr-2" />
+            <TabsTrigger value="breathing" className="text-xs sm:text-sm gap-1 sm:gap-2">
+              <Wind className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Breathing
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="browse" className="space-y-3">
-            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
+          <TabsContent value="browse" className="space-y-2 sm:space-y-3">
+            <div className="grid gap-2 sm:gap-3 grid-cols-2 lg:grid-cols-3">
               {meditationPrograms.map((program) => (
-                <Card key={program.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader className="p-3 sm:p-4 pb-2">
-                    <div className="flex justify-between items-start gap-2 mb-1 sm:mb-2">
-                      <CardTitle className="text-base sm:text-lg line-clamp-1">{program.title}</CardTitle>
-                      <Badge variant="secondary" className="text-xs shrink-0">{program.difficulty_level}</Badge>
+                <Card key={program.id} className="hover:shadow-lg transition-all">
+                  <CardHeader className="p-2.5 sm:p-4 pb-1.5 sm:pb-2">
+                    <div className="flex justify-between items-start gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                      <CardTitle className="text-xs sm:text-base font-semibold line-clamp-1">{program.title}</CardTitle>
+                      <Badge variant="secondary" className="text-[10px] sm:text-xs shrink-0 px-1.5 sm:px-2">{program.difficulty_level}</Badge>
                     </div>
-                    <CardDescription className="text-xs sm:text-sm line-clamp-2">{program.description}</CardDescription>
+                    <CardDescription className="text-[10px] sm:text-sm line-clamp-2">{program.description}</CardDescription>
                   </CardHeader>
-                  <CardContent className="p-3 sm:p-4 pt-0 space-y-2 sm:space-y-3">
-                    <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+                  <CardContent className="p-2.5 sm:p-4 pt-0 space-y-1.5 sm:space-y-2">
+                    <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
-                        {program.duration_minutes} min
+                        <Clock className="h-2.5 w-2.5 sm:h-4 sm:w-4" />
+                        {program.duration_minutes}m
                       </span>
-                      <span className="capitalize line-clamp-1">{program.category.replace('_', ' ')}</span>
+                      <span className="capitalize line-clamp-1 text-[10px] sm:text-xs">{program.category.replace('_', ' ')}</span>
                     </div>
 
-                    <div className="flex flex-wrap gap-1">
+                    <div className="hidden sm:flex flex-wrap gap-1">
                       {program.tags?.slice(0, 2).map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-xs">
+                        <Badge key={tag} variant="outline" className="text-[10px] sm:text-xs">
                           {tag}
                         </Badge>
                       ))}
                       {program.tags?.length > 2 && (
-                        <Badge variant="outline" className="text-xs">+{program.tags.length - 2}</Badge>
+                        <Badge variant="outline" className="text-[10px] sm:text-xs">+{program.tags.length - 2}</Badge>
                       )}
                     </div>
 
-                    <div className="space-y-1">
-                      <p className="text-xs font-semibold">Benefits:</p>
-                      <ul className="text-xs text-muted-foreground space-y-0.5">
+                    <div className="hidden sm:block space-y-0.5">
+                      <p className="text-[10px] sm:text-xs font-semibold">Benefits:</p>
+                      <ul className="text-[10px] sm:text-xs text-muted-foreground space-y-0.5">
                         {program.benefits?.slice(0, 2).map((benefit, idx) => (
                           <li key={idx} className="line-clamp-1">• {benefit}</li>
                         ))}
@@ -357,10 +357,10 @@ const Mindfulness = () => {
 
                     <Button 
                       onClick={() => startMeditationSession(program)}
-                      className="w-full h-9 sm:h-10"
+                      className="w-full h-8 sm:h-10 text-xs sm:text-sm"
                     >
-                      <Play className="h-4 w-4 mr-2" />
-                      Start Session
+                      <Play className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                      Start
                     </Button>
                   </CardContent>
                 </Card>
@@ -368,36 +368,40 @@ const Mindfulness = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="breathing" className="space-y-3">
-            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
+          <TabsContent value="breathing" className="space-y-2 sm:space-y-3">
+            <div className="grid gap-2 sm:gap-3 grid-cols-2 lg:grid-cols-3">
               {breathingExercises.map((exercise) => (
-                <Card key={exercise.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader className="p-3 sm:p-4 pb-2">
-                    <div className="flex justify-between items-start gap-2 mb-1 sm:mb-2">
-                      <CardTitle className="text-base sm:text-lg line-clamp-1">{exercise.name}</CardTitle>
-                      <Badge variant="secondary" className="text-xs shrink-0">{exercise.difficulty_level}</Badge>
+                <Card key={exercise.id} className="hover:shadow-lg transition-all">
+                  <CardHeader className="p-2.5 sm:p-4 pb-1.5 sm:pb-2">
+                    <div className="flex justify-between items-start gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                      <CardTitle className="text-xs sm:text-base font-semibold line-clamp-1">{exercise.name}</CardTitle>
+                      <Badge variant="secondary" className="text-[10px] sm:text-xs shrink-0 px-1.5 sm:px-2">{exercise.difficulty_level}</Badge>
                     </div>
-                    <CardDescription className="text-xs sm:text-sm line-clamp-2">{exercise.description}</CardDescription>
+                    <CardDescription className="text-[10px] sm:text-sm line-clamp-2">{exercise.description}</CardDescription>
                   </CardHeader>
-                  <CardContent className="p-3 sm:p-4 pt-0 space-y-2 sm:space-y-3">
-                    <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+                  <CardContent className="p-2.5 sm:p-4 pt-0 space-y-1.5 sm:space-y-2">
+                    <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
-                        {exercise.duration_minutes} min
+                        <Clock className="h-2.5 w-2.5 sm:h-4 sm:w-4" />
+                        {exercise.duration_minutes}m
                       </span>
                       <span>{exercise.cycles} cycles</span>
                     </div>
 
-                    <div className="bg-muted/50 p-2 sm:p-3 rounded text-xs space-y-0.5">
-                      <div>Inhale: {exercise.inhale_seconds}s</div>
-                      {exercise.hold_seconds && <div>Hold: {exercise.hold_seconds}s</div>}
-                      <div>Exhale: {exercise.exhale_seconds}s</div>
-                      {exercise.rest_seconds && <div>Rest: {exercise.rest_seconds}s</div>}
+                    <div className="bg-muted/50 p-1.5 sm:p-2 rounded text-[10px] sm:text-xs space-y-0.5">
+                      <div className="flex gap-2">
+                        <span>In: {exercise.inhale_seconds}s</span>
+                        {exercise.hold_seconds && <span>Hold: {exercise.hold_seconds}s</span>}
+                      </div>
+                      <div className="flex gap-2">
+                        <span>Out: {exercise.exhale_seconds}s</span>
+                        {exercise.rest_seconds && <span>Rest: {exercise.rest_seconds}s</span>}
+                      </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <p className="text-xs font-semibold">Benefits:</p>
-                      <ul className="text-xs text-muted-foreground space-y-0.5">
+                    <div className="hidden sm:block space-y-0.5">
+                      <p className="text-[10px] sm:text-xs font-semibold">Benefits:</p>
+                      <ul className="text-[10px] sm:text-xs text-muted-foreground space-y-0.5">
                         {exercise.benefits?.slice(0, 2).map((benefit, idx) => (
                           <li key={idx} className="line-clamp-1">• {benefit}</li>
                         ))}
@@ -406,10 +410,10 @@ const Mindfulness = () => {
 
                     <Button 
                       onClick={() => setSelectedExercise(exercise)}
-                      className="w-full h-9 sm:h-10"
+                      className="w-full h-8 sm:h-10 text-xs sm:text-sm"
                     >
-                      <Wind className="h-4 w-4 mr-2" />
-                      Start Exercise
+                      <Wind className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                      Start
                     </Button>
                   </CardContent>
                 </Card>
