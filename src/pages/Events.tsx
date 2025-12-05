@@ -74,11 +74,11 @@ export default function Events() {
 
   const EventCard = ({ event }: { event: any }) => (
     <Card
-      className="cursor-pointer hover:shadow-lg transition-shadow active:scale-[0.98]"
+      className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
       onClick={() => navigate(`/events/${event.id}`)}
     >
       {event.image_url && (
-        <div className="h-28 sm:h-40 overflow-hidden rounded-t-lg">
+        <div className="h-20 sm:h-36 overflow-hidden rounded-t-lg">
           <img
             src={event.image_url}
             alt={event.title}
@@ -86,42 +86,40 @@ export default function Events() {
           />
         </div>
       )}
-      <CardHeader className="p-3 sm:p-6">
-        <div className="flex items-start justify-between gap-2">
+      <CardHeader className="p-2.5 sm:p-4 pb-1 sm:pb-2">
+        <div className="flex items-start justify-between gap-1.5 sm:gap-2">
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-sm sm:text-lg truncate">{event.title}</CardTitle>
-            <CardDescription className="line-clamp-2 text-xs sm:text-sm">
+            <CardTitle className="text-xs sm:text-base font-semibold truncate">{event.title}</CardTitle>
+            <CardDescription className="line-clamp-1 sm:line-clamp-2 text-[10px] sm:text-sm mt-0.5">
               {event.description}
             </CardDescription>
           </div>
-          <Badge variant="secondary" className="text-xs shrink-0">{event.event_type}</Badge>
+          <Badge variant="secondary" className="text-[10px] sm:text-xs shrink-0 px-1.5 sm:px-2 py-0.5">{event.event_type}</Badge>
         </div>
       </CardHeader>
-      <CardContent className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-muted-foreground p-3 pt-0 sm:p-6 sm:pt-0">
-        <div className="flex items-center gap-2">
-          <Calendar className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
-          <span className="truncate">{format(new Date(event.start_time), "PPP")}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Clock className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
+      <CardContent className="space-y-1 sm:space-y-1.5 text-[10px] sm:text-sm text-muted-foreground p-2.5 pt-0 sm:p-4 sm:pt-0">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <Calendar className="h-2.5 w-2.5 sm:h-4 sm:w-4 shrink-0" />
+          <span className="truncate">{format(new Date(event.start_time), "MMM d")}</span>
+          <Clock className="h-2.5 w-2.5 sm:h-4 sm:w-4 shrink-0 ml-1" />
           <span>{format(new Date(event.start_time), "p")}</span>
         </div>
         {event.location && (
-          <div className="flex items-center gap-2">
-            <MapPin className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <MapPin className="h-2.5 w-2.5 sm:h-4 sm:w-4 shrink-0" />
             <span className="line-clamp-1">{event.location}</span>
           </div>
         )}
-        <div className="flex items-center gap-2">
-          <Users className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <Users className="h-2.5 w-2.5 sm:h-4 sm:w-4 shrink-0" />
           <span>
             {event.current_participants || 0}
-            {event.max_participants && ` / ${event.max_participants}`} attending
+            {event.max_participants && `/${event.max_participants}`}
           </span>
         </div>
       </CardContent>
-      <CardFooter className="p-3 pt-0 sm:p-6 sm:pt-0">
-        <Badge variant="outline" className="text-xs">{event.community?.name}</Badge>
+      <CardFooter className="p-2.5 pt-0 sm:p-4 sm:pt-0">
+        <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 sm:px-2">{event.community?.name}</Badge>
       </CardFooter>
     </Card>
   );
@@ -200,15 +198,15 @@ export default function Events() {
             </div>
 
             {viewMode === "map" ? (
-              <div className="h-[400px] sm:h-[600px] rounded-lg overflow-hidden border">
+              <div className="h-[300px] sm:h-[500px] rounded-lg overflow-hidden border">
                 <EventsMap events={events || []} onEventClick={(eventId) => navigate(`/events/${eventId}`)} />
               </div>
             ) : (
               <>
                 {isLoading ? (
-                  <div className="text-center py-8 text-muted-foreground text-sm">Loading events...</div>
+                  <div className="text-center py-6 sm:py-8 text-muted-foreground text-xs sm:text-sm">Loading events...</div>
                 ) : events && events.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
                     {events.map((event) => (
                       <EventCard key={event.id} event={event} />
                     ))}
@@ -226,9 +224,9 @@ export default function Events() {
             )}
           </TabsContent>
 
-          <TabsContent value="my-events" className="space-y-4">
+          <TabsContent value="my-events" className="space-y-3 sm:space-y-4">
             {myEvents && myEvents.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
                 {myEvents.map((event) => (
                   <EventCard key={event.id} event={event} />
                 ))}
