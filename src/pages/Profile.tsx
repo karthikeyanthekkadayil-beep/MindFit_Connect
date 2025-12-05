@@ -133,36 +133,36 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="container max-w-4xl mx-auto p-3 sm:p-4 space-y-4 sm:space-y-6">
+      <div className="container max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3 sm:space-y-6">
         {/* Header */}
         <Card>
-          <CardContent className="pt-4 sm:pt-6 p-3 sm:p-6">
-            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-              <Avatar className="h-16 w-16 sm:h-24 sm:w-24">
+          <CardContent className="pt-3 sm:pt-6 p-3 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
+              <Avatar className="h-14 w-14 sm:h-24 sm:w-24">
                 <AvatarImage src={profile.avatar_url || undefined} />
-                <AvatarFallback className="text-lg sm:text-2xl">
+                <AvatarFallback className="text-base sm:text-2xl">
                   {profile.full_name?.charAt(0) || profile.email.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 text-center sm:text-left min-w-0">
-                <h1 className="text-xl sm:text-2xl font-bold truncate">{profile.full_name || "User"}</h1>
-                <p className="text-muted-foreground text-sm sm:text-base truncate">{profile.email}</p>
+                <h1 className="text-lg sm:text-2xl font-bold truncate">{profile.full_name || "User"}</h1>
+                <p className="text-muted-foreground text-xs sm:text-base truncate">{profile.email}</p>
                 {profile.location && (
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 truncate">{profile.location}</p>
+                  <p className="text-[10px] sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 truncate">{profile.location}</p>
                 )}
               </div>
               <div className="flex gap-2 w-full sm:w-auto">
                 {!isEditing ? (
-                  <Button onClick={() => setIsEditing(true)} className="flex-1 sm:flex-none h-9 sm:h-10 text-sm">
+                  <Button onClick={() => setIsEditing(true)} className="flex-1 sm:flex-none h-8 sm:h-10 text-xs sm:text-sm">
                     Edit Profile
                   </Button>
                 ) : (
                   <>
-                    <Button variant="outline" onClick={() => setIsEditing(false)} className="flex-1 sm:flex-none h-9 sm:h-10 text-sm">
+                    <Button variant="outline" onClick={() => setIsEditing(false)} className="flex-1 sm:flex-none h-8 sm:h-10 text-xs sm:text-sm">
                       Cancel
                     </Button>
-                    <Button onClick={handleSave} disabled={saving} className="flex-1 sm:flex-none h-9 sm:h-10 text-sm">
-                      {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    <Button onClick={handleSave} disabled={saving} className="flex-1 sm:flex-none h-8 sm:h-10 text-xs sm:text-sm">
+                      {saving && <Loader2 className="mr-2 h-3 w-3 sm:h-4 sm:w-4 animate-spin" />}
                       Save
                     </Button>
                   </>
@@ -174,74 +174,74 @@ const Profile = () => {
 
         {/* Profile Tabs */}
         <Tabs defaultValue="personal" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-10 sm:h-11">
-            <TabsTrigger value="personal" className="text-xs sm:text-sm px-1 sm:px-3">
-              <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Personal</span>
+          <TabsList className="grid w-full grid-cols-3 h-9 sm:h-11">
+            <TabsTrigger value="personal" className="text-[10px] sm:text-sm px-1 sm:px-3 gap-1 sm:gap-2">
+              <User className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden xs:inline sm:inline">Personal</span>
             </TabsTrigger>
-            <TabsTrigger value="health" className="text-xs sm:text-sm px-1 sm:px-3">
-              <Heart className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Health</span>
+            <TabsTrigger value="health" className="text-[10px] sm:text-sm px-1 sm:px-3 gap-1 sm:gap-2">
+              <Heart className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden xs:inline sm:inline">Health</span>
             </TabsTrigger>
-            <TabsTrigger value="settings" className="text-xs sm:text-sm px-1 sm:px-3">
-              <Settings className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Settings</span>
+            <TabsTrigger value="settings" className="text-[10px] sm:text-sm px-1 sm:px-3 gap-1 sm:gap-2">
+              <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden xs:inline sm:inline">Settings</span>
             </TabsTrigger>
           </TabsList>
 
           {/* Personal Info Tab */}
           <TabsContent value="personal">
             <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Personal Information</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Your basic profile information</CardDescription>
+              <CardHeader className="p-3 sm:p-6">
+                <CardTitle className="text-sm sm:text-lg">Personal Information</CardTitle>
+                <CardDescription className="text-[10px] sm:text-sm">Your basic profile information</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4 p-4 pt-0 sm:p-6 sm:pt-0">
-                <div className="space-y-2">
-                  <Label htmlFor="full_name" className="text-sm">Full Name</Label>
+              <CardContent className="space-y-3 sm:space-y-4 p-3 pt-0 sm:p-6 sm:pt-0">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="full_name" className="text-xs sm:text-sm">Full Name</Label>
                   <Input
                     id="full_name"
                     value={profile.full_name || ""}
                     onChange={(e) => setProfile({ ...profile, full_name: e.target.value })}
                     disabled={!isEditing}
-                    className="h-10 sm:h-11"
+                    className="h-9 sm:h-11 text-sm"
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="bio" className="text-sm">Bio</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="bio" className="text-xs sm:text-sm">Bio</Label>
                   <Textarea
                     id="bio"
                     value={profile.bio || ""}
                     onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
                     disabled={!isEditing}
-                    rows={3}
-                    className="text-sm"
+                    rows={2}
+                    className="text-xs sm:text-sm"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="date_of_birth" className="text-sm">Date of Birth</Label>
+                <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="date_of_birth" className="text-xs sm:text-sm">Date of Birth</Label>
                     <Input
                       id="date_of_birth"
                       type="date"
                       value={profile.date_of_birth || ""}
                       onChange={(e) => setProfile({ ...profile, date_of_birth: e.target.value })}
                       disabled={!isEditing}
-                      className="h-10 sm:h-11"
+                      className="h-9 sm:h-11 text-xs sm:text-sm"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="gender" className="text-sm">Gender</Label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="gender" className="text-xs sm:text-sm">Gender</Label>
                     <Select
                       value={profile.gender || ""}
                       onValueChange={(value) => setProfile({ ...profile, gender: value })}
                       disabled={!isEditing}
                     >
-                      <SelectTrigger className="h-10 sm:h-11">
-                        <SelectValue placeholder="Select gender" />
+                      <SelectTrigger className="h-9 sm:h-11 text-xs sm:text-sm">
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent className="bg-popover">
                         <SelectItem value="male">Male</SelectItem>
@@ -253,33 +253,33 @@ const Profile = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="location" className="text-sm">Location</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="location" className="text-xs sm:text-sm">Location</Label>
                   <Input
                     id="location"
                     value={profile.location || ""}
                     onChange={(e) => setProfile({ ...profile, location: e.target.value })}
                     disabled={!isEditing}
                     placeholder="City, Country"
-                    className="h-10 sm:h-11"
+                    className="h-9 sm:h-11 text-sm"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="activity_interests" className="text-sm">Activity Interests</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="activity_interests" className="text-xs sm:text-sm">Activity Interests</Label>
                   {isEditing ? (
                     <Input
                       id="activity_interests"
                       value={(profile.activity_interests || []).join(", ")}
                       onChange={(e) => updateArrayField("activity_interests", e.target.value)}
-                      placeholder="Hiking, Yoga, Running (comma separated)"
-                      className="h-10 sm:h-11"
+                      placeholder="Hiking, Yoga, Running"
+                      className="h-9 sm:h-11 text-sm"
                     />
                   ) : (
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {profile.activity_interests?.map((interest, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">{interest}</Badge>
-                      )) || <span className="text-muted-foreground text-sm">No interests added</span>}
+                        <Badge key={i} variant="secondary" className="text-[10px] sm:text-xs">{interest}</Badge>
+                      )) || <span className="text-muted-foreground text-xs sm:text-sm">No interests added</span>}
                     </div>
                   )}
                 </div>
@@ -290,20 +290,20 @@ const Profile = () => {
           {/* Health Profile Tab */}
           <TabsContent value="health">
             <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Health Profile</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Your health and fitness information</CardDescription>
+              <CardHeader className="p-3 sm:p-6">
+                <CardTitle className="text-sm sm:text-lg">Health Profile</CardTitle>
+                <CardDescription className="text-[10px] sm:text-sm">Your health and fitness information</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4 p-4 pt-0 sm:p-6 sm:pt-0">
-                <div className="space-y-2">
-                  <Label htmlFor="fitness_level" className="text-sm">Fitness Level</Label>
+              <CardContent className="space-y-3 sm:space-y-4 p-3 pt-0 sm:p-6 sm:pt-0">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="fitness_level" className="text-xs sm:text-sm">Fitness Level</Label>
                   <Select
                     value={profile.fitness_level || ""}
                     onValueChange={(value) => setProfile({ ...profile, fitness_level: value })}
                     disabled={!isEditing}
                   >
-                    <SelectTrigger className="h-10 sm:h-11">
-                      <SelectValue placeholder="Select fitness level" />
+                    <SelectTrigger className="h-9 sm:h-11 text-xs sm:text-sm">
+                      <SelectValue placeholder="Select level" />
                     </SelectTrigger>
                     <SelectContent className="bg-popover">
                       <SelectItem value="beginner">Beginner</SelectItem>
@@ -314,59 +314,59 @@ const Profile = () => {
                   </Select>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="health_goals" className="text-sm">Health Goals</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="health_goals" className="text-xs sm:text-sm">Health Goals</Label>
                   {isEditing ? (
                     <Input
                       id="health_goals"
                       value={(profile.health_goals || []).join(", ")}
                       onChange={(e) => updateArrayField("health_goals", e.target.value)}
-                      placeholder="Weight loss, Muscle gain, Flexibility (comma separated)"
-                      className="h-10 sm:h-11"
+                      placeholder="Weight loss, Muscle gain"
+                      className="h-9 sm:h-11 text-sm"
                     />
                   ) : (
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {profile.health_goals?.map((goal, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">{goal}</Badge>
-                      )) || <span className="text-muted-foreground text-sm">No goals set</span>}
+                        <Badge key={i} variant="secondary" className="text-[10px] sm:text-xs">{goal}</Badge>
+                      )) || <span className="text-muted-foreground text-xs sm:text-sm">No goals set</span>}
                     </div>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="medical_conditions" className="text-sm">Medical Conditions</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="medical_conditions" className="text-xs sm:text-sm">Medical Conditions</Label>
                   {isEditing ? (
                     <Input
                       id="medical_conditions"
                       value={(profile.medical_conditions || []).join(", ")}
                       onChange={(e) => updateArrayField("medical_conditions", e.target.value)}
-                      placeholder="Diabetes, Asthma (comma separated)"
-                      className="h-10 sm:h-11"
+                      placeholder="Diabetes, Asthma"
+                      className="h-9 sm:h-11 text-sm"
                     />
                   ) : (
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {profile.medical_conditions?.map((condition, i) => (
-                        <Badge key={i} variant="outline" className="text-xs">{condition}</Badge>
-                      )) || <span className="text-muted-foreground text-sm">No conditions listed</span>}
+                        <Badge key={i} variant="outline" className="text-[10px] sm:text-xs">{condition}</Badge>
+                      )) || <span className="text-muted-foreground text-xs sm:text-sm">No conditions listed</span>}
                     </div>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="dietary_preferences" className="text-sm">Dietary Preferences</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="dietary_preferences" className="text-xs sm:text-sm">Dietary Preferences</Label>
                   {isEditing ? (
                     <Input
                       id="dietary_preferences"
                       value={(profile.dietary_preferences || []).join(", ")}
                       onChange={(e) => updateArrayField("dietary_preferences", e.target.value)}
-                      placeholder="Vegetarian, Vegan, Gluten-free (comma separated)"
-                      className="h-10 sm:h-11"
+                      placeholder="Vegetarian, Vegan"
+                      className="h-9 sm:h-11 text-sm"
                     />
                   ) : (
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {profile.dietary_preferences?.map((pref, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">{pref}</Badge>
-                      )) || <span className="text-muted-foreground text-sm">No preferences set</span>}
+                        <Badge key={i} variant="secondary" className="text-[10px] sm:text-xs">{pref}</Badge>
+                      )) || <span className="text-muted-foreground text-xs sm:text-sm">No preferences set</span>}
                     </div>
                   )}
                 </div>
@@ -377,21 +377,21 @@ const Profile = () => {
           {/* Settings Tab */}
           <TabsContent value="settings">
             <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Account Settings</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Manage your account preferences</CardDescription>
+              <CardHeader className="p-3 sm:p-6">
+                <CardTitle className="text-sm sm:text-lg">Account Settings</CardTitle>
+                <CardDescription className="text-[10px] sm:text-sm">Manage your account preferences</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4 p-4 pt-0 sm:p-6 sm:pt-0">
-                <div className="space-y-4">
+              <CardContent className="space-y-3 sm:space-y-4 p-3 pt-0 sm:p-6 sm:pt-0">
+                <div className="space-y-3 sm:space-y-4">
                   <div>
-                    <h3 className="font-medium mb-2 text-sm sm:text-base">Email</h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground break-all">{profile.email}</p>
+                    <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Email</h3>
+                    <p className="text-[10px] sm:text-sm text-muted-foreground break-all">{profile.email}</p>
                   </div>
 
                   <div>
-                    <h3 className="font-medium mb-2 text-sm sm:text-base">Account Actions</h3>
-                    <Button variant="destructive" onClick={handleLogout} className="w-full sm:w-auto h-9 sm:h-10 text-sm">
-                      <LogOut className="mr-2 h-4 w-4" />
+                    <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Account Actions</h3>
+                    <Button variant="destructive" onClick={handleLogout} className="w-full sm:w-auto h-8 sm:h-10 text-xs sm:text-sm">
+                      <LogOut className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
                       Log Out
                     </Button>
                   </div>
