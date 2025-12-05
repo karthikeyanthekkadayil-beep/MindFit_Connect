@@ -58,11 +58,11 @@ export default function Communities() {
 
   const CommunityCard = ({ community }: { community: any }) => (
     <Card
-      className="cursor-pointer hover:shadow-lg transition-shadow active:scale-[0.98]"
+      className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
       onClick={() => navigate(`/communities/${community.id}`)}
     >
       {community.image_url && (
-        <div className="h-24 sm:h-32 overflow-hidden rounded-t-lg">
+        <div className="h-20 sm:h-32 overflow-hidden rounded-t-lg">
           <img
             src={community.image_url}
             alt={community.name}
@@ -70,18 +70,18 @@ export default function Communities() {
           />
         </div>
       )}
-      <CardHeader className="p-3 sm:p-6">
-        <div className="flex items-start justify-between gap-2">
+      <CardHeader className="p-2.5 sm:p-4 pb-1.5 sm:pb-2">
+        <div className="flex items-start justify-between gap-1.5 sm:gap-2">
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-sm sm:text-lg truncate">{community.name}</CardTitle>
-            <CardDescription className="line-clamp-2 text-xs sm:text-sm">
+            <CardTitle className="text-xs sm:text-base font-semibold truncate">{community.name}</CardTitle>
+            <CardDescription className="line-clamp-2 text-[10px] sm:text-sm mt-0.5">
               {community.description}
             </CardDescription>
           </div>
-          <Badge variant="secondary" className="text-xs shrink-0">{community.category}</Badge>
+          <Badge variant="secondary" className="text-[10px] sm:text-xs shrink-0 px-1.5 sm:px-2 py-0.5">{community.category}</Badge>
         </div>
       </CardHeader>
-      <CardFooter className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground p-3 pt-0 sm:p-6 sm:pt-0">
+      <CardFooter className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-sm text-muted-foreground p-2.5 pt-0 sm:p-4 sm:pt-0">
         <Users className="h-3 w-3 sm:h-4 sm:w-4" />
         <span>{community.member_count || 0} members</span>
       </CardFooter>
@@ -142,9 +142,9 @@ export default function Communities() {
             </div>
 
             {isLoading ? (
-              <div className="text-center py-8 text-muted-foreground text-sm">Loading communities...</div>
+              <div className="text-center py-6 sm:py-8 text-muted-foreground text-xs sm:text-sm">Loading communities...</div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
                 {communities?.map((community) => (
                   <CommunityCard key={community.id} community={community} />
                 ))}
@@ -152,9 +152,9 @@ export default function Communities() {
             )}
           </TabsContent>
 
-          <TabsContent value="my-communities" className="space-y-4">
+          <TabsContent value="my-communities" className="space-y-3 sm:space-y-4">
             {myCommunities && myCommunities.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
                 {myCommunities.map((community) => (
                   <CommunityCard key={community.id} community={community} />
                 ))}
