@@ -26,6 +26,8 @@ import Messages from "./pages/Messages";
 import ChatThread from "./pages/ChatThread";
 import Admin from "./pages/Admin";
 import AdminAuth from "./pages/AdminAuth";
+import Balance from "./pages/Balance";
+import Moderator from "./pages/Moderator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,6 +62,8 @@ const App = () => (
           <Route path="/messages/:id" element={<ChatThread />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/login" element={<AdminAuth />} />
+          <Route path="/balance" element={<Balance />} />
+          <Route path="/moderator" element={<Moderator />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
