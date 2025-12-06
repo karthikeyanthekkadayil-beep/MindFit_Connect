@@ -184,37 +184,38 @@ const WorkoutLibrary = () => {
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                 {filteredWorkouts.map((workout) => (
                   <Card 
                     key={workout.id} 
                     className="cursor-pointer hover:shadow-lg transition-shadow active:scale-[0.98]"
                     onClick={() => navigate(`/workouts/${workout.id}`)}
                   >
-                    <CardHeader className="p-3 sm:p-4 pb-2">
-                      <div className="aspect-video bg-muted rounded-lg mb-2 overflow-hidden">
+                    <CardHeader className="p-2 sm:p-4 pb-1 sm:pb-2">
+                      <div className="aspect-video bg-muted rounded-md sm:rounded-lg mb-1 sm:mb-2 overflow-hidden">
                         {workout.image_url ? (
                           <img src={workout.image_url} alt={workout.name} className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Dumbbell className="h-8 sm:h-12 w-8 sm:w-12 text-muted-foreground" />
+                            <Dumbbell className="h-6 sm:h-12 w-6 sm:w-12 text-muted-foreground" />
                           </div>
                         )}
                       </div>
-                      <div className="flex justify-between items-start gap-2">
-                        <CardTitle className="text-base sm:text-lg line-clamp-1">{workout.name}</CardTitle>
-                        <Badge className={`${getDifficultyColor(workout.difficulty_level)} text-xs shrink-0`}>
-                          {workout.difficulty_level}
+                      <div className="flex justify-between items-start gap-1">
+                        <CardTitle className="text-xs sm:text-lg line-clamp-1">{workout.name}</CardTitle>
+                        <Badge className={`${getDifficultyColor(workout.difficulty_level)} text-[9px] sm:text-xs shrink-0 px-1 sm:px-2 py-0`}>
+                          <span className="sm:hidden">{workout.difficulty_level.charAt(0).toUpperCase()}</span>
+                          <span className="hidden sm:inline">{workout.difficulty_level}</span>
                         </Badge>
                       </div>
-                      <CardDescription className="line-clamp-2 text-xs sm:text-sm">
+                      <CardDescription className="line-clamp-2 text-[10px] sm:text-sm hidden sm:block">
                         {workout.description}
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="p-3 sm:p-4 pt-0">
-                      <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
-                        <span>{workout.total_duration_minutes} min</span>
-                        <Badge variant="outline" className="text-xs">{workout.category}</Badge>
+                    <CardContent className="p-2 sm:p-4 pt-0">
+                      <div className="flex justify-between items-center text-[10px] sm:text-sm text-muted-foreground">
+                        <span>{workout.total_duration_minutes}m</span>
+                        <Badge variant="outline" className="text-[9px] sm:text-xs px-1 sm:px-2 py-0">{workout.category}</Badge>
                       </div>
                     </CardContent>
                   </Card>
@@ -232,44 +233,45 @@ const WorkoutLibrary = () => {
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                 {filteredExercises.map((exercise) => (
                   <Card key={exercise.id} className="hover:shadow-lg transition-shadow">
-                    <CardHeader className="p-3 sm:p-4 pb-2">
-                      <div className="aspect-video bg-muted rounded-lg mb-2 overflow-hidden">
+                    <CardHeader className="p-2 sm:p-4 pb-1 sm:pb-2">
+                      <div className="aspect-video bg-muted rounded-md sm:rounded-lg mb-1 sm:mb-2 overflow-hidden">
                         {exercise.thumbnail_url ? (
                           <img src={exercise.thumbnail_url} alt={exercise.name} className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Heart className="h-8 sm:h-12 w-8 sm:w-12 text-muted-foreground" />
+                            <Heart className="h-6 sm:h-12 w-6 sm:w-12 text-muted-foreground" />
                           </div>
                         )}
                       </div>
-                      <div className="flex justify-between items-start gap-2">
-                        <CardTitle className="text-base sm:text-lg line-clamp-1">{exercise.name}</CardTitle>
-                        <Badge className={`${getDifficultyColor(exercise.difficulty_level)} text-xs shrink-0`}>
-                          {exercise.difficulty_level}
+                      <div className="flex justify-between items-start gap-1">
+                        <CardTitle className="text-xs sm:text-lg line-clamp-1">{exercise.name}</CardTitle>
+                        <Badge className={`${getDifficultyColor(exercise.difficulty_level)} text-[9px] sm:text-xs shrink-0 px-1 sm:px-2 py-0`}>
+                          <span className="sm:hidden">{exercise.difficulty_level.charAt(0).toUpperCase()}</span>
+                          <span className="hidden sm:inline">{exercise.difficulty_level}</span>
                         </Badge>
                       </div>
-                      <CardDescription className="line-clamp-2 text-xs sm:text-sm">
+                      <CardDescription className="line-clamp-2 text-[10px] sm:text-sm hidden sm:block">
                         {exercise.description}
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="p-3 sm:p-4 pt-0">
-                      <div className="flex flex-wrap gap-1 mb-2">
+                    <CardContent className="p-2 sm:p-4 pt-0">
+                      <div className="flex flex-wrap gap-0.5 sm:gap-1 mb-1 sm:mb-2">
                         {exercise.muscle_groups.slice(0, 2).map((group, i) => (
-                          <Badge key={i} variant="secondary" className="text-xs">
+                          <Badge key={i} variant="secondary" className="text-[9px] sm:text-xs px-1 sm:px-2 py-0">
                             {group}
                           </Badge>
                         ))}
                         {exercise.muscle_groups.length > 2 && (
-                          <Badge variant="secondary" className="text-xs">
+                          <Badge variant="secondary" className="text-[9px] sm:text-xs px-1 sm:px-2 py-0">
                             +{exercise.muscle_groups.length - 2}
                           </Badge>
                         )}
                       </div>
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        {exercise.duration_minutes} min
+                      <p className="text-[10px] sm:text-sm text-muted-foreground">
+                        {exercise.duration_minutes}m
                       </p>
                     </CardContent>
                   </Card>

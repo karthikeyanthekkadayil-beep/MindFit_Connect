@@ -180,62 +180,65 @@ const Nutrition = () => {
 
   const RecipeCard = ({ recipe, showAddButton = false }: { recipe: Recipe; showAddButton?: boolean }) => (
     <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader className="p-3 sm:p-4 pb-2">
-        <div className="flex justify-between items-start gap-2">
+      <CardHeader className="p-2 sm:p-4 pb-1 sm:pb-2">
+        <div className="flex justify-between items-start gap-1">
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-base sm:text-lg line-clamp-1">{recipe.name}</CardTitle>
-            <CardDescription className="mt-1 text-xs sm:text-sm line-clamp-2">{recipe.description}</CardDescription>
+            <CardTitle className="text-xs sm:text-lg line-clamp-1">{recipe.name}</CardTitle>
+            <CardDescription className="mt-0.5 sm:mt-1 text-[10px] sm:text-sm line-clamp-2 hidden sm:block">{recipe.description}</CardDescription>
           </div>
         </div>
-        <div className="flex flex-wrap gap-1 mt-2">
-          {recipe.dietary_tags?.slice(0, 3).map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-xs">
+        <div className="flex flex-wrap gap-0.5 sm:gap-1 mt-1 sm:mt-2">
+          {recipe.dietary_tags?.slice(0, 2).map((tag) => (
+            <Badge key={tag} variant="secondary" className="text-[9px] sm:text-xs px-1 sm:px-2 py-0">
               {tag}
             </Badge>
           ))}
-          {recipe.dietary_tags?.length > 3 && (
-            <Badge variant="secondary" className="text-xs">+{recipe.dietary_tags.length - 3}</Badge>
+          {recipe.dietary_tags?.length > 2 && (
+            <Badge variant="secondary" className="text-[9px] sm:text-xs px-1 sm:px-2 py-0">+{recipe.dietary_tags.length - 2}</Badge>
           )}
         </div>
       </CardHeader>
-      <CardContent className="p-3 sm:p-4 pt-0">
-        <div className="space-y-2">
-          <div className="grid grid-cols-2 gap-1 sm:gap-2 text-xs sm:text-sm">
-            <div>⏱️ Prep: {recipe.prep_time_minutes}min</div>
-            <div>🔥 Cook: {recipe.cook_time_minutes}min</div>
-            <div>🍽️ {recipe.servings} servings</div>
+      <CardContent className="p-2 sm:p-4 pt-0">
+        <div className="space-y-1 sm:space-y-2">
+          <div className="grid grid-cols-2 gap-0.5 sm:gap-2 text-[10px] sm:text-sm">
+            <div>⏱️ {recipe.prep_time_minutes}m</div>
+            <div>🔥 {recipe.cook_time_minutes}m</div>
+            <div className="hidden sm:block">🍽️ {recipe.servings} servings</div>
             <div>📊 {recipe.calories_per_serving} cal</div>
           </div>
-          <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+          <div className="hidden sm:flex flex-wrap gap-2 text-xs text-muted-foreground">
             <span>P: {recipe.protein_grams}g</span>
             <span>C: {recipe.carbs_grams}g</span>
             <span>F: {recipe.fat_grams}g</span>
           </div>
           {showAddButton && (
-            <div className="grid grid-cols-3 gap-1 sm:gap-2 pt-2">
+            <div className="grid grid-cols-3 gap-0.5 sm:gap-2 pt-1 sm:pt-2">
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="text-xs px-1 sm:px-2 h-8"
+                className="text-[9px] sm:text-xs px-0.5 sm:px-2 h-6 sm:h-8"
                 onClick={() => addToMealPlan(recipe, 'breakfast')}
               >
-                Breakfast
+                B
+                <span className="hidden sm:inline">reakfast</span>
               </Button>
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="text-xs px-1 sm:px-2 h-8"
+                className="text-[9px] sm:text-xs px-0.5 sm:px-2 h-6 sm:h-8"
                 onClick={() => addToMealPlan(recipe, 'lunch')}
               >
-                Lunch
+                L
+                <span className="hidden sm:inline">unch</span>
               </Button>
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="text-xs px-1 sm:px-2 h-8"
+                className="text-[9px] sm:text-xs px-0.5 sm:px-2 h-6 sm:h-8"
                 onClick={() => addToMealPlan(recipe, 'dinner')}
               >
-                Dinner
+                D
+                <span className="hidden sm:inline">inner</span>
               </Button>
             </div>
           )}
@@ -358,11 +361,11 @@ const Nutrition = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="browse" className="space-y-3 sm:space-y-4">
+          <TabsContent value="browse" className="space-y-2 sm:space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-lg sm:text-2xl font-semibold">Recipe Library</h2>
+              <h2 className="text-base sm:text-2xl font-semibold">Recipe Library</h2>
             </div>
-            <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
+            <div className="grid gap-2 sm:gap-4 grid-cols-2 lg:grid-cols-3">
               {recipes.map((recipe) => (
                 <RecipeCard key={recipe.id} recipe={recipe} showAddButton={true} />
               ))}
