@@ -62,12 +62,10 @@ const SharedGoals = () => {
 
       if (publicError) throw publicError;
 
-      // Fetch profiles for goal owners
+      // Fetch profiles using security definer function
       const ownerIds = publicGoals?.map(g => g.user_id) || [];
       const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id, full_name, avatar_url')
-        .in('id', ownerIds);
+        .rpc("get_public_profiles_info", { profile_ids: ownerIds });
 
       const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
 

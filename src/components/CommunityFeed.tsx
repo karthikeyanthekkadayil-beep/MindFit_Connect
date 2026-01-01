@@ -45,12 +45,10 @@ export const CommunityFeed = ({ communityId }: CommunityFeedProps) => {
 
       if (error) throw error;
 
-      // Fetch profiles separately
+      // Fetch profiles using security definer function
       const userIds = [...new Set(data?.map((p) => p.user_id) || [])];
       const { data: profiles } = await supabase
-        .from("profiles")
-        .select("id, full_name, avatar_url")
-        .in("id", userIds);
+        .rpc("get_public_profiles_info", { profile_ids: userIds });
 
       return data?.map((post) => ({
         ...post,
@@ -73,12 +71,10 @@ export const CommunityFeed = ({ communityId }: CommunityFeedProps) => {
 
       if (error) throw error;
 
-      // Fetch profiles separately
+      // Fetch profiles using security definer function
       const userIds = [...new Set(data?.map((c) => c.user_id) || [])];
       const { data: profiles } = await supabase
-        .from("profiles")
-        .select("id, full_name, avatar_url")
-        .in("id", userIds);
+        .rpc("get_public_profiles_info", { profile_ids: userIds });
 
       return data?.map((comment) => ({
         ...comment,
