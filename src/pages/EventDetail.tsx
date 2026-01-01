@@ -29,14 +29,21 @@ export default function EventDetail() {
         .from("events")
         .select(`
           *,
-          community:communities(id, name, category),
-          creator:profiles!events_creator_id_fkey(full_name, avatar_url)
+          community:communities(id, name, category)
         `)
         .eq("id", id!)
         .single();
 
       if (error) throw error;
-      return data;
+      
+      // Fetch creator profile using RPC
+      const { data: creatorProfile } = await supabase
+        .rpc("get_public_profile_info", { profile_id: data.creator_id });
+      
+      return {
+        ...data,
+        creator: creatorProfile?.[0] || null
+      };
     },
     enabled: !!id,
   });
@@ -46,13 +53,24 @@ export default function EventDetail() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("event_rsvps")
-        .select("*, profile:profiles(full_name, avatar_url, bio)")
+        .select("*")
         .eq("event_id", id!)
         .eq("status", "going")
         .order("rsvp_at", { ascending: false });
 
       if (error) throw error;
-      return data;
+      
+      // Fetch attendee profiles using RPC
+      const userIds = data?.map(a => a.user_id) || [];
+      const { data: profiles } = await supabase
+        .rpc("get_public_profiles_info", { profile_ids: userIds });
+      
+      const profileMap = new Map(profiles?.map((p: any) => [p.id, p]) || []);
+      
+      return data?.map(attendee => ({
+        ...attendee,
+        profile: profileMap.get(attendee.user_id)
+      }));
     },
     enabled: !!id,
   });
@@ -263,7 +281,7 @@ export default function EventDetail() {
                     <div className="flex-1">
                       <p className="font-medium">{attendee.profile?.full_name}</p>
                       <p className="text-sm text-muted-foreground line-clamp-1">
-                        {attendee.profile?.bio || "No bio available"}
+                        Attending this event
                       </p>
                     </div>
                   </div>

@@ -10,6 +10,7 @@ import { Plus, Search, Calendar, MapPin, Users, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CreateEventDialog } from "@/components/CreateEventDialog";
 import { EventsMap } from "@/components/EventsMap";
+import { BottomNav } from "@/components/BottomNav";
 import { format } from "date-fns";
 
 export default function Events() {
@@ -27,7 +28,6 @@ export default function Events() {
         .select(`
           *,
           community:communities(name, category),
-          creator:profiles!events_creator_id_fkey(full_name, avatar_url),
           rsvp_count:event_rsvps(count)
         `)
         .gte("start_time", new Date().toISOString())
@@ -43,7 +43,18 @@ export default function Events() {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data;
+      
+      // Fetch creator profiles using RPC
+      const creatorIds = [...new Set(data?.map(e => e.creator_id) || [])];
+      const { data: profiles } = await supabase
+        .rpc("get_public_profiles_info", { profile_ids: creatorIds });
+      
+      const profileMap = new Map(profiles?.map((p: any) => [p.id, p]) || []);
+      
+      return data?.map(event => ({
+        ...event,
+        creator: profileMap.get(event.creator_id)
+      }));
     },
   });
 
@@ -58,15 +69,27 @@ export default function Events() {
         .select(`
           event:events(
             *,
-            community:communities(name, category),
-            creator:profiles!events_creator_id_fkey(full_name, avatar_url)
+            community:communities(name, category)
           )
         `)
         .eq("user_id", user.id)
         .eq("status", "going");
 
       if (error) throw error;
-      return data.map(item => item.event).filter(Boolean);
+      
+      const events = data.map(item => item.event).filter(Boolean);
+      
+      // Fetch creator profiles using RPC
+      const creatorIds = [...new Set(events.map((e: any) => e.creator_id))];
+      const { data: profiles } = await supabase
+        .rpc("get_public_profiles_info", { profile_ids: creatorIds });
+      
+      const profileMap = new Map(profiles?.map((p: any) => [p.id, p]) || []);
+      
+      return events.map((event: any) => ({
+        ...event,
+        creator: profileMap.get(event.creator_id)
+      }));
     },
   });
 
@@ -251,6 +274,8 @@ export default function Events() {
 
         <CreateEventDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} />
       </div>
+
+      <BottomNav />
     </div>
   );
 }

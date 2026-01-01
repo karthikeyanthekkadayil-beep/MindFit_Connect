@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Search, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CreateCommunityDialog } from "@/components/CreateCommunityDialog";
+import { BottomNav } from "@/components/BottomNav";
 
 export default function Communities() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function Communities() {
     queryFn: async () => {
       let query = supabase
         .from("communities")
-        .select("*, creator:profiles!communities_creator_id_fkey(full_name, avatar_url)")
+        .select("*")
         .order("member_count", { ascending: false });
 
       if (searchQuery) {
@@ -34,7 +35,18 @@ export default function Communities() {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data;
+      
+      // Fetch creator profiles using RPC
+      const creatorIds = [...new Set(data?.map(c => c.creator_id) || [])];
+      const { data: profiles } = await supabase
+        .rpc("get_public_profiles_info", { profile_ids: creatorIds });
+      
+      const profileMap = new Map(profiles?.map((p: any) => [p.id, p]) || []);
+      
+      return data?.map(community => ({
+        ...community,
+        creator: profileMap.get(community.creator_id)
+      }));
     },
   });
 
@@ -179,6 +191,8 @@ export default function Communities() {
 
         <CreateCommunityDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} />
       </div>
+
+      <BottomNav />
     </div>
   );
 }
