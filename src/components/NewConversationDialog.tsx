@@ -35,19 +35,24 @@ export function NewConversationDialog({ open, onOpenChange }: NewConversationDia
   const { data: users } = useQuery({
     queryKey: ["users-search", searchQuery],
     queryFn: async () => {
-      let query = supabase
-        .from("profiles")
-        .select("id, full_name, avatar_url, bio")
-        .neq("id", currentUserId!)
-        .limit(20);
-
-      if (searchQuery) {
-        query = query.ilike("full_name", `%${searchQuery}%`);
-      }
-
-      const { data, error } = await query;
+      // Use security definer function to get limited profile info
+      const { data: allProfiles, error } = await supabase
+        .rpc("get_public_profiles_info", { profile_ids: [] });
+      
       if (error) throw error;
-      return data;
+      
+      // Manually filter - RPC doesn't support filtering, so we get all and filter client-side
+      // For a production app, you'd want a dedicated search RPC
+      let filtered = allProfiles?.filter((p: any) => p.id !== currentUserId) || [];
+      
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        filtered = filtered.filter((p: any) => 
+          p.full_name?.toLowerCase().includes(query)
+        );
+      }
+      
+      return filtered.slice(0, 20);
     },
     enabled: !!currentUserId && open,
   });
@@ -211,7 +216,7 @@ export function NewConversationDialog({ open, onOpenChange }: NewConversationDia
                   <div className="flex-1">
                     <p className="font-medium">{user.full_name}</p>
                     <p className="text-sm text-muted-foreground line-clamp-1">
-                      {user.bio || "No bio available"}
+                      Click to start conversation
                     </p>
                   </div>
                 </div>

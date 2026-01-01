@@ -51,12 +51,10 @@ export default function ChatThread() {
         .select("user_id")
         .eq("conversation_id", id!);
 
-      // Get profiles for all members
+      // Get profiles using security definer function
       const userIds = memberIds?.map(m => m.user_id) || [];
       const { data: profiles } = await supabase
-        .from("profiles")
-        .select("id, full_name, avatar_url")
-        .in("id", userIds);
+        .rpc("get_public_profiles_info", { profile_ids: userIds });
 
       const members = profiles?.map(profile => ({ user: profile })) || [];
 
@@ -76,12 +74,10 @@ export default function ChatThread() {
 
       if (error) throw error;
 
-      // Fetch sender profiles separately
+      // Fetch sender profiles using security definer function
       const senderIds = [...new Set(data.map(m => m.sender_id))];
       const { data: profiles } = await supabase
-        .from("profiles")
-        .select("id, full_name, avatar_url")
-        .in("id", senderIds);
+        .rpc("get_public_profiles_info", { profile_ids: senderIds });
 
       const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
 
