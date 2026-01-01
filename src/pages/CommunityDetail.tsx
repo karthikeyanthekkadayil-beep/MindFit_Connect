@@ -31,12 +31,20 @@ export default function CommunityDetail() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("communities")
-        .select("*, creator:profiles!communities_creator_id_fkey(full_name, avatar_url)")
+        .select("*")
         .eq("id", id!)
         .single();
 
       if (error) throw error;
-      return data;
+      
+      // Fetch creator profile using RPC
+      const { data: creatorProfile } = await supabase
+        .rpc("get_public_profile_info", { profile_id: data.creator_id });
+      
+      return {
+        ...data,
+        creator: creatorProfile?.[0] || null
+      };
     },
     enabled: !!id,
   });
@@ -46,12 +54,23 @@ export default function CommunityDetail() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("community_members")
-        .select("*, profile:profiles(full_name, avatar_url, bio)")
+        .select("*")
         .eq("community_id", id!)
         .order("joined_at", { ascending: false });
 
       if (error) throw error;
-      return data;
+      
+      // Fetch member profiles using RPC
+      const userIds = data?.map(m => m.user_id) || [];
+      const { data: profiles } = await supabase
+        .rpc("get_public_profiles_info", { profile_ids: userIds });
+      
+      const profileMap = new Map(profiles?.map((p: any) => [p.id, p]) || []);
+      
+      return data?.map(member => ({
+        ...member,
+        profile: profileMap.get(member.user_id)
+      }));
     },
     enabled: !!id,
   });
@@ -79,13 +98,24 @@ export default function CommunityDetail() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("events")
-        .select("*, creator:profiles!events_creator_id_fkey(full_name, avatar_url)")
+        .select("*")
         .eq("community_id", id!)
         .gte("start_time", new Date().toISOString())
         .order("start_time", { ascending: true });
 
       if (error) throw error;
-      return data;
+      
+      // Fetch creator profiles using RPC
+      const creatorIds = [...new Set(data?.map(e => e.creator_id) || [])];
+      const { data: profiles } = await supabase
+        .rpc("get_public_profiles_info", { profile_ids: creatorIds });
+      
+      const profileMap = new Map(profiles?.map((p: any) => [p.id, p]) || []);
+      
+      return data?.map(event => ({
+        ...event,
+        creator: profileMap.get(event.creator_id)
+      }));
     },
     enabled: !!id,
   });
@@ -262,7 +292,7 @@ export default function CommunityDetail() {
                       <div className="flex-1">
                         <CardTitle className="text-base">{member.profile?.full_name}</CardTitle>
                         <CardDescription className="line-clamp-1">
-                          {member.profile?.bio || "No bio available"}
+                          Member since {new Date(member.joined_at).toLocaleDateString()}
                         </CardDescription>
                       </div>
                       <Badge variant={member.role === "owner" ? "default" : "secondary"}>

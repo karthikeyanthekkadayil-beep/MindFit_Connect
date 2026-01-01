@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Search, MessageCircle } from "lucide-react";
+import { BottomNav } from "@/components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { NewConversationDialog } from "@/components/NewConversationDialog";
 import { formatDistanceToNow } from "date-fns";
@@ -65,12 +66,9 @@ export default function Messages() {
 
             if (members && members.length > 0) {
               const { data: profile } = await supabase
-                .from("profiles")
-                .select("id, full_name, avatar_url")
-                .eq("id", members[0].user_id)
-                .single();
+                .rpc("get_public_profile_info", { profile_id: members[0].user_id });
 
-              otherUser = profile;
+              otherUser = profile?.[0] || null;
             }
           }
 
@@ -227,6 +225,8 @@ export default function Messages() {
           onOpenChange={setIsNewConversationOpen}
         />
       </div>
+
+      <BottomNav />
     </div>
   );
 }
