@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -10,9 +10,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Loader2, User, Heart, Settings, LogOut } from "lucide-react";
+import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
+import { useCamera, base64ToBlob } from "@/hooks/useCamera";
+import { Capacitor } from "@capacitor/core";
 
 interface Profile {
   id: string;
@@ -36,8 +39,11 @@ const Profile = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { takePhoto, pickFromGallery, isSupported: isCameraSupported } = useCamera();
 
   useEffect(() => {
     checkUser();
@@ -108,6 +114,79 @@ const Profile = () => {
     navigate("/auth");
   };
 
+  const uploadAvatar = async (blob: Blob, userId: string) => {
+    const fileName = `${userId}/avatar-${Date.now()}.jpg`;
+    
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(fileName, blob, {
+        cacheControl: '3600',
+        upsert: true,
+      });
+
+    if (uploadError) throw uploadError;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(fileName);
+
+    return publicUrl;
+  };
+
+  const handleAvatarUpload = async (source: 'camera' | 'gallery' | 'file', file?: File) => {
+    if (!profile) return;
+    
+    setUploadingAvatar(true);
+    try {
+      let blob: Blob;
+
+      if (source === 'file' && file) {
+        blob = file;
+      } else if (source === 'camera') {
+        const photo = await takePhoto();
+        if (!photo?.base64String) return;
+        blob = base64ToBlob(photo.base64String, `image/${photo.format || 'jpeg'}`);
+      } else {
+        const photo = await pickFromGallery();
+        if (!photo?.base64String) return;
+        blob = base64ToBlob(photo.base64String, `image/${photo.format || 'jpeg'}`);
+      }
+
+      const avatarUrl = await uploadAvatar(blob, profile.id);
+
+      // Update profile with new avatar URL
+      const { error } = await supabase
+        .from('profiles')
+        .update({ avatar_url: avatarUrl })
+        .eq('id', profile.id);
+
+      if (error) throw error;
+
+      setProfile({ ...profile, avatar_url: avatarUrl });
+      toast.success('Profile photo updated!');
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+      toast.error('Failed to upload photo');
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please select an image file');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image must be less than 5MB');
+        return;
+      }
+      handleAvatarUpload('file', file);
+    }
+  };
+
   const updateArrayField = (field: keyof Profile, value: string) => {
     if (!profile) return;
     const currentArray = (profile[field] as string[]) || [];
@@ -138,12 +217,60 @@ const Profile = () => {
         <Card>
           <CardContent className="pt-3 sm:pt-6 p-3 sm:p-6">
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
-              <Avatar className="h-14 w-14 sm:h-24 sm:w-24">
-                <AvatarImage src={profile.avatar_url || undefined} />
-                <AvatarFallback className="text-base sm:text-2xl">
-                  {profile.full_name?.charAt(0) || profile.email.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+              <div className="relative">
+                <Avatar className="h-14 w-14 sm:h-24 sm:w-24">
+                  <AvatarImage src={profile.avatar_url || undefined} />
+                  <AvatarFallback className="text-base sm:text-2xl">
+                    {profile.full_name?.charAt(0) || profile.email.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                
+                {/* Hidden file input for web */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileSelect}
+                  accept="image/*"
+                  className="hidden"
+                />
+                
+                {/* Camera/Upload button */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      size="icon" 
+                      variant="secondary"
+                      className="absolute -bottom-1 -right-1 h-6 w-6 sm:h-8 sm:w-8 rounded-full"
+                      disabled={uploadingAvatar}
+                    >
+                      {uploadingAvatar ? (
+                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                      ) : (
+                        <Camera className="h-3 w-3 sm:h-4 sm:w-4" />
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="center">
+                    {isCameraSupported && Capacitor.isNativePlatform() ? (
+                      <>
+                        <DropdownMenuItem onClick={() => handleAvatarUpload('camera')}>
+                          <Camera className="mr-2 h-4 w-4" />
+                          Take Photo
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleAvatarUpload('gallery')}>
+                          <ImagePlus className="mr-2 h-4 w-4" />
+                          Choose from Gallery
+                        </DropdownMenuItem>
+                      </>
+                    ) : (
+                      <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
+                        <ImagePlus className="mr-2 h-4 w-4" />
+                        Upload Photo
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <div className="flex-1 text-center sm:text-left min-w-0">
                 <h1 className="text-lg sm:text-2xl font-bold truncate">{profile.full_name || "User"}</h1>
                 <p className="text-muted-foreground text-xs sm:text-base truncate">{profile.email}</p>
