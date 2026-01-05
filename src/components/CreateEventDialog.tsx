@@ -45,7 +45,13 @@ export function CreateEventDialog({ open, onOpenChange }: CreateEventDialogProps
     enabled: open,
   });
 
-  const eventTypes = ["Workout", "Running", "Cycling", "Hiking", "Sports", "Yoga", "Social"];
+  const eventTypes = [
+    { value: "workout", label: "Workout" },
+    { value: "social", label: "Social" },
+    { value: "workshop", label: "Workshop" },
+    { value: "competition", label: "Competition" },
+    { value: "other", label: "Other" },
+  ];
 
   const createMutation = useMutation({
     mutationFn: async () => {
@@ -138,8 +144,8 @@ export function CreateEventDialog({ open, onOpenChange }: CreateEventDialogProps
                   </SelectTrigger>
                   <SelectContent>
                     {eventTypes.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type}
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
                       </SelectItem>
                     ))}
                   </SelectContent>

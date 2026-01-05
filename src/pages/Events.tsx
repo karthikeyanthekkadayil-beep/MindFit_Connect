@@ -93,7 +93,13 @@ export default function Events() {
     },
   });
 
-  const eventTypes = ["Workout", "Running", "Cycling", "Hiking", "Sports", "Yoga", "Social"];
+  const eventTypes = [
+    { value: "workout", label: "Workout" },
+    { value: "social", label: "Social" },
+    { value: "workshop", label: "Workshop" },
+    { value: "competition", label: "Competition" },
+    { value: "other", label: "Other" },
+  ];
 
   const EventCard = ({ event }: { event: any }) => (
     <Card
@@ -190,13 +196,13 @@ export default function Events() {
                 </Button>
                 {eventTypes.map((type) => (
                   <Button
-                    key={type}
-                    variant={selectedType === type ? "default" : "outline"}
+                    key={type.value}
+                    variant={selectedType === type.value ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedType(type)}
+                    onClick={() => setSelectedType(type.value)}
                     className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
                   >
-                    {type}
+                    {type.label}
                   </Button>
                 ))}
               </div>
