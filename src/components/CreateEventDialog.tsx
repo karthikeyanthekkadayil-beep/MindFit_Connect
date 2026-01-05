@@ -28,19 +28,16 @@ export function CreateEventDialog({ open, onOpenChange }: CreateEventDialogProps
   const [endTime, setEndTime] = useState("");
   const [maxParticipants, setMaxParticipants] = useState("");
 
-  const { data: myCommunities } = useQuery({
-    queryKey: ["my-communities-for-events"],
+  const { data: allCommunities } = useQuery({
+    queryKey: ["all-communities-for-events"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return [];
-
       const { data, error } = await supabase
-        .from("community_members")
-        .select("community:communities(*)")
-        .eq("user_id", user.id);
+        .from("communities")
+        .select("*")
+        .order("name");
 
       if (error) throw error;
-      return data.map(item => item.community).filter(Boolean);
+      return data;
     },
     enabled: open,
   });
@@ -153,7 +150,7 @@ export function CreateEventDialog({ open, onOpenChange }: CreateEventDialogProps
                     <SelectValue placeholder="Select community" />
                   </SelectTrigger>
                   <SelectContent>
-                    {myCommunities?.map((community) => (
+                    {allCommunities?.map((community) => (
                       <SelectItem key={community.id} value={community.id}>
                         {community.name}
                       </SelectItem>
