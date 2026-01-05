@@ -22,7 +22,14 @@ export function CreateCommunityDialog({ open, onOpenChange }: CreateCommunityDia
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
 
-  const categories = ["Fitness", "Running", "Yoga", "Cycling", "Hiking", "Sports", "Wellness"];
+  const categories = [
+    { value: "fitness", label: "Fitness" },
+    { value: "nutrition", label: "Nutrition" },
+    { value: "mental_health", label: "Mental Health" },
+    { value: "social", label: "Social" },
+    { value: "outdoor", label: "Outdoor" },
+    { value: "other", label: "Other" },
+  ];
 
   const createMutation = useMutation({
     mutationFn: async () => {
@@ -108,8 +115,8 @@ export function CreateCommunityDialog({ open, onOpenChange }: CreateCommunityDia
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
+                    <SelectItem key={cat.value} value={cat.value}>
+                      {cat.label}
                     </SelectItem>
                   ))}
                 </SelectContent>

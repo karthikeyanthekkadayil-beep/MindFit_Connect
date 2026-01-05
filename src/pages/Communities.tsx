@@ -66,7 +66,14 @@ export default function Communities() {
     },
   });
 
-  const categories = ["Fitness", "Running", "Yoga", "Cycling", "Hiking", "Sports", "Wellness"];
+  const categories = [
+    { value: "fitness", label: "Fitness" },
+    { value: "nutrition", label: "Nutrition" },
+    { value: "mental_health", label: "Mental Health" },
+    { value: "social", label: "Social" },
+    { value: "outdoor", label: "Outdoor" },
+    { value: "other", label: "Other" },
+  ];
 
   const CommunityCard = ({ community }: { community: any }) => (
     <Card
@@ -142,13 +149,13 @@ export default function Communities() {
               </Button>
               {categories.map((category) => (
                 <Button
-                  key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
+                  key={category.value}
+                  variant={selectedCategory === category.value ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => setSelectedCategory(category.value)}
                   className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
                 >
-                  {category}
+                  {category.label}
                 </Button>
               ))}
             </div>
