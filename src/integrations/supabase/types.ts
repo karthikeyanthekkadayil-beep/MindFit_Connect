@@ -1257,6 +1257,10 @@ export type Database = {
         Args: { _roles: string[]; _user_id: string }
         Returns: string[]
       }
+      get_user_conversation_ids: {
+        Args: { _user_id: string }
+        Returns: string[]
+      }
       has_community_role: {
         Args: { _community_id: string; _roles: string[]; _user_id: string }
         Returns: boolean
