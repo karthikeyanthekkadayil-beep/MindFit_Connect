@@ -93,12 +93,12 @@ export function NewConversationDialog({ open, onOpenChange }: NewConversationDia
         }
       }
 
-      // Create new conversation
-      const { data: conversation, error: convError } = await supabase
+      // Create new conversation (avoid RETURNING/SELECT RLS issues by supplying id)
+      const conversationId = crypto.randomUUID();
+
+      const { error: convError } = await supabase
         .from("conversations")
-        .insert({ type: "direct" })
-        .select()
-        .single();
+        .insert({ id: conversationId, type: "direct" }, { returning: "minimal" });
 
       if (convError) throw convError;
 
@@ -106,13 +106,13 @@ export function NewConversationDialog({ open, onOpenChange }: NewConversationDia
       const { error: membersError } = await supabase
         .from("conversation_members")
         .insert([
-          { conversation_id: conversation.id, user_id: currentUserId! },
-          { conversation_id: conversation.id, user_id: userId },
+          { conversation_id: conversationId, user_id: currentUserId! },
+          { conversation_id: conversationId, user_id: userId },
         ]);
 
       if (membersError) throw membersError;
 
-      return { conversation_id: conversation.id };
+      return { conversation_id: conversationId };
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
@@ -131,21 +131,25 @@ export function NewConversationDialog({ open, onOpenChange }: NewConversationDia
         throw new Error("Please provide a group name and select members");
       }
 
-      const { data: conversation, error: convError } = await supabase
+      const conversationId = crypto.randomUUID();
+
+      const { error: convError } = await supabase
         .from("conversations")
-        .insert({
-          type: "group",
-          name: groupName,
-          community_id: selectedCommunity || null,
-        })
-        .select()
-        .single();
+        .insert(
+          {
+            id: conversationId,
+            type: "group",
+            name: groupName,
+            community_id: selectedCommunity || null,
+          },
+          { returning: "minimal" }
+        );
 
       if (convError) throw convError;
 
       // Add all members including current user
       const members = [currentUserId!, ...selectedUsers].map((userId) => ({
-        conversation_id: conversation.id,
+        conversation_id: conversationId,
         user_id: userId,
       }));
 
@@ -155,7 +159,7 @@ export function NewConversationDialog({ open, onOpenChange }: NewConversationDia
 
       if (membersError) throw membersError;
 
-      return { conversation_id: conversation.id };
+      return { conversation_id: conversationId };
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
