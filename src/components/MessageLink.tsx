@@ -59,7 +59,7 @@ export function MessageLink({ userId, className }: MessageLinkProps) {
 
       const { error: convError } = await supabase
         .from("conversations")
-        .insert({ id: conversationId, type: "direct" }, { returning: "minimal" });
+        .insert({ id: conversationId, type: "direct" });
 
       if (convError) throw convError;
 
