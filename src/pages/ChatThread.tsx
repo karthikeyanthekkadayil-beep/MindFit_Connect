@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { useTypingIndicator } from "@/hooks/useTypingIndicator";
 import { TypingIndicator } from "@/components/TypingIndicator";
 import { MessageReactions } from "@/components/MessageReactions";
+import { ReadReceiptIndicator } from "@/components/ReadReceiptIndicator";
 
 export default function ChatThread() {
   const { id } = useParams<{ id: string }>();
@@ -60,18 +61,24 @@ export default function ChatThread() {
         community = communityData;
       }
 
-      // Get member IDs
-      const { data: memberIds } = await supabase
+      // Get member IDs with last_read_at
+      const { data: memberData } = await supabase
         .from("conversation_members")
-        .select("user_id")
+        .select("user_id, last_read_at")
         .eq("conversation_id", id!);
 
       // Get profiles using security definer function
-      const userIds = memberIds?.map(m => m.user_id) || [];
+      const userIds = memberData?.map(m => m.user_id) || [];
       const { data: profiles } = await supabase
         .rpc("get_public_profiles_info", { profile_ids: userIds });
 
-      const members = profiles?.map(profile => ({ user: profile })) || [];
+      const members = profiles?.map(profile => {
+        const memberInfo = memberData?.find(m => m.user_id === profile.id);
+        return { 
+          user: profile,
+          last_read_at: memberInfo?.last_read_at 
+        };
+      }) || [];
 
       return { ...data, members, community };
     },
@@ -161,10 +168,23 @@ export default function ChatThread() {
     };
   }, [id, queryClient]);
 
-  // Scroll to bottom when messages change
+  // Scroll to bottom when messages change and mark as read
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    
+    // Mark messages as read
+    if (id && currentUserId && messages && messages.length > 0) {
+      supabase
+        .from("conversation_members")
+        .update({ last_read_at: new Date().toISOString() })
+        .eq("conversation_id", id)
+        .eq("user_id", currentUserId)
+        .then(() => {
+          // Invalidate to update read receipts for other users
+          queryClient.invalidateQueries({ queryKey: ["conversation", id] });
+        });
+    }
+  }, [messages, id, currentUserId, queryClient]);
 
   const sendMessageMutation = useMutation({
     mutationFn: async (content: string) => {
@@ -313,6 +333,23 @@ export default function ChatThread() {
                     <span className="text-xs text-muted-foreground">
                       {format(new Date(msg.created_at), "p")}
                     </span>
+                    {isCurrentUser && (
+                      <ReadReceiptIndicator
+                        messageCreatedAt={msg.created_at}
+                        isOwnMessage={isCurrentUser}
+                        readReceipts={
+                          conversation?.members
+                            ?.filter((m: any) => m.user.id !== currentUserId)
+                            .map((m: any) => ({
+                              userId: m.user.id,
+                              userName: m.user.full_name || "User",
+                              readAt: m.last_read_at,
+                            }))
+                            .filter((r: any) => r.readAt) || []
+                        }
+                        conversationType={conversation?.type === "direct" ? "direct" : "group"}
+                      />
+                    )}
                     <MessageReactions
                       messageId={msg.id}
                       conversationId={id!}
