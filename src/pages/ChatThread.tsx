@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { useTypingIndicator } from "@/hooks/useTypingIndicator";
 import { TypingIndicator } from "@/components/TypingIndicator";
+import { MessageReactions } from "@/components/MessageReactions";
 
 export default function ChatThread() {
   const { id } = useParams<{ id: string }>();
@@ -95,12 +96,44 @@ export default function ChatThread() {
 
       const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
 
+      // Fetch reactions for all messages
+      const messageIds = data.map(m => m.id);
+      const { data: reactionsData } = await supabase
+        .from("message_reactions")
+        .select("*")
+        .in("message_id", messageIds);
+
+      // Group reactions by message
+      const reactionsMap = new Map<string, { emoji: string; count: number; hasReacted: boolean }[]>();
+      
+      for (const msg of data) {
+        const msgReactions = reactionsData?.filter(r => r.message_id === msg.id) || [];
+        const emojiCounts = new Map<string, { count: number; hasReacted: boolean }>();
+        
+        for (const reaction of msgReactions) {
+          const existing = emojiCounts.get(reaction.emoji) || { count: 0, hasReacted: false };
+          emojiCounts.set(reaction.emoji, {
+            count: existing.count + 1,
+            hasReacted: existing.hasReacted || reaction.user_id === currentUserId,
+          });
+        }
+        
+        reactionsMap.set(
+          msg.id,
+          Array.from(emojiCounts.entries()).map(([emoji, data]) => ({
+            emoji,
+            ...data,
+          }))
+        );
+      }
+
       return data.map(msg => ({
         ...msg,
         sender: profileMap.get(msg.sender_id),
+        reactions: reactionsMap.get(msg.id) || [],
       }));
     },
-    enabled: !!id,
+    enabled: !!id && !!currentUserId,
   });
 
   // Real-time subscription for new messages
@@ -245,7 +278,7 @@ export default function ChatThread() {
             return (
               <div
                 key={msg.id}
-                className={`flex gap-3 ${
+                className={`group flex gap-3 ${
                   isCurrentUser ? "flex-row-reverse" : ""
                 }`}
               >
@@ -276,9 +309,18 @@ export default function ChatThread() {
                   >
                     <p className="text-sm break-words">{msg.content}</p>
                   </div>
-                  <span className="text-xs text-muted-foreground mt-1">
-                    {format(new Date(msg.created_at), "p")}
-                  </span>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-xs text-muted-foreground">
+                      {format(new Date(msg.created_at), "p")}
+                    </span>
+                    <MessageReactions
+                      messageId={msg.id}
+                      conversationId={id!}
+                      currentUserId={currentUserId}
+                      reactions={msg.reactions || []}
+                      isOwnMessage={isCurrentUser}
+                    />
+                  </div>
                 </div>
               </div>
             );
