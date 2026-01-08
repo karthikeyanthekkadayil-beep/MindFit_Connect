@@ -98,7 +98,7 @@ export function NewConversationDialog({ open, onOpenChange }: NewConversationDia
 
       const { error: convError } = await supabase
         .from("conversations")
-        .insert({ id: conversationId, type: "direct" }, { returning: "minimal" });
+        .insert({ id: conversationId, type: "direct" });
 
       if (convError) throw convError;
 
@@ -135,15 +135,12 @@ export function NewConversationDialog({ open, onOpenChange }: NewConversationDia
 
       const { error: convError } = await supabase
         .from("conversations")
-        .insert(
-          {
-            id: conversationId,
-            type: "group",
-            name: groupName,
-            community_id: selectedCommunity || null,
-          },
-          { returning: "minimal" }
-        );
+        .insert({
+          id: conversationId,
+          type: "group",
+          name: groupName,
+          community_id: selectedCommunity || null,
+        });
 
       if (convError) throw convError;
 

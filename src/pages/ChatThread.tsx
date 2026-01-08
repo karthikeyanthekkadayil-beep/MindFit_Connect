@@ -8,20 +8,34 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeft, Send, Users } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { useTypingIndicator } from "@/hooks/useTypingIndicator";
+import { TypingIndicator } from "@/components/TypingIndicator";
 
 export default function ChatThread() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
       setCurrentUserId(user?.id || null);
+      if (user?.id) {
+        const { data: profile } = await supabase
+          .rpc("get_public_profile_info", { profile_id: user.id });
+        setCurrentUserName(profile?.[0]?.full_name || null);
+      }
     });
   }, []);
+
+  const { typingUsers, startTyping, stopTyping } = useTypingIndicator(
+    id || "",
+    currentUserId,
+    currentUserName
+  );
 
   const { data: conversation } = useQuery({
     queryKey: ["conversation", id],
@@ -142,7 +156,17 @@ export default function ChatThread() {
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim() || !currentUserId) return;
+    stopTyping();
     sendMessageMutation.mutate(message.trim());
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+    if (e.target.value.trim()) {
+      startTyping();
+    } else {
+      stopTyping();
+    }
   };
 
   const getConversationTitle = () => {
@@ -267,12 +291,15 @@ export default function ChatThread() {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Typing Indicator */}
+      <TypingIndicator typingUsers={typingUsers} />
+
       {/* Input */}
       <div className="border-t bg-card px-4 py-3">
         <form onSubmit={handleSendMessage} className="flex gap-2">
           <Input
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={handleInputChange}
             placeholder="Type a message..."
             className="flex-1"
             disabled={sendMessageMutation.isPending}
