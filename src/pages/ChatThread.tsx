@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Send, Users } from "lucide-react";
+import { ArrowLeft, Send, Users, Search } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { useTypingIndicator } from "@/hooks/useTypingIndicator";
@@ -14,6 +14,7 @@ import { MessageReactions } from "@/components/MessageReactions";
 import { ReadReceiptIndicator } from "@/components/ReadReceiptIndicator";
 import { ChatAttachment, MessageAttachmentPreview } from "@/components/ChatAttachment";
 import { VoiceRecorder, VoiceMessagePlayer } from "@/components/VoiceRecorder";
+import { MessageSearch, HighlightedText } from "@/components/MessageSearch";
 
 export default function ChatThread() {
   const { id } = useParams<{ id: string }>();
@@ -27,7 +28,11 @@ export default function ChatThread() {
     type: string;
     name: string;
   } | null>(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
@@ -177,7 +182,9 @@ export default function ChatThread() {
 
   // Scroll to bottom when messages change and mark as read
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (!isSearchOpen) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
     
     // Mark messages as read
     if (id && currentUserId && messages && messages.length > 0) {
@@ -191,7 +198,23 @@ export default function ChatThread() {
           queryClient.invalidateQueries({ queryKey: ["conversation", id] });
         });
     }
-  }, [messages, id, currentUserId, queryClient]);
+  }, [messages, id, currentUserId, queryClient, isSearchOpen]);
+
+  const scrollToMessage = useCallback((messageId: string) => {
+    setHighlightedMessageId(messageId);
+    const element = messageRefs.current.get(messageId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    // Clear highlight after animation
+    setTimeout(() => setHighlightedMessageId(null), 2000);
+  }, []);
+
+  const handleSearchClose = useCallback(() => {
+    setIsSearchOpen(false);
+    setSearchQuery("");
+    setHighlightedMessageId(null);
+  }, []);
 
   const sendMessageMutation = useMutation({
     mutationFn: async ({
@@ -303,24 +326,48 @@ export default function ChatThread() {
               </p>
             )}
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsSearchOpen(true)}
+          >
+            <Search className="h-5 w-5" />
+          </Button>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-20">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-20 relative">
+        {isSearchOpen && messages && (
+          <MessageSearch
+            messages={messages}
+            onResultSelect={(messageId) => {
+              scrollToMessage(messageId);
+              // Track the current search query for highlighting
+              const input = document.querySelector('input[placeholder="Search messages..."]') as HTMLInputElement;
+              if (input) setSearchQuery(input.value);
+            }}
+            onClose={handleSearchClose}
+          />
+        )}
+        
         {messages && messages.length > 0 ? (
           messages.map((msg, index) => {
             const isCurrentUser = msg.sender_id === currentUserId;
             const showAvatar =
               index === 0 ||
               messages[index - 1].sender_id !== msg.sender_id;
+            const isHighlighted = highlightedMessageId === msg.id;
 
             return (
               <div
                 key={msg.id}
-                className={`group flex gap-3 ${
+                ref={(el) => {
+                  if (el) messageRefs.current.set(msg.id, el);
+                }}
+                className={`group flex gap-3 transition-all duration-500 ${
                   isCurrentUser ? "flex-row-reverse" : ""
-                }`}
+                } ${isHighlighted ? "bg-primary/10 -mx-4 px-4 py-2 rounded-lg" : ""}`}
               >
                 {showAvatar ? (
                   <Avatar className="h-8 w-8">
@@ -363,7 +410,13 @@ export default function ChatThread() {
                       />
                     )}
                     {msg.content && (
-                      <p className="text-sm break-words">{msg.content}</p>
+                      <p className="text-sm break-words">
+                        {searchQuery ? (
+                          <HighlightedText text={msg.content} highlight={searchQuery} />
+                        ) : (
+                          msg.content
+                        )}
+                      </p>
                     )}
                   </div>
                   <div className="flex items-center gap-2 mt-1">
