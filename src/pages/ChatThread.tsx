@@ -13,6 +13,7 @@ import { TypingIndicator } from "@/components/TypingIndicator";
 import { MessageReactions } from "@/components/MessageReactions";
 import { ReadReceiptIndicator } from "@/components/ReadReceiptIndicator";
 import { ChatAttachment, MessageAttachmentPreview } from "@/components/ChatAttachment";
+import { VoiceRecorder, VoiceMessagePlayer } from "@/components/VoiceRecorder";
 
 export default function ChatThread() {
   const { id } = useParams<{ id: string }>();
@@ -346,7 +347,14 @@ export default function ChatThread() {
                         : "bg-muted"
                     }`}
                   >
-                    {msg.attachment_url && msg.attachment_type && msg.attachment_name && (
+                    {msg.attachment_url && msg.attachment_type === "voice" && msg.attachment_name && (
+                      <VoiceMessagePlayer
+                        url={msg.attachment_url}
+                        name={msg.attachment_name}
+                        isOwnMessage={isCurrentUser}
+                      />
+                    )}
+                    {msg.attachment_url && msg.attachment_type && msg.attachment_type !== "voice" && msg.attachment_name && (
                       <MessageAttachmentPreview
                         url={msg.attachment_url}
                         type={msg.attachment_type}
@@ -410,13 +418,34 @@ export default function ChatThread() {
             onAttachmentReady={setPendingAttachment}
             pendingAttachment={pendingAttachment}
           />
-          <Input
-            value={message}
-            onChange={handleInputChange}
-            placeholder="Type a message..."
-            className="flex-1"
-            disabled={sendMessageMutation.isPending}
-          />
+          {pendingAttachment?.type === "voice" ? (
+            <div className="flex-1 flex items-center">
+              <VoiceRecorder
+                currentUserId={currentUserId!}
+                onVoiceReady={setPendingAttachment}
+                pendingVoice={pendingAttachment}
+                disabled={sendMessageMutation.isPending}
+              />
+            </div>
+          ) : (
+            <>
+              <Input
+                value={message}
+                onChange={handleInputChange}
+                placeholder="Type a message..."
+                className="flex-1"
+                disabled={sendMessageMutation.isPending}
+              />
+              {!message.trim() && !pendingAttachment && (
+                <VoiceRecorder
+                  currentUserId={currentUserId!}
+                  onVoiceReady={setPendingAttachment}
+                  pendingVoice={null}
+                  disabled={sendMessageMutation.isPending}
+                />
+              )}
+            </>
+          )}
           <Button
             type="submit"
             size="icon"
