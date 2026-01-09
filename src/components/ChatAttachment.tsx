@@ -104,7 +104,7 @@ export function ChatAttachment({
         onChange={handleFileSelect}
       />
 
-      {pendingAttachment ? (
+      {pendingAttachment && pendingAttachment.type !== "voice" ? (
         <div className="relative">
           <div className="flex items-center gap-2 bg-muted rounded-lg px-3 py-2 mr-2">
             {pendingAttachment.type === "image" ? (
@@ -126,7 +126,7 @@ export function ChatAttachment({
             </Button>
           </div>
         </div>
-      ) : (
+      ) : !pendingAttachment ? (
         <Button
           type="button"
           variant="ghost"
@@ -140,7 +140,7 @@ export function ChatAttachment({
             <Paperclip className="h-5 w-5" />
           )}
         </Button>
-      )}
+      ) : null}
     </div>
   );
 }
