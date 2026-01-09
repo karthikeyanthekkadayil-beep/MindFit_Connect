@@ -12,6 +12,7 @@ import { useTypingIndicator } from "@/hooks/useTypingIndicator";
 import { TypingIndicator } from "@/components/TypingIndicator";
 import { MessageReactions } from "@/components/MessageReactions";
 import { ReadReceiptIndicator } from "@/components/ReadReceiptIndicator";
+import { ChatAttachment, MessageAttachmentPreview } from "@/components/ChatAttachment";
 
 export default function ChatThread() {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +21,11 @@ export default function ChatThread() {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const [pendingAttachment, setPendingAttachment] = useState<{
+    url: string;
+    type: string;
+    name: string;
+  } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -187,17 +193,27 @@ export default function ChatThread() {
   }, [messages, id, currentUserId, queryClient]);
 
   const sendMessageMutation = useMutation({
-    mutationFn: async (content: string) => {
+    mutationFn: async ({
+      content,
+      attachment,
+    }: {
+      content: string;
+      attachment: { url: string; type: string; name: string } | null;
+    }) => {
       const { error } = await supabase.from("messages").insert({
         conversation_id: id!,
         sender_id: currentUserId!,
         content,
+        attachment_url: attachment?.url || null,
+        attachment_type: attachment?.type || null,
+        attachment_name: attachment?.name || null,
       });
 
       if (error) throw error;
     },
     onSuccess: () => {
       setMessage("");
+      setPendingAttachment(null);
       queryClient.invalidateQueries({ queryKey: ["messages", id] });
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
@@ -208,9 +224,12 @@ export default function ChatThread() {
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim() || !currentUserId) return;
+    if ((!message.trim() && !pendingAttachment) || !currentUserId) return;
     stopTyping();
-    sendMessageMutation.mutate(message.trim());
+    sendMessageMutation.mutate({
+      content: message.trim(),
+      attachment: pendingAttachment,
+    });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -327,7 +346,17 @@ export default function ChatThread() {
                         : "bg-muted"
                     }`}
                   >
-                    <p className="text-sm break-words">{msg.content}</p>
+                    {msg.attachment_url && msg.attachment_type && msg.attachment_name && (
+                      <MessageAttachmentPreview
+                        url={msg.attachment_url}
+                        type={msg.attachment_type}
+                        name={msg.attachment_name}
+                        isOwnMessage={isCurrentUser}
+                      />
+                    )}
+                    {msg.content && (
+                      <p className="text-sm break-words">{msg.content}</p>
+                    )}
                   </div>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-muted-foreground">
@@ -375,7 +404,12 @@ export default function ChatThread() {
 
       {/* Input */}
       <div className="border-t bg-card px-4 py-3">
-        <form onSubmit={handleSendMessage} className="flex gap-2">
+        <form onSubmit={handleSendMessage} className="flex gap-2 items-center">
+          <ChatAttachment
+            currentUserId={currentUserId!}
+            onAttachmentReady={setPendingAttachment}
+            pendingAttachment={pendingAttachment}
+          />
           <Input
             value={message}
             onChange={handleInputChange}
@@ -386,7 +420,7 @@ export default function ChatThread() {
           <Button
             type="submit"
             size="icon"
-            disabled={!message.trim() || sendMessageMutation.isPending}
+            disabled={(!message.trim() && !pendingAttachment) || sendMessageMutation.isPending}
           >
             <Send className="h-4 w-4" />
           </Button>
