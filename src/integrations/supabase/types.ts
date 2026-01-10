@@ -1207,6 +1207,126 @@ export type Database = {
           },
         ]
       }
+      workout_session_logs: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string
+          duration_seconds: number | null
+          exercise_id: string
+          id: string
+          notes: string | null
+          reps_completed: number | null
+          session_id: string
+          set_number: number
+          weight_unit: string | null
+          weight_used: number | null
+          workout_exercise_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          exercise_id: string
+          id?: string
+          notes?: string | null
+          reps_completed?: number | null
+          session_id: string
+          set_number: number
+          weight_unit?: string | null
+          weight_used?: number | null
+          workout_exercise_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          exercise_id?: string
+          id?: string
+          notes?: string | null
+          reps_completed?: number | null
+          session_id?: string
+          set_number?: number
+          weight_unit?: string | null
+          weight_used?: number | null
+          workout_exercise_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_session_logs_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workout_session_logs_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "workout_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workout_session_logs_workout_exercise_id_fkey"
+            columns: ["workout_exercise_id"]
+            isOneToOne: false
+            referencedRelation: "workout_exercises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workout_sessions: {
+        Row: {
+          calories_burned: number | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          started_at: string
+          status: string
+          total_duration_seconds: number | null
+          updated_at: string
+          user_id: string
+          workout_id: string
+        }
+        Insert: {
+          calories_burned?: number | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          started_at?: string
+          status?: string
+          total_duration_seconds?: number | null
+          updated_at?: string
+          user_id: string
+          workout_id: string
+        }
+        Update: {
+          calories_burned?: number | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          started_at?: string
+          status?: string
+          total_duration_seconds?: number | null
+          updated_at?: string
+          user_id?: string
+          workout_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_sessions_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workouts: {
         Row: {
           category: string

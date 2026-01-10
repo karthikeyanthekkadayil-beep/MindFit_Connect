@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import WorkoutLibrary from "./pages/WorkoutLibrary";
 import WorkoutDetail from "./pages/WorkoutDetail";
 import WorkoutBuilder from "./pages/WorkoutBuilder";
+import WorkoutSession from "./pages/WorkoutSession";
 import Nutrition from "./pages/Nutrition";
 import Mindfulness from "./pages/Mindfulness";
 import Progress from "./pages/Progress";
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/workouts" element={<WorkoutLibrary />} />
           <Route path="/workouts/:id" element={<WorkoutDetail />} />
+          <Route path="/workouts/:id/session" element={<WorkoutSession />} />
           <Route path="/workouts/builder" element={<WorkoutBuilder />} />
           <Route path="/nutrition" element={<Nutrition />} />
           <Route path="/mindfulness" element={<Mindfulness />} />
