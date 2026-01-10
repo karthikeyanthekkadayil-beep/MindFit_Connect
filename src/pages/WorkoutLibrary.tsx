@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Loader2, Search, Dumbbell, Heart, Plus } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
+import PersonalizedWorkouts from "@/components/PersonalizedWorkouts";
 
 interface Exercise {
   id: string;
@@ -161,6 +162,9 @@ const WorkoutLibrary = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* AI-Powered Personalized Recommendations */}
+        <PersonalizedWorkouts />
 
         {/* Content Tabs */}
         <Tabs defaultValue="workouts" className="w-full">
