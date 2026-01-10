@@ -148,8 +148,7 @@ const WorkoutDetail = () => {
   };
 
   const startWorkout = () => {
-    toast.success("Starting workout session...");
-    // TODO: Implement workout session tracking
+    navigate(`/workouts/${id}/session`);
   };
 
   if (loading) {
