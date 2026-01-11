@@ -268,7 +268,7 @@ const Balance = () => {
             <Scale className="h-6 w-6 sm:h-8 sm:w-8" />
             <div>
               <h1 className="text-xl sm:text-3xl font-heading font-bold">Wellness Balance</h1>
-              <p className="text-white/90 text-xs sm:text-base">Track your holistic wellness across all areas</p>
+              <p className="text-white/90 text-xs sm:text-base">MindFit Connect • Holistic wellness tracking</p>
             </div>
           </div>
         </div>
@@ -302,11 +302,12 @@ const Balance = () => {
         </Card>
 
         <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 h-auto">
+          <TabsList className="grid w-full grid-cols-5 h-auto">
             <TabsTrigger value="dashboard" className="text-[10px] sm:text-sm py-2 px-1">Dashboard</TabsTrigger>
+            <TabsTrigger value="mental" className="text-[10px] sm:text-sm py-2 px-1">Mental</TabsTrigger>
             <TabsTrigger value="insights" className="text-[10px] sm:text-sm py-2 px-1">Insights</TabsTrigger>
             <TabsTrigger value="worklife" className="text-[10px] sm:text-sm py-2 px-1">Work-Life</TabsTrigger>
-            <TabsTrigger value="exercises" className="text-[10px] sm:text-sm py-2 px-1">Balance Ex.</TabsTrigger>
+            <TabsTrigger value="exercises" className="text-[10px] sm:text-sm py-2 px-1">Exercises</TabsTrigger>
           </TabsList>
 
           {/* Wellness Dashboard */}
@@ -376,6 +377,159 @@ const Balance = () => {
                       <ChartTooltip />
                     </PieChart>
                   </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Mental Wellness Tab */}
+          <TabsContent value="mental" className="space-y-4 mt-4">
+            {/* Mood Tracker */}
+            <Card>
+              <CardHeader className="p-3 sm:p-6 pb-2">
+                <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
+                  <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                  Today's Mood
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">How are you feeling right now?</CardDescription>
+              </CardHeader>
+              <CardContent className="p-3 sm:p-6 pt-0">
+                <div className="grid grid-cols-5 gap-2">
+                  {[
+                    { emoji: '😊', label: 'Great', color: 'bg-green-500/10 hover:bg-green-500/20 border-green-500/30' },
+                    { emoji: '🙂', label: 'Good', color: 'bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30' },
+                    { emoji: '😐', label: 'Okay', color: 'bg-yellow-500/10 hover:bg-yellow-500/20 border-yellow-500/30' },
+                    { emoji: '😔', label: 'Low', color: 'bg-orange-500/10 hover:bg-orange-500/20 border-orange-500/30' },
+                    { emoji: '😢', label: 'Tough', color: 'bg-red-500/10 hover:bg-red-500/20 border-red-500/30' },
+                  ].map((mood) => (
+                    <button
+                      key={mood.label}
+                      className={`p-2 sm:p-3 rounded-lg border text-center transition-all ${mood.color}`}
+                      onClick={() => toast.success(`Mood logged: ${mood.label}`)}
+                    >
+                      <span className="text-xl sm:text-2xl">{mood.emoji}</span>
+                      <p className="text-[10px] sm:text-xs mt-1">{mood.label}</p>
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Stress Level */}
+            <Card>
+              <CardHeader className="p-3 sm:p-6 pb-2">
+                <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
+                  <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />
+                  Stress Level
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Rate your current stress (1-10)</CardDescription>
+              </CardHeader>
+              <CardContent className="p-3 sm:p-6 pt-0">
+                <div className="flex gap-1 sm:gap-2">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
+                    <button
+                      key={level}
+                      className={`flex-1 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all
+                        ${level <= 3 ? 'bg-green-500/10 hover:bg-green-500/20 text-green-600' : 
+                          level <= 6 ? 'bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-600' : 
+                          'bg-red-500/10 hover:bg-red-500/20 text-red-600'}`}
+                      onClick={() => toast.success(`Stress level logged: ${level}/10`)}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex justify-between text-[10px] sm:text-xs text-muted-foreground mt-2">
+                  <span>Low stress</span>
+                  <span>High stress</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Mental Wellness Actions */}
+            <Card>
+              <CardHeader className="p-3 sm:p-6 pb-2">
+                <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
+                  <Brain className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
+                  Quick Relief
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Instant stress-relief activities</CardDescription>
+              </CardHeader>
+              <CardContent className="p-3 sm:p-6 pt-0 space-y-2">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start h-12 sm:h-14"
+                  onClick={() => navigate('/mindfulness')}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Brain className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-medium text-xs sm:text-sm">5-Minute Meditation</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">Quick calm session</p>
+                    </div>
+                  </div>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start h-12 sm:h-14"
+                  onClick={() => navigate('/mindfulness')}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-secondary/10 flex items-center justify-center">
+                      <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-medium text-xs sm:text-sm">Box Breathing</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">4-4-4-4 technique</p>
+                    </div>
+                  </div>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start h-12 sm:h-14"
+                  onClick={() => navigate('/communities')}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-accent/10 flex items-center justify-center">
+                      <Users className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-medium text-xs sm:text-sm">Talk to Community</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">Connect with others</p>
+                    </div>
+                  </div>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Mental Wellness Tips */}
+            <Card>
+              <CardHeader className="p-3 sm:p-6 pb-2">
+                <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                  Daily Wellness Tips
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 sm:p-6 pt-0 space-y-2">
+                <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
+                  <p className="text-xs sm:text-sm font-medium">🌟 Tip of the Day</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                    Take a 5-minute break every hour to stretch and breathe deeply. Small pauses boost productivity and reduce stress.
+                  </p>
+                </div>
+                <div className="p-3 rounded-lg bg-secondary/5 border border-secondary/20">
+                  <p className="text-xs sm:text-sm font-medium">💪 Affirmation</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                    "I am capable of handling whatever comes my way today. I choose calm over chaos."
+                  </p>
+                </div>
+                <div className="p-3 rounded-lg bg-accent/5 border border-accent/20">
+                  <p className="text-xs sm:text-sm font-medium">🎯 Focus Reminder</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                    Progress, not perfection. Every small step towards your wellness goals counts.
+                  </p>
                 </div>
               </CardContent>
             </Card>
