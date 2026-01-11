@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import ExerciseDemo from "@/components/ExerciseDemo";
 
 interface Exercise {
   id: string;
@@ -20,6 +21,8 @@ interface Exercise {
   description: string | null;
   muscle_groups: string[];
   instructions: string;
+  video_url: string | null;
+  thumbnail_url: string | null;
 }
 
 interface WorkoutExercise {
@@ -135,7 +138,7 @@ const WorkoutSession = () => {
           id, name, description, difficulty_level, category, total_duration_minutes,
           workout_exercises (
             id, exercise_id, order_index, sets, reps, duration_seconds, rest_seconds, notes,
-            exercise:exercises (id, name, description, muscle_groups, instructions)
+            exercise:exercises (id, name, description, muscle_groups, instructions, video_url, thumbnail_url)
           )
         `)
         .eq("id", workoutId)
@@ -492,15 +495,23 @@ const WorkoutSession = () => {
               <Dumbbell className="h-6 w-6 text-muted-foreground" />
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+            {/* Exercise Demo Video/GIF */}
+            <ExerciseDemo
+              videoUrl={currentExercise.exercise.video_url}
+              thumbnailUrl={currentExercise.exercise.thumbnail_url}
+              exerciseName={currentExercise.exercise.name}
+              autoPlay={true}
+            />
+
             {currentExercise.exercise.description && (
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-muted-foreground">
                 {currentExercise.exercise.description}
               </p>
             )}
             
             {/* Target */}
-            <div className="flex gap-4 text-sm mb-4 p-3 bg-muted/50 rounded-lg">
+            <div className="flex gap-4 text-sm p-3 bg-muted/50 rounded-lg">
               <div>
                 <span className="text-muted-foreground">Target: </span>
                 <span className="font-medium">{currentExercise.sets || 3} sets</span>
@@ -520,7 +531,7 @@ const WorkoutSession = () => {
             </div>
 
             {currentExercise.notes && (
-              <p className="text-xs text-muted-foreground mb-4 italic">
+              <p className="text-xs text-muted-foreground italic">
                 Note: {currentExercise.notes}
               </p>
             )}
