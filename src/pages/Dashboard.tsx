@@ -62,7 +62,7 @@ const Dashboard = () => {
       <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold">SocialVibe</h1>
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold">MindFit Connect</h1>
             <p className="text-white/90 mt-1 text-sm sm:text-base">Welcome back!</p>
           </div>
           <Button 

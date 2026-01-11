@@ -33,11 +33,11 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center space-y-8 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-heading font-bold gradient-hero bg-clip-text text-transparent">
-            Welcome to SocialVibe
+          <h1 className="text-5xl md:text-6xl font-heading font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+            Welcome to MindFit Connect
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground">
-            Connect, stay active, and build meaningful relationships through wellness
+            Combat social isolation and promote active, healthy lifestyles
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">

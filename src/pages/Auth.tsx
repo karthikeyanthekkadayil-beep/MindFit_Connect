@@ -111,9 +111,9 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 p-4 sm:p-6">
-          <CardTitle className="text-2xl sm:text-3xl font-heading font-bold text-center">SocialVibe</CardTitle>
+          <CardTitle className="text-2xl sm:text-3xl font-heading font-bold text-center">MindFit Connect</CardTitle>
           <CardDescription className="text-center text-sm sm:text-base">
-            Connect, stay active, and build meaningful relationships
+            Combat social isolation and promote active, healthy lifestyles
           </CardDescription>
         </CardHeader>
         <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
