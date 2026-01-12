@@ -734,6 +734,42 @@ export type Database = {
           },
         ]
       }
+      mood_stress_entries: {
+        Row: {
+          created_at: string
+          entry_date: string
+          id: string
+          mood_label: string
+          mood_score: number
+          notes: string | null
+          stress_level: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entry_date?: string
+          id?: string
+          mood_label: string
+          mood_score: number
+          notes?: string | null
+          stress_level?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entry_date?: string
+          id?: string
+          mood_label?: string
+          mood_score?: number
+          notes?: string | null
+          stress_level?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       post_comments: {
         Row: {
           content: string
