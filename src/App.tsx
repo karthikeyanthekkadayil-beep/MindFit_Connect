@@ -30,6 +30,7 @@ import Admin from "./pages/Admin";
 import AdminAuth from "./pages/AdminAuth";
 import Balance from "./pages/Balance";
 import Moderator from "./pages/Moderator";
+import Rewards from "./pages/Rewards";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -68,6 +69,7 @@ const App = () => (
           <Route path="/admin/login" element={<AdminAuth />} />
           <Route path="/balance" element={<Balance />} />
           <Route path="/moderator" element={<Moderator />} />
+          <Route path="/rewards" element={<Rewards />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

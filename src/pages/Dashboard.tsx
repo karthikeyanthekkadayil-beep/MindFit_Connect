@@ -4,9 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
-import { Calendar, Users, MessageSquare, Dumbbell, Utensils, Brain, TrendingUp, Target, LogOut } from "lucide-react";
+import { useGamification } from "@/hooks/useGamification";
+import { 
+  Calendar, Users, MessageSquare, Dumbbell, Utensils, Brain, 
+  TrendingUp, Target, LogOut, Trophy, Flame, Star, Crown, ArrowRight 
+} from "lucide-react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -36,6 +41,9 @@ const Dashboard = () => {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  const { stats, earnedAchievements, getLevelProgress, loading: gamificationLoading } = useGamification(user?.id || null);
+  const levelProgress = getLevelProgress();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -79,13 +87,71 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
+        {/* Gamification Stats Card */}
+        <Card 
+          className="bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 border-primary/20 cursor-pointer hover:shadow-lg transition-shadow"
+          onClick={() => navigate('/rewards')}
+        >
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-primary" />
+                <span className="font-semibold text-sm sm:text-base">Your Progress</span>
+              </div>
+              <Button variant="ghost" size="sm" className="text-xs gap-1">
+                View All <ArrowRight className="h-3 w-3" />
+              </Button>
+            </div>
+            
+            {gamificationLoading ? (
+              <div className="animate-pulse space-y-3">
+                <div className="h-16 bg-muted rounded-lg"></div>
+                <div className="h-4 bg-muted rounded w-3/4"></div>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-4 gap-2 sm:gap-4 mb-4">
+                  <div className="text-center p-2 sm:p-3 rounded-lg bg-background/50">
+                    <Star className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 mx-auto mb-1" />
+                    <p className="text-lg sm:text-xl font-bold">{stats?.total_points || 0}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground">Points</p>
+                  </div>
+                  <div className="text-center p-2 sm:p-3 rounded-lg bg-background/50">
+                    <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-primary mx-auto mb-1" />
+                    <p className="text-lg sm:text-xl font-bold">{stats?.current_level || 1}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground">Level</p>
+                  </div>
+                  <div className="text-center p-2 sm:p-3 rounded-lg bg-background/50">
+                    <Flame className="h-4 w-4 sm:h-5 sm:w-5 text-secondary mx-auto mb-1" />
+                    <p className="text-lg sm:text-xl font-bold">{stats?.current_streak || 0}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground">Streak</p>
+                  </div>
+                  <div className="text-center p-2 sm:p-3 rounded-lg bg-background/50">
+                    <Trophy className="h-4 w-4 sm:h-5 sm:w-5 text-accent mx-auto mb-1" />
+                    <p className="text-lg sm:text-xl font-bold">{earnedAchievements.length}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground">Badges</p>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs sm:text-sm">
+                    <span>Level {stats?.current_level || 1}</span>
+                    <span className="text-muted-foreground">{levelProgress.current} / {levelProgress.next} XP</span>
+                  </div>
+                  <Progress value={levelProgress.percentage} className="h-2" />
+                </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="font-heading text-lg sm:text-xl">Daily Overview</CardTitle>
+            <CardTitle className="font-heading text-lg sm:text-xl">Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
             <p className="text-muted-foreground text-sm sm:text-base">
-              Your personalized dashboard is being set up. Start exploring your wellness journey!
+              Your personalized dashboard is ready. Start exploring your wellness journey!
             </p>
           </CardContent>
         </Card>
