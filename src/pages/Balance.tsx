@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { BottomNav } from "@/components/BottomNav";
+import { MoodStressChart } from "@/components/MoodStressChart";
 import { 
   Scale, Activity, Brain, Apple, Users, TrendingUp, Briefcase, 
   Heart, AlertTriangle, CheckCircle, Clock, Sparkles, Target
@@ -45,6 +46,7 @@ const Balance = () => {
     restHours: 0
   });
   const [activityDistribution, setActivityDistribution] = useState<any[]>([]);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     checkAuthAndFetchData();
@@ -56,6 +58,7 @@ const Balance = () => {
       navigate("/auth");
       return;
     }
+    setUserId(session.user.id);
     await fetchBalanceData(session.user.id);
   };
 
@@ -384,67 +387,15 @@ const Balance = () => {
 
           {/* Mental Wellness Tab */}
           <TabsContent value="mental" className="space-y-4 mt-4">
-            {/* Mood Tracker */}
-            <Card>
-              <CardHeader className="p-3 sm:p-6 pb-2">
-                <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
-                  <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                  Today's Mood
-                </CardTitle>
-                <CardDescription className="text-xs sm:text-sm">How are you feeling right now?</CardDescription>
-              </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0">
-                <div className="grid grid-cols-5 gap-2">
-                  {[
-                    { emoji: '😊', label: 'Great', color: 'bg-green-500/10 hover:bg-green-500/20 border-green-500/30' },
-                    { emoji: '🙂', label: 'Good', color: 'bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30' },
-                    { emoji: '😐', label: 'Okay', color: 'bg-yellow-500/10 hover:bg-yellow-500/20 border-yellow-500/30' },
-                    { emoji: '😔', label: 'Low', color: 'bg-orange-500/10 hover:bg-orange-500/20 border-orange-500/30' },
-                    { emoji: '😢', label: 'Tough', color: 'bg-red-500/10 hover:bg-red-500/20 border-red-500/30' },
-                  ].map((mood) => (
-                    <button
-                      key={mood.label}
-                      className={`p-2 sm:p-3 rounded-lg border text-center transition-all ${mood.color}`}
-                      onClick={() => toast.success(`Mood logged: ${mood.label}`)}
-                    >
-                      <span className="text-xl sm:text-2xl">{mood.emoji}</span>
-                      <p className="text-[10px] sm:text-xs mt-1">{mood.label}</p>
-                    </button>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Stress Level */}
-            <Card>
-              <CardHeader className="p-3 sm:p-6 pb-2">
-                <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
-                  <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />
-                  Stress Level
-                </CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Rate your current stress (1-10)</CardDescription>
-              </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0">
-                <div className="flex gap-1 sm:gap-2">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
-                    <button
-                      key={level}
-                      className={`flex-1 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all
-                        ${level <= 3 ? 'bg-green-500/10 hover:bg-green-500/20 text-green-600' : 
-                          level <= 6 ? 'bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-600' : 
-                          'bg-red-500/10 hover:bg-red-500/20 text-red-600'}`}
-                      onClick={() => toast.success(`Stress level logged: ${level}/10`)}
-                    >
-                      {level}
-                    </button>
-                  ))}
-                </div>
-                <div className="flex justify-between text-[10px] sm:text-xs text-muted-foreground mt-2">
-                  <span>Low stress</span>
-                  <span>High stress</span>
-                </div>
-              </CardContent>
-            </Card>
+            {userId ? (
+              <MoodStressChart userId={userId} />
+            ) : (
+              <Card>
+                <CardContent className="p-6 text-center text-muted-foreground">
+                  Loading...
+                </CardContent>
+              </Card>
+            )}
 
             {/* Quick Mental Wellness Actions */}
             <Card>
