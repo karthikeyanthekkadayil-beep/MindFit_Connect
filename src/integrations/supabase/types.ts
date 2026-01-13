@@ -1547,6 +1547,19 @@ export type Database = {
       }
     }
     Views: {
+      leaderboard_view: {
+        Row: {
+          achievement_count: number | null
+          avatar_url: string | null
+          current_level: number | null
+          current_streak: number | null
+          full_name: string | null
+          longest_streak: number | null
+          total_points: number | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
       shared_goals_view: {
         Row: {
           cheer_count: number | null
@@ -1573,6 +1586,34 @@ export type Database = {
       }
     }
     Functions: {
+      get_community_leaderboard: {
+        Args: { community_uuid: string; limit_count?: number }
+        Returns: {
+          achievement_count: number
+          avatar_url: string
+          current_level: number
+          current_streak: number
+          full_name: string
+          longest_streak: number
+          rank: number
+          total_points: number
+          user_id: string
+        }[]
+      }
+      get_global_leaderboard: {
+        Args: { limit_count?: number }
+        Returns: {
+          achievement_count: number
+          avatar_url: string
+          current_level: number
+          current_streak: number
+          full_name: string
+          longest_streak: number
+          rank: number
+          total_points: number
+          user_id: string
+        }[]
+      }
       get_public_profile_info: {
         Args: { profile_id: string }
         Returns: {
@@ -1597,6 +1638,13 @@ export type Database = {
       get_user_conversation_ids: {
         Args: { _user_id: string }
         Returns: string[]
+      }
+      get_user_rank: {
+        Args: { target_user_id: string }
+        Returns: {
+          global_rank: number
+          total_users: number
+        }[]
       }
       has_community_role: {
         Args: { _community_id: string; _roles: string[]; _user_id: string }

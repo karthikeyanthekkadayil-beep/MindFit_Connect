@@ -54,6 +54,7 @@ const Dashboard = () => {
   const dashboardItems = [
     { title: "Today's Activities", description: "Plan your daily wellness activities", icon: Calendar, path: "/planner" },
     { title: "Wellness Balance", description: "Track your holistic wellness", icon: TrendingUp, path: "/balance" },
+    { title: "Leaderboard", description: "Compete with friends & community", icon: Crown, path: "/leaderboard" },
     { title: "Upcoming Events", description: "Discover and join fitness events", icon: Calendar, path: "/events" },
     { title: "Your Communities", description: "Connect with like-minded people", icon: Users, path: "/communities" },
     { title: "Messages", description: "Chat with friends and groups", icon: MessageSquare, path: "/messages" },
