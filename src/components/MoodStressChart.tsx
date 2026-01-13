@@ -7,6 +7,7 @@ import { format, subDays, parseISO } from "date-fns";
 import { TrendingUp, TrendingDown, Minus, Calendar, BarChart3 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { useGamification } from "@/hooks/useGamification";
 
 interface MoodEntry {
   id: string;
@@ -47,6 +48,9 @@ export const MoodStressChart = ({ userId, onMoodLogged }: MoodStressChartProps) 
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
   const [selectedStress, setSelectedStress] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+
+  // Gamification hook
+  const { awardPoints, checkAchievements } = useGamification(userId);
 
   useEffect(() => {
     fetchMoodHistory();
@@ -110,8 +114,11 @@ export const MoodStressChart = ({ userId, onMoodLogged }: MoodStressChartProps) 
     setSaving(true);
     const today = format(new Date(), 'yyyy-MM-dd');
     const moodLabel = MOOD_EMOJIS[selectedMood]?.label || 'Unknown';
+    const isNewEntry = !todayEntry;
 
     try {
+      let entryId: string | null = null;
+      
       if (todayEntry) {
         // Update existing entry
         const { error } = await supabase
@@ -125,10 +132,11 @@ export const MoodStressChart = ({ userId, onMoodLogged }: MoodStressChartProps) 
           .eq('id', todayEntry.id);
 
         if (error) throw error;
+        entryId = todayEntry.id;
         toast.success('Mood updated!');
       } else {
         // Create new entry
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('mood_stress_entries')
           .insert({
             user_id: userId,
@@ -136,10 +144,28 @@ export const MoodStressChart = ({ userId, onMoodLogged }: MoodStressChartProps) 
             mood_score: selectedMood,
             mood_label: moodLabel,
             stress_level: selectedStress,
-          });
+          })
+          .select()
+          .single();
 
         if (error) throw error;
+        entryId = data?.id;
         toast.success('Mood logged!');
+      }
+
+      // Award points only for new entries (not updates)
+      if (isNewEntry && entryId) {
+        const points = 10; // Points for logging mood
+        await awardPoints(
+          points,
+          'mood_log',
+          'Logged daily mood',
+          entryId,
+          'mood_entry'
+        );
+        
+        // Check for new achievements
+        await checkAchievements();
       }
 
       fetchMoodHistory();
