@@ -112,12 +112,23 @@ const Rewards = () => {
     <div className="min-h-screen bg-background pb-20">
       <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Trophy className="h-6 w-6 sm:h-8 sm:w-8" />
-            <div>
-              <h1 className="text-xl sm:text-3xl font-heading font-bold">Rewards & Achievements</h1>
-              <p className="text-white/90 text-xs sm:text-base">MindFit Connect • Track your progress</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Trophy className="h-6 w-6 sm:h-8 sm:w-8" />
+              <div>
+                <h1 className="text-xl sm:text-3xl font-heading font-bold">Rewards & Achievements</h1>
+                <p className="text-white/90 text-xs sm:text-base">MindFit Connect • Track your progress</p>
+              </div>
             </div>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => navigate('/leaderboard')}
+              className="gap-1 sm:gap-2"
+            >
+              <Crown className="h-4 w-4" />
+              <span className="hidden sm:inline">Leaderboard</span>
+            </Button>
           </div>
         </div>
       </header>
