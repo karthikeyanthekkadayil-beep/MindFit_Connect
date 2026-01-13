@@ -10,6 +10,7 @@ import { Loader2, Play, Brain, Wind, Heart, Clock, TrendingUp, ArrowLeft } from 
 import { BreathingExercise } from "@/components/BreathingExercise";
 import { BottomNav } from "@/components/BottomNav";
 import { format } from "date-fns";
+import { useGamification } from "@/hooks/useGamification";
 
 interface MeditationProgram {
   id: string;
@@ -56,10 +57,18 @@ const Mindfulness = () => {
   const [sessionTime, setSessionTime] = useState(0);
   const [stats, setStats] = useState<SessionStats>({ totalSessions: 0, totalMinutes: 0, weekStreak: 0 });
   const [activeTab, setActiveTab] = useState("browse");
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // Gamification hook
+  const { awardPoints, checkAchievements } = useGamification(userId);
 
   useEffect(() => {
     fetchData();
     fetchStats();
+    // Get user ID for gamification
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) setUserId(user.id);
+    });
   }, []);
 
   useEffect(() => {
@@ -129,7 +138,7 @@ const Mindfulness = () => {
 
       const durationMinutes = Math.floor(sessionTime / 60);
 
-      const { error } = await supabase
+      const { data: sessionData, error } = await supabase
         .from("user_meditation_sessions")
         .insert({
           user_id: user.id,
@@ -138,9 +147,27 @@ const Mindfulness = () => {
           duration_minutes: durationMinutes,
           completed: true,
           session_date: new Date().toISOString()
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // Award points for meditation session
+      const basePoints = 25; // Base points for any meditation
+      const durationBonus = Math.min(durationMinutes * 3, 45); // Up to 45 bonus points based on duration
+      const totalPoints = basePoints + durationBonus;
+      
+      await awardPoints(
+        totalPoints,
+        'meditation',
+        `Completed meditation: ${selectedProgram.title}`,
+        sessionData?.id,
+        'meditation_session'
+      );
+      
+      // Check for new achievements
+      await checkAchievements();
 
       toast.success(`Session completed! ${durationMinutes} minutes`);
       setSessionActive(false);
@@ -159,7 +186,7 @@ const Mindfulness = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const { error } = await supabase
+      const { data: sessionData, error } = await supabase
         .from("user_meditation_sessions")
         .insert({
           user_id: user.id,
@@ -168,9 +195,25 @@ const Mindfulness = () => {
           duration_minutes: selectedExercise.duration_minutes,
           completed: true,
           session_date: new Date().toISOString()
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // Award points for breathing exercise
+      const points = 15 + Math.min(selectedExercise.duration_minutes * 2, 20); // 15 base + up to 20 bonus
+      
+      await awardPoints(
+        points,
+        'breathing',
+        `Completed breathing exercise: ${selectedExercise.name}`,
+        sessionData?.id,
+        'meditation_session'
+      );
+      
+      // Check for new achievements
+      await checkAchievements();
 
       toast.success("Breathing exercise completed!");
       setSelectedExercise(null);

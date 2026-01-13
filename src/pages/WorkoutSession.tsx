@@ -14,6 +14,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import ExerciseDemo from "@/components/ExerciseDemo";
+import { useGamification } from "@/hooks/useGamification";
 
 interface Exercise {
   id: string;
@@ -81,6 +82,9 @@ const WorkoutSession = () => {
   const [showCompleteDialog, setShowCompleteDialog] = useState(false);
   const [sessionNotes, setSessionNotes] = useState("");
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+
+  // Gamification hook
+  const { awardPoints, checkAchievements } = useGamification(userId);
 
   useEffect(() => {
     checkUserAndLoadWorkout();
@@ -343,6 +347,23 @@ const WorkoutSession = () => {
             });
         }
       }
+
+      // Award points for completing workout
+      const workoutMinutes = Math.floor(elapsedTime / 60);
+      const basePoints = 50; // Base points for completing any workout
+      const durationBonus = Math.min(workoutMinutes * 2, 50); // Up to 50 bonus points based on duration
+      const totalPoints = basePoints + durationBonus;
+      
+      await awardPoints(
+        totalPoints,
+        'workout',
+        `Completed workout: ${workout?.name || 'Workout'}`,
+        sessionId,
+        'workout_session'
+      );
+      
+      // Check for new achievements
+      await checkAchievements();
 
       toast.success("Workout completed! Great job! 🎉");
       navigate(`/workouts/${workoutId}`);
