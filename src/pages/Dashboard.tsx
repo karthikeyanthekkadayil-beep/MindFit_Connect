@@ -3,23 +3,32 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
 import { useGamification } from "@/hooks/useGamification";
 import { 
   Calendar, Users, MessageSquare, Dumbbell, Utensils, Brain, 
-  TrendingUp, Target, LogOut, Trophy, Flame, Star, Crown, ArrowRight 
+  TrendingUp, Target, LogOut, Trophy, Flame, Star, Crown, ChevronRight,
+  Sparkles
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [greeting, setGreeting] = useState("Welcome");
 
   useEffect(() => {
-    // Set up auth state listener FIRST
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting("Good morning");
+    else if (hour < 17) setGreeting("Good afternoon");
+    else setGreeting("Good evening");
+  }, []);
+
+  useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -29,7 +38,6 @@ const Dashboard = () => {
       }
     });
 
-    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -51,92 +59,92 @@ const Dashboard = () => {
     navigate("/auth");
   };
 
+  const quickActions = [
+    { title: "Planner", icon: Calendar, path: "/planner", color: "bg-primary/10 text-primary" },
+    { title: "Workouts", icon: Dumbbell, path: "/workouts", color: "bg-secondary/10 text-secondary" },
+    { title: "Mindfulness", icon: Brain, path: "/mindfulness", color: "bg-accent/10 text-accent" },
+    { title: "Nutrition", icon: Utensils, path: "/nutrition", color: "bg-primary/10 text-primary" },
+  ];
+
   const dashboardItems = [
-    { title: "Today's Activities", description: "Plan your daily wellness activities", icon: Calendar, path: "/planner" },
-    { title: "Wellness Balance", description: "Track your holistic wellness", icon: TrendingUp, path: "/balance" },
-    { title: "Leaderboard", description: "Compete with friends & community", icon: Crown, path: "/leaderboard" },
-    { title: "Upcoming Events", description: "Discover and join fitness events", icon: Calendar, path: "/events" },
-    { title: "Your Communities", description: "Connect with like-minded people", icon: Users, path: "/communities" },
-    { title: "Messages", description: "Chat with friends and groups", icon: MessageSquare, path: "/messages" },
-    { title: "Workouts", description: "Browse workout library", icon: Dumbbell, path: "/workouts" },
-    { title: "Nutrition", description: "Plan your meals and nutrition", icon: Utensils, path: "/nutrition" },
-    { title: "Mindfulness", description: "Meditation and breathing exercises", icon: Brain, path: "/mindfulness" },
-    { title: "Progress Analytics", description: "Track your wellness trends", icon: TrendingUp, path: "/progress" },
-    { title: "My Goals", description: "Set and track your targets", icon: Target, path: "/goals" },
+    { title: "Today's Activities", description: "Plan your daily wellness", icon: Calendar, path: "/planner" },
+    { title: "Wellness Balance", description: "Track holistic wellness", icon: TrendingUp, path: "/balance" },
+    { title: "Leaderboard", description: "Compete with friends", icon: Crown, path: "/leaderboard" },
+    { title: "Upcoming Events", description: "Discover fitness events", icon: Calendar, path: "/events" },
+    { title: "Communities", description: "Connect with others", icon: Users, path: "/communities" },
+    { title: "Messages", description: "Chat with friends", icon: MessageSquare, path: "/messages" },
+    { title: "Progress Analytics", description: "Track your trends", icon: TrendingUp, path: "/progress" },
+    { title: "My Goals", description: "Set and track targets", icon: Target, path: "/goals" },
   ];
 
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold">MindFit Connect</h1>
-            <p className="text-white/90 mt-1 text-sm sm:text-base">Welcome back!</p>
+      <header className="bg-gradient-hero text-white px-4 pt-12 pb-6 safe-area-top">
+        <div className="max-w-lg mx-auto">
+          <div className="flex items-start justify-between">
+            <div className="animate-in-up">
+              <p className="text-white/80 text-sm font-medium">{greeting} 👋</p>
+              <h1 className="text-2xl font-heading font-bold mt-0.5">MindFit Connect</h1>
+            </div>
+            <Button 
+              onClick={handleLogout} 
+              variant="ghost" 
+              size="icon"
+              className="text-white hover:bg-white/20 rounded-full h-10 w-10"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
           </div>
-          <Button 
-            onClick={handleLogout} 
-            variant="ghost" 
-            size="sm"
-            className="text-white hover:bg-white/20"
-          >
-            <LogOut className="h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline">Logout</span>
-          </Button>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
-        {/* Gamification Stats Card */}
+      <main className="max-w-lg mx-auto px-4 -mt-3 space-y-5">
+        {/* Stats Card */}
         <Card 
-          className="bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 border-primary/20 cursor-pointer hover:shadow-lg transition-shadow"
+          className="overflow-hidden border-0 shadow-lg animate-in-up card-press cursor-pointer"
           onClick={() => navigate('/rewards')}
         >
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-primary" />
-                <span className="font-semibold text-sm sm:text-base">Your Progress</span>
-              </div>
-              <Button variant="ghost" size="sm" className="text-xs gap-1">
-                View All <ArrowRight className="h-3 w-3" />
-              </Button>
-            </div>
-            
+          <CardContent className="p-0">
             {gamificationLoading ? (
-              <div className="animate-pulse space-y-3">
+              <div className="p-5 animate-pulse space-y-3">
                 <div className="h-16 bg-muted rounded-lg"></div>
                 <div className="h-4 bg-muted rounded w-3/4"></div>
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-4 gap-2 sm:gap-4 mb-4">
-                  <div className="text-center p-2 sm:p-3 rounded-lg bg-background/50">
-                    <Star className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 mx-auto mb-1" />
-                    <p className="text-lg sm:text-xl font-bold">{stats?.total_points || 0}</p>
-                    <p className="text-[10px] sm:text-xs text-muted-foreground">Points</p>
+                {/* Stats Grid */}
+                <div className="grid grid-cols-4 divide-x divide-border">
+                  <div className="text-center py-4 px-2">
+                    <Star className="h-5 w-5 text-amber-500 mx-auto mb-1" />
+                    <p className="text-lg font-bold">{stats?.total_points || 0}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Points</p>
                   </div>
-                  <div className="text-center p-2 sm:p-3 rounded-lg bg-background/50">
-                    <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-primary mx-auto mb-1" />
-                    <p className="text-lg sm:text-xl font-bold">{stats?.current_level || 1}</p>
-                    <p className="text-[10px] sm:text-xs text-muted-foreground">Level</p>
+                  <div className="text-center py-4 px-2">
+                    <Crown className="h-5 w-5 text-primary mx-auto mb-1" />
+                    <p className="text-lg font-bold">{stats?.current_level || 1}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Level</p>
                   </div>
-                  <div className="text-center p-2 sm:p-3 rounded-lg bg-background/50">
-                    <Flame className="h-4 w-4 sm:h-5 sm:w-5 text-secondary mx-auto mb-1" />
-                    <p className="text-lg sm:text-xl font-bold">{stats?.current_streak || 0}</p>
-                    <p className="text-[10px] sm:text-xs text-muted-foreground">Streak</p>
+                  <div className="text-center py-4 px-2">
+                    <Flame className="h-5 w-5 text-secondary mx-auto mb-1" />
+                    <p className="text-lg font-bold">{stats?.current_streak || 0}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Streak</p>
                   </div>
-                  <div className="text-center p-2 sm:p-3 rounded-lg bg-background/50">
-                    <Trophy className="h-4 w-4 sm:h-5 sm:w-5 text-accent mx-auto mb-1" />
-                    <p className="text-lg sm:text-xl font-bold">{earnedAchievements.length}</p>
-                    <p className="text-[10px] sm:text-xs text-muted-foreground">Badges</p>
+                  <div className="text-center py-4 px-2">
+                    <Trophy className="h-5 w-5 text-accent mx-auto mb-1" />
+                    <p className="text-lg font-bold">{earnedAchievements.length}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Badges</p>
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <div className="flex justify-between text-xs sm:text-sm">
-                    <span>Level {stats?.current_level || 1}</span>
+                {/* Level Progress */}
+                <div className="px-4 pb-4 pt-2 bg-muted/30">
+                  <div className="flex justify-between text-xs mb-1.5">
+                    <span className="font-medium flex items-center gap-1">
+                      <Sparkles className="h-3 w-3 text-primary" />
+                      Level {stats?.current_level || 1}
+                    </span>
                     <span className="text-muted-foreground">{levelProgress.current} / {levelProgress.next} XP</span>
                   </div>
                   <Progress value={levelProgress.percentage} className="h-2" />
@@ -146,36 +154,60 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="font-heading text-lg sm:text-xl">Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
-            <p className="text-muted-foreground text-sm sm:text-base">
-              Your personalized dashboard is ready. Start exploring your wellness journey!
-            </p>
-          </CardContent>
-        </Card>
+        {/* Quick Actions */}
+        <section className="animate-in-up delay-1">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+            Quick Actions
+          </h2>
+          <div className="scroll-x -mx-4 px-4">
+            {quickActions.map((action, index) => (
+              <button
+                key={action.path}
+                onClick={() => navigate(action.path)}
+                className={cn(
+                  "flex flex-col items-center justify-center w-20 h-20 rounded-2xl press-effect",
+                  index === 0 && "bg-primary/10 text-primary",
+                  index === 1 && "bg-secondary/10 text-secondary",
+                  index === 2 && "bg-accent/10 text-accent-foreground",
+                  index === 3 && "bg-muted text-primary"
+                )}
+              >
+                <action.icon className="h-6 w-6 mb-1" />
+                <span className="text-xs font-medium">{action.title}</span>
+              </button>
+            ))}
+          </div>
+        </section>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-          {dashboardItems.map((item) => (
-            <Card 
-              key={item.path}
-              className="cursor-pointer hover:shadow-lg transition-shadow active:scale-[0.98]" 
-              onClick={() => navigate(item.path)}
-            >
-              <CardHeader className="p-3 sm:p-6 pb-2 sm:pb-2">
-                <div className="flex items-center gap-2">
-                  <item.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
-                  <CardTitle className="text-sm sm:text-lg leading-tight">{item.title}</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
-                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{item.description}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {/* Features List */}
+        <section className="animate-in-up delay-2">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+            Explore
+          </h2>
+          <div className="space-y-2">
+            {dashboardItems.map((item, index) => (
+              <Card 
+                key={item.path}
+                className={cn(
+                  "border-0 shadow-sm card-press cursor-pointer",
+                  `delay-${Math.min(index + 1, 5)}`
+                )}
+                onClick={() => navigate(item.path)}
+              >
+                <CardContent className="p-4 flex items-center gap-4">
+                  <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <item.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-sm">{item.title}</h3>
+                    <p className="text-xs text-muted-foreground truncate">{item.description}</p>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
       </main>
 
       <BottomNav />

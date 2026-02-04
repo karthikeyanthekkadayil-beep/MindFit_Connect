@@ -25,25 +25,55 @@ export const BottomNav = () => {
 
   const activeTab = getActiveTab();
 
+  const handleTabClick = (path: string) => {
+    // Add haptic feedback if available
+    if ('vibrate' in navigator) {
+      navigator.vibrate(10);
+    }
+    navigate(path);
+  };
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 safe-area-bottom">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4">
-        <div className="flex justify-around items-center h-14 sm:h-16">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => navigate(tab.path)}
-              className={cn(
-                "flex flex-col items-center justify-center flex-1 h-full transition-colors min-w-0 py-1 active:scale-95",
-                activeTab === tab.id
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              <tab.icon className="h-5 w-5 sm:h-6 sm:w-6" />
-              <span className="text-[10px] sm:text-xs mt-0.5 sm:mt-1 truncate">{tab.label}</span>
-            </button>
-          ))}
+    <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border/50 z-50 safe-area-bottom">
+      <div className="max-w-lg mx-auto">
+        <div className="flex justify-around items-center h-16">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => handleTabClick(tab.path)}
+                className={cn(
+                  "relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-200 touch-target",
+                  "active:scale-90",
+                  isActive ? "text-primary" : "text-muted-foreground"
+                )}
+              >
+                {/* Active indicator */}
+                {isActive && (
+                  <span className="absolute -top-0.5 w-8 h-1 bg-primary rounded-full" />
+                )}
+                
+                <div className={cn(
+                  "flex flex-col items-center justify-center transition-transform duration-200",
+                  isActive && "scale-110"
+                )}>
+                  <tab.icon 
+                    className={cn(
+                      "h-6 w-6 transition-all duration-200",
+                      isActive && "stroke-[2.5px]"
+                    )} 
+                  />
+                  <span className={cn(
+                    "text-[10px] mt-1 font-medium transition-all duration-200",
+                    isActive && "font-semibold"
+                  )}>
+                    {tab.label}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     </nav>
