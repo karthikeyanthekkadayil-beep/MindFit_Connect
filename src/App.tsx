@@ -43,6 +43,7 @@ const App = () => (
       <PushNotificationProvider>
         <Toaster />
         <Sonner />
+        <InstallPromptBanner />
         <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
