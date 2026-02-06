@@ -169,19 +169,19 @@ const Progress = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold">Progress Analytics</h1>
-            <p className="text-white/90 mt-1 text-sm sm:text-base">Track your wellness journey</p>
+      <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-3xl font-heading font-bold">Progress</h1>
+            <p className="text-white/90 mt-0.5 text-xs sm:text-base">Track your wellness journey</p>
           </div>
           <Button 
             onClick={() => navigate('/goals')} 
-            className="bg-white text-primary hover:bg-white/90 w-full sm:w-auto"
+            className="bg-white text-primary hover:bg-white/90 h-9 sm:h-10 text-xs sm:text-sm px-3 sm:px-4"
             size="sm"
           >
-            <Target className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-            My Goals
+            <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            Goals
           </Button>
         </div>
       </header>
