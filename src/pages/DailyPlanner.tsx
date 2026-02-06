@@ -173,61 +173,61 @@ const DailyPlanner = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
+      <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold">Daily Planner</h1>
-          <p className="text-white/90 mt-1 text-sm sm:text-base">
-            {format(selectedDate, "EEEE, MMMM d, yyyy")}
+          <h1 className="text-xl sm:text-3xl font-heading font-bold">Daily Planner</h1>
+          <p className="text-white/90 mt-0.5 sm:mt-1 text-xs sm:text-base">
+            {format(selectedDate, "EEE, MMM d, yyyy")}
           </p>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
-          <Card>
-            <CardContent className="p-4 sm:pt-6">
-              <div className="text-xl sm:text-2xl font-bold">{stats.completed}/{stats.total}</div>
-              <p className="text-xs text-muted-foreground">Tasks Completed</p>
+        <div className="grid grid-cols-4 gap-2 sm:gap-4">
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="text-base sm:text-2xl font-bold">{stats.completed}/{stats.total}</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Done</p>
             </CardContent>
           </Card>
           <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
+            className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
             onClick={() => navigate("/workouts")}
           >
-            <CardContent className="p-4 sm:pt-6">
-              <div className="flex items-center gap-2">
-                <Dumbbell className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                <div className="text-xl sm:text-2xl font-bold">{stats.workout}</div>
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Dumbbell className="h-3 w-3 sm:h-5 sm:w-5 text-primary" />
+                <div className="text-base sm:text-2xl font-bold">{stats.workout}</div>
               </div>
-              <p className="text-xs text-muted-foreground">Workouts</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Workouts</p>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4 sm:pt-6">
-              <div className="flex items-center gap-2">
-                <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />
-                <div className="text-xl sm:text-2xl font-bold">{stats.meditation}</div>
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Heart className="h-3 w-3 sm:h-5 sm:w-5 text-secondary" />
+                <div className="text-base sm:text-2xl font-bold">{stats.meditation}</div>
               </div>
-              <p className="text-xs text-muted-foreground">Meditation</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Meditate</p>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4 sm:pt-6">
-              <div className="flex items-center gap-2">
-                <Apple className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
-                <div className="text-xl sm:text-2xl font-bold">{stats.nutrition}</div>
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Apple className="h-3 w-3 sm:h-5 sm:w-5 text-accent" />
+                <div className="text-base sm:text-2xl font-bold">{stats.nutrition}</div>
               </div>
-              <p className="text-xs text-muted-foreground">Nutrition</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Nutrition</p>
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
-          {/* Calendar */}
-          <Card>
-            <CardHeader className="p-4 sm:p-6">
-              <CardTitle className="font-heading flex items-center gap-2 text-base sm:text-lg">
+        <div className="grid gap-3 sm:gap-6 lg:grid-cols-3">
+          {/* Calendar - Hidden on mobile, shown as compact on larger screens */}
+          <Card className="hidden sm:block">
+            <CardHeader className="p-3 sm:p-6 pb-2">
+              <CardTitle className="font-heading flex items-center gap-2 text-sm sm:text-lg">
                 <CalendarIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 Calendar
               </CardTitle>
@@ -242,26 +242,53 @@ const DailyPlanner = () => {
             </CardContent>
           </Card>
 
+          {/* Mobile Date Picker */}
+          <Card className="sm:hidden">
+            <CardContent className="p-3">
+              <div className="flex items-center justify-between">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 px-2"
+                  onClick={() => setSelectedDate(new Date(selectedDate.getTime() - 86400000))}
+                >
+                  ←
+                </Button>
+                <div className="flex items-center gap-2">
+                  <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">{format(selectedDate, "EEE, MMM d")}</span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 px-2"
+                  onClick={() => setSelectedDate(new Date(selectedDate.getTime() + 86400000))}
+                >
+                  →
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Activities List */}
           <Card className="lg:col-span-2">
-            <CardHeader className="p-4 sm:p-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <CardTitle className="font-heading text-base sm:text-lg">Today's Activities</CardTitle>
-                <div className="flex gap-2">
+            <CardHeader className="p-3 sm:p-6 pb-2">
+              <div className="flex items-center justify-between gap-2">
+                <CardTitle className="font-heading text-sm sm:text-lg">Activities</CardTitle>
+                <div className="flex gap-1.5 sm:gap-2">
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={generateAIRecommendations}
                     disabled={generatingAI}
-                    className="text-xs sm:text-sm"
+                    className="h-8 sm:h-9 text-xs px-2.5 sm:px-3"
                   >
                     {generatingAI ? (
-                      <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                      <Loader2 className="h-3 w-3 animate-spin" />
                     ) : (
-                      <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <Sparkles className="h-3 w-3" />
                     )}
-                    <span className="hidden xs:inline ml-1">AI Suggest</span>
-                    <span className="xs:hidden ml-1">AI</span>
+                    <span className="ml-1">AI</span>
                   </Button>
                   <AddActivityDialog 
                     selectedDate={selectedDate}
@@ -270,57 +297,57 @@ const DailyPlanner = () => {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="p-4 sm:p-6 pt-0 space-y-3 sm:space-y-4">
+            <CardContent className="p-3 sm:p-6 pt-0 space-y-2 sm:space-y-3">
               {loading ? (
-                <div className="flex items-center justify-center py-8">
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                <div className="flex items-center justify-center py-6">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                 </div>
               ) : activities.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <p className="text-sm sm:text-base">No activities scheduled for this day</p>
-                  <p className="text-xs sm:text-sm mt-2">Try generating AI recommendations!</p>
+                <div className="text-center py-6 text-muted-foreground">
+                  <p className="text-xs sm:text-base">No activities for today</p>
+                  <p className="text-[10px] sm:text-sm mt-1">Tap AI to get recommendations!</p>
                 </div>
               ) : (
                 activities.map((activity) => (
                   <div
                     key={activity.id}
                     className={cn(
-                      "flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg border transition-colors",
+                      "flex items-start gap-2 p-2.5 sm:p-4 rounded-xl border transition-all active:scale-[0.99]",
                       activity.completed ? "bg-muted/50" : "bg-card hover:bg-accent/5"
                     )}
                   >
                     <Checkbox
                       checked={activity.completed}
                       onCheckedChange={() => toggleComplete(activity)}
-                      className="mt-1"
+                      className="mt-0.5 h-5 w-5"
                     />
-                    <div className="flex-1 min-w-0 space-y-1">
-                      <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                    <div className="flex-1 min-w-0 space-y-0.5">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         {getActivityIcon(activity.activity_type)}
                         <h3 className={cn(
-                          "font-medium text-sm sm:text-base truncate",
+                          "font-medium text-xs sm:text-base truncate flex-1",
                           activity.completed && "line-through text-muted-foreground"
                         )}>
                           {activity.title}
                         </h3>
                         {activity.is_ai_recommended && (
-                          <Badge variant="secondary" className="text-[10px] sm:text-xs px-1 sm:px-2">
-                            <Sparkles className="h-2 w-2 sm:h-3 sm:w-3 mr-0.5 sm:mr-1" />
+                          <Badge variant="secondary" className="text-[9px] sm:text-xs px-1 py-0">
+                            <Sparkles className="h-2 w-2 mr-0.5" />
                             AI
                           </Badge>
                         )}
                       </div>
                       {activity.description && (
-                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                        <p className="text-[10px] sm:text-sm text-muted-foreground line-clamp-1">
                           {activity.description}
                         </p>
                       )}
-                      <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-muted-foreground flex-wrap">
+                      <div className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
                         {activity.scheduled_time && (
                           <span>{activity.scheduled_time}</span>
                         )}
                         {activity.duration_minutes && (
-                          <span>{activity.duration_minutes} min</span>
+                          <span>{activity.duration_minutes}m</span>
                         )}
                         <span className={getPriorityColor(activity.priority)}>
                           {activity.priority}
