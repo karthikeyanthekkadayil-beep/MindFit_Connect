@@ -223,11 +223,11 @@ const DailyPlanner = () => {
           </Card>
         </div>
 
-        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
-          {/* Calendar */}
-          <Card>
-            <CardHeader className="p-4 sm:p-6">
-              <CardTitle className="font-heading flex items-center gap-2 text-base sm:text-lg">
+        <div className="grid gap-3 sm:gap-6 lg:grid-cols-3">
+          {/* Calendar - Hidden on mobile, shown as compact on larger screens */}
+          <Card className="hidden sm:block">
+            <CardHeader className="p-3 sm:p-6 pb-2">
+              <CardTitle className="font-heading flex items-center gap-2 text-sm sm:text-lg">
                 <CalendarIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 Calendar
               </CardTitle>
@@ -239,6 +239,34 @@ const DailyPlanner = () => {
                 onSelect={(date) => date && setSelectedDate(date)}
                 className="rounded-md border mx-auto"
               />
+            </CardContent>
+          </Card>
+
+          {/* Mobile Date Picker */}
+          <Card className="sm:hidden">
+            <CardContent className="p-3">
+              <div className="flex items-center justify-between">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 px-2"
+                  onClick={() => setSelectedDate(new Date(selectedDate.getTime() - 86400000))}
+                >
+                  ←
+                </Button>
+                <div className="flex items-center gap-2">
+                  <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">{format(selectedDate, "EEE, MMM d")}</span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 px-2"
+                  onClick={() => setSelectedDate(new Date(selectedDate.getTime() + 86400000))}
+                >
+                  →
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
