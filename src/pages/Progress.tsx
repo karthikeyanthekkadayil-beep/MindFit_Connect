@@ -169,78 +169,74 @@ const Progress = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold">Progress Analytics</h1>
-            <p className="text-white/90 mt-1 text-sm sm:text-base">Track your wellness journey</p>
+      <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-3xl font-heading font-bold">Progress</h1>
+            <p className="text-white/90 mt-0.5 text-xs sm:text-base">Track your wellness journey</p>
           </div>
           <Button 
             onClick={() => navigate('/goals')} 
-            className="bg-white text-primary hover:bg-white/90 w-full sm:w-auto"
+            className="bg-white text-primary hover:bg-white/90 h-9 sm:h-10 text-xs sm:text-sm px-3 sm:px-4"
             size="sm"
           >
-            <Target className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-            My Goals
+            <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            Goals
           </Button>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
         {/* Weekly Summary Cards */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Fitness</CardTitle>
-              <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-            </CardHeader>
-            <CardContent className="p-3 sm:p-6 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">This week</p>
+        <div className="grid grid-cols-4 gap-2 sm:gap-4">
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center justify-between mb-1">
+                <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+              </div>
+              <div className="text-base sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
+              <p className="text-[9px] sm:text-xs text-muted-foreground">Fitness</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Meditation</CardTitle>
-              <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-            </CardHeader>
-            <CardContent className="p-3 sm:p-6 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-sm sm:text-base">m</span></div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Total this week</p>
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center justify-between mb-1">
+                <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+              </div>
+              <div className="text-base sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-[10px] sm:text-sm">m</span></div>
+              <p className="text-[9px] sm:text-xs text-muted-foreground">Meditate</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Nutrition</CardTitle>
-              <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-            </CardHeader>
-            <CardContent className="p-3 sm:p-6 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Meal plan</p>
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center justify-between mb-1">
+                <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+              </div>
+              <div className="text-base sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
+              <p className="text-[9px] sm:text-xs text-muted-foreground">Nutrition</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Community</CardTitle>
-              <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-            </CardHeader>
-            <CardContent className="p-3 sm:p-6 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Interactions</p>
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center justify-between mb-1">
+                <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+              </div>
+              <div className="text-base sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
+              <p className="text-[9px] sm:text-xs text-muted-foreground">Social</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Detailed Charts */}
         <Tabs defaultValue="fitness" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 h-auto">
-            <TabsTrigger value="fitness" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Fitness</TabsTrigger>
-            <TabsTrigger value="meditation" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Meditation</TabsTrigger>
-            <TabsTrigger value="nutrition" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Nutrition</TabsTrigger>
-            <TabsTrigger value="community" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Community</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 h-9 sm:h-10">
+            <TabsTrigger value="fitness" className="text-[10px] sm:text-sm px-1 sm:px-3">Fitness</TabsTrigger>
+            <TabsTrigger value="meditation" className="text-[10px] sm:text-sm px-1 sm:px-3">Mind</TabsTrigger>
+            <TabsTrigger value="nutrition" className="text-[10px] sm:text-sm px-1 sm:px-3">Diet</TabsTrigger>
+            <TabsTrigger value="community" className="text-[10px] sm:text-sm px-1 sm:px-3">Social</TabsTrigger>
           </TabsList>
 
           <TabsContent value="fitness" className="space-y-3 sm:space-y-4">
