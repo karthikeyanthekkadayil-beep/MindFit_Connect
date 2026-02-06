@@ -186,50 +186,46 @@ const Progress = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
         {/* Weekly Summary Cards */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Fitness</CardTitle>
-              <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-            </CardHeader>
-            <CardContent className="p-3 sm:p-6 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">This week</p>
+        <div className="grid grid-cols-4 gap-2 sm:gap-4">
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center justify-between mb-1">
+                <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+              </div>
+              <div className="text-base sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
+              <p className="text-[9px] sm:text-xs text-muted-foreground">Fitness</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Meditation</CardTitle>
-              <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-            </CardHeader>
-            <CardContent className="p-3 sm:p-6 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-sm sm:text-base">m</span></div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Total this week</p>
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center justify-between mb-1">
+                <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+              </div>
+              <div className="text-base sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-[10px] sm:text-sm">m</span></div>
+              <p className="text-[9px] sm:text-xs text-muted-foreground">Meditate</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Nutrition</CardTitle>
-              <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-            </CardHeader>
-            <CardContent className="p-3 sm:p-6 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Meal plan</p>
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center justify-between mb-1">
+                <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+              </div>
+              <div className="text-base sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
+              <p className="text-[9px] sm:text-xs text-muted-foreground">Nutrition</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Community</CardTitle>
-              <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-            </CardHeader>
-            <CardContent className="p-3 sm:p-6 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Interactions</p>
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center justify-between mb-1">
+                <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+              </div>
+              <div className="text-base sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
+              <p className="text-[9px] sm:text-xs text-muted-foreground">Social</p>
             </CardContent>
           </Card>
         </div>
