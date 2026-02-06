@@ -272,24 +272,23 @@ const DailyPlanner = () => {
 
           {/* Activities List */}
           <Card className="lg:col-span-2">
-            <CardHeader className="p-4 sm:p-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <CardTitle className="font-heading text-base sm:text-lg">Today's Activities</CardTitle>
-                <div className="flex gap-2">
+            <CardHeader className="p-3 sm:p-6 pb-2">
+              <div className="flex items-center justify-between gap-2">
+                <CardTitle className="font-heading text-sm sm:text-lg">Activities</CardTitle>
+                <div className="flex gap-1.5 sm:gap-2">
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={generateAIRecommendations}
                     disabled={generatingAI}
-                    className="text-xs sm:text-sm"
+                    className="h-8 sm:h-9 text-xs px-2.5 sm:px-3"
                   >
                     {generatingAI ? (
-                      <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                      <Loader2 className="h-3 w-3 animate-spin" />
                     ) : (
-                      <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <Sparkles className="h-3 w-3" />
                     )}
-                    <span className="hidden xs:inline ml-1">AI Suggest</span>
-                    <span className="xs:hidden ml-1">AI</span>
+                    <span className="ml-1">AI</span>
                   </Button>
                   <AddActivityDialog 
                     selectedDate={selectedDate}
