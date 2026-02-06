@@ -173,11 +173,11 @@ const DailyPlanner = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
+      <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold">Daily Planner</h1>
-          <p className="text-white/90 mt-1 text-sm sm:text-base">
-            {format(selectedDate, "EEEE, MMMM d, yyyy")}
+          <h1 className="text-xl sm:text-3xl font-heading font-bold">Daily Planner</h1>
+          <p className="text-white/90 mt-0.5 sm:mt-1 text-xs sm:text-base">
+            {format(selectedDate, "EEE, MMM d, yyyy")}
           </p>
         </div>
       </header>
