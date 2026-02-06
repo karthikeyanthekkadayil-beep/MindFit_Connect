@@ -182,43 +182,43 @@ const DailyPlanner = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
-          <Card>
-            <CardContent className="p-4 sm:pt-6">
-              <div className="text-xl sm:text-2xl font-bold">{stats.completed}/{stats.total}</div>
-              <p className="text-xs text-muted-foreground">Tasks Completed</p>
+        <div className="grid grid-cols-4 gap-2 sm:gap-4">
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="text-base sm:text-2xl font-bold">{stats.completed}/{stats.total}</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Done</p>
             </CardContent>
           </Card>
           <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
+            className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
             onClick={() => navigate("/workouts")}
           >
-            <CardContent className="p-4 sm:pt-6">
-              <div className="flex items-center gap-2">
-                <Dumbbell className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                <div className="text-xl sm:text-2xl font-bold">{stats.workout}</div>
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Dumbbell className="h-3 w-3 sm:h-5 sm:w-5 text-primary" />
+                <div className="text-base sm:text-2xl font-bold">{stats.workout}</div>
               </div>
-              <p className="text-xs text-muted-foreground">Workouts</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Workouts</p>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4 sm:pt-6">
-              <div className="flex items-center gap-2">
-                <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />
-                <div className="text-xl sm:text-2xl font-bold">{stats.meditation}</div>
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Heart className="h-3 w-3 sm:h-5 sm:w-5 text-secondary" />
+                <div className="text-base sm:text-2xl font-bold">{stats.meditation}</div>
               </div>
-              <p className="text-xs text-muted-foreground">Meditation</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Meditate</p>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4 sm:pt-6">
-              <div className="flex items-center gap-2">
-                <Apple className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
-                <div className="text-xl sm:text-2xl font-bold">{stats.nutrition}</div>
+          <Card className="active:scale-[0.98] transition-transform">
+            <CardContent className="p-2.5 sm:p-4">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Apple className="h-3 w-3 sm:h-5 sm:w-5 text-accent" />
+                <div className="text-base sm:text-2xl font-bold">{stats.nutrition}</div>
               </div>
-              <p className="text-xs text-muted-foreground">Nutrition</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Nutrition</p>
             </CardContent>
           </Card>
         </div>
