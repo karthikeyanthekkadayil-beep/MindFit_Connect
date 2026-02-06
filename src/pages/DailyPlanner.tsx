@@ -297,57 +297,57 @@ const DailyPlanner = () => {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="p-4 sm:p-6 pt-0 space-y-3 sm:space-y-4">
+            <CardContent className="p-3 sm:p-6 pt-0 space-y-2 sm:space-y-3">
               {loading ? (
-                <div className="flex items-center justify-center py-8">
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                <div className="flex items-center justify-center py-6">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                 </div>
               ) : activities.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <p className="text-sm sm:text-base">No activities scheduled for this day</p>
-                  <p className="text-xs sm:text-sm mt-2">Try generating AI recommendations!</p>
+                <div className="text-center py-6 text-muted-foreground">
+                  <p className="text-xs sm:text-base">No activities for today</p>
+                  <p className="text-[10px] sm:text-sm mt-1">Tap AI to get recommendations!</p>
                 </div>
               ) : (
                 activities.map((activity) => (
                   <div
                     key={activity.id}
                     className={cn(
-                      "flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg border transition-colors",
+                      "flex items-start gap-2 p-2.5 sm:p-4 rounded-xl border transition-all active:scale-[0.99]",
                       activity.completed ? "bg-muted/50" : "bg-card hover:bg-accent/5"
                     )}
                   >
                     <Checkbox
                       checked={activity.completed}
                       onCheckedChange={() => toggleComplete(activity)}
-                      className="mt-1"
+                      className="mt-0.5 h-5 w-5"
                     />
-                    <div className="flex-1 min-w-0 space-y-1">
-                      <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                    <div className="flex-1 min-w-0 space-y-0.5">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         {getActivityIcon(activity.activity_type)}
                         <h3 className={cn(
-                          "font-medium text-sm sm:text-base truncate",
+                          "font-medium text-xs sm:text-base truncate flex-1",
                           activity.completed && "line-through text-muted-foreground"
                         )}>
                           {activity.title}
                         </h3>
                         {activity.is_ai_recommended && (
-                          <Badge variant="secondary" className="text-[10px] sm:text-xs px-1 sm:px-2">
-                            <Sparkles className="h-2 w-2 sm:h-3 sm:w-3 mr-0.5 sm:mr-1" />
+                          <Badge variant="secondary" className="text-[9px] sm:text-xs px-1 py-0">
+                            <Sparkles className="h-2 w-2 mr-0.5" />
                             AI
                           </Badge>
                         )}
                       </div>
                       {activity.description && (
-                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                        <p className="text-[10px] sm:text-sm text-muted-foreground line-clamp-1">
                           {activity.description}
                         </p>
                       )}
-                      <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-muted-foreground flex-wrap">
+                      <div className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
                         {activity.scheduled_time && (
                           <span>{activity.scheduled_time}</span>
                         )}
                         {activity.duration_minutes && (
-                          <span>{activity.duration_minutes} min</span>
+                          <span>{activity.duration_minutes}m</span>
                         )}
                         <span className={getPriorityColor(activity.priority)}>
                           {activity.priority}
