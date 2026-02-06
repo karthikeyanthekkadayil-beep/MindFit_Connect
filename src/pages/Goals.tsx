@@ -283,31 +283,30 @@ const Goals = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
+      <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between gap-2 mb-2 sm:mb-0">
+          <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">
-              <h1 className="text-xl sm:text-3xl font-heading font-bold">My Goals</h1>
-              <p className="text-white/90 mt-0.5 sm:mt-1 text-xs sm:text-base">Set targets and track your progress</p>
+              <h1 className="text-xl sm:text-3xl font-heading font-bold">Goals</h1>
+              <p className="text-white/90 mt-0.5 text-xs sm:text-base">Track your progress</p>
             </div>
-          </div>
-          <div className="flex gap-2 mt-3 sm:mt-4">
-            <Button 
-              onClick={() => navigate('/goals/shared')} 
-              variant="outline" 
-              className="bg-transparent border-white text-white hover:bg-white/10 h-9 sm:h-10 text-xs sm:text-sm flex-1 sm:flex-none"
-            >
-              <Users className="h-4 w-4 mr-1 sm:mr-2" />
-              Community
-            </Button>
             <Button 
               onClick={() => setShowCreateDialog(true)} 
-              className="bg-white text-primary hover:bg-white/90 h-9 sm:h-10 text-xs sm:text-sm flex-1 sm:flex-none"
+              className="bg-white text-primary hover:bg-white/90 h-9 sm:h-10 text-xs sm:text-sm px-3 sm:px-4"
             >
-              <Plus className="h-4 w-4 mr-1 sm:mr-2" />
-              New Goal
+              <Plus className="h-4 w-4 mr-1" />
+              <span className="hidden sm:inline">New Goal</span>
+              <span className="sm:hidden">Add</span>
             </Button>
           </div>
+          <Button 
+            onClick={() => navigate('/goals/shared')} 
+            variant="outline" 
+            className="bg-transparent border-white/50 text-white hover:bg-white/10 h-8 sm:h-9 text-xs sm:text-sm mt-3 w-full sm:w-auto"
+          >
+            <Users className="h-3.5 w-3.5 mr-1.5" />
+            Community Goals
+          </Button>
         </div>
       </header>
 

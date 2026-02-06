@@ -326,22 +326,51 @@ const Nutrition = () => {
           </p>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-3 sm:space-y-4">
-          <TabsList className="grid w-full grid-cols-2 h-10">
-            <TabsTrigger value="today" className="text-xs sm:text-sm">
-              <CalendarIcon className="h-4 w-4 mr-1 sm:mr-2" />
-              Today's Plan
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-2 sm:space-y-4">
+          <TabsList className="grid w-full grid-cols-2 h-9 sm:h-10">
+            <TabsTrigger value="today" className="text-xs sm:text-sm gap-1">
+              <CalendarIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              Today
             </TabsTrigger>
-            <TabsTrigger value="browse" className="text-xs sm:text-sm">
-              <Utensils className="h-4 w-4 mr-1 sm:mr-2" />
+            <TabsTrigger value="browse" className="text-xs sm:text-sm gap-1">
+              <Utensils className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Recipes
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="today" className="space-y-4 sm:space-y-6">
-            <Card>
+          <TabsContent value="today" className="space-y-3 sm:space-y-6">
+            {/* Mobile Date Navigation */}
+            <Card className="sm:hidden">
+              <CardContent className="p-2.5">
+                <div className="flex items-center justify-between">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 px-2"
+                    onClick={() => setSelectedDate(new Date(selectedDate.getTime() - 86400000))}
+                  >
+                    ←
+                  </Button>
+                  <div className="flex items-center gap-2">
+                    <CalendarIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                    <span className="text-sm font-medium">{format(selectedDate, "EEE, MMM d")}</span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 px-2"
+                    onClick={() => setSelectedDate(new Date(selectedDate.getTime() + 86400000))}
+                  >
+                    →
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Desktop Calendar */}
+            <Card className="hidden sm:block">
               <CardHeader className="p-3 sm:p-4 pb-2">
-                <CardTitle className="text-base sm:text-lg">Select Date</CardTitle>
+                <CardTitle className="text-sm sm:text-lg">Select Date</CardTitle>
               </CardHeader>
               <CardContent className="p-3 sm:p-4 pt-0 flex justify-center">
                 <Calendar

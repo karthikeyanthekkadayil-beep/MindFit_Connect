@@ -232,11 +232,11 @@ const Progress = () => {
 
         {/* Detailed Charts */}
         <Tabs defaultValue="fitness" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 h-auto">
-            <TabsTrigger value="fitness" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Fitness</TabsTrigger>
-            <TabsTrigger value="meditation" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Meditation</TabsTrigger>
-            <TabsTrigger value="nutrition" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Nutrition</TabsTrigger>
-            <TabsTrigger value="community" className="text-xs sm:text-sm py-2 px-1 sm:px-3">Community</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 h-9 sm:h-10">
+            <TabsTrigger value="fitness" className="text-[10px] sm:text-sm px-1 sm:px-3">Fitness</TabsTrigger>
+            <TabsTrigger value="meditation" className="text-[10px] sm:text-sm px-1 sm:px-3">Mind</TabsTrigger>
+            <TabsTrigger value="nutrition" className="text-[10px] sm:text-sm px-1 sm:px-3">Diet</TabsTrigger>
+            <TabsTrigger value="community" className="text-[10px] sm:text-sm px-1 sm:px-3">Social</TabsTrigger>
           </TabsList>
 
           <TabsContent value="fitness" className="space-y-3 sm:space-y-4">
