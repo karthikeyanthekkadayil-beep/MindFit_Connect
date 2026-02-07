@@ -9,6 +9,7 @@ import { Activity, Brain, Apple, Users, TrendingUp, Target } from "lucide-react"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend } from "recharts";
 import { format, subDays, startOfWeek, endOfWeek } from "date-fns";
+import { StatsCardSkeleton, ChartSkeleton } from "@/components/skeletons";
 
 const Progress = () => {
   const navigate = useNavigate();
@@ -158,11 +159,25 @@ const Progress = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading your progress...</p>
-        </div>
+      <div className="min-h-screen bg-background pb-20">
+        <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <div className="h-6 sm:h-8 bg-white/20 animate-pulse rounded w-32 mb-1" />
+              <div className="h-3 sm:h-4 bg-white/20 animate-pulse rounded w-48" />
+            </div>
+          </div>
+        </header>
+        <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
+          <div className="grid grid-cols-4 gap-2 sm:gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <StatsCardSkeleton key={i} />
+            ))}
+          </div>
+          <ChartSkeleton height="200px" />
+          <ChartSkeleton height="200px" />
+        </main>
+        <BottomNav />
       </div>
     );
   }

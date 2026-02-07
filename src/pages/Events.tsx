@@ -12,6 +12,7 @@ import { CreateEventDialog } from "@/components/CreateEventDialog";
 import { EventsMap } from "@/components/EventsMap";
 import { BottomNav } from "@/components/BottomNav";
 import { format } from "date-fns";
+import { EventCardSkeleton } from "@/components/skeletons";
 
 export default function Events() {
   const navigate = useNavigate();
@@ -233,7 +234,11 @@ export default function Events() {
             ) : (
               <>
                 {isLoading ? (
-                  <div className="text-center py-6 sm:py-8 text-muted-foreground text-xs sm:text-sm">Loading events...</div>
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <EventCardSkeleton key={i} />
+                    ))}
+                  </div>
                 ) : events && events.length > 0 ? (
                   <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
                     {events.map((event) => (

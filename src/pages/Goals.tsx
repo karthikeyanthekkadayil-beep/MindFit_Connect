@@ -12,6 +12,7 @@ import { CreateGoalDialog } from "@/components/CreateGoalDialog";
 import { ShareGoalDialog } from "@/components/ShareGoalDialog";
 import { toast } from "sonner";
 import { format, differenceInDays } from "date-fns";
+import { GoalCardSkeleton } from "@/components/skeletons";
 
 interface Goal {
   id: string;
@@ -268,11 +269,25 @@ const Goals = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground text-sm">Loading your goals...</p>
-        </div>
+      <div className="min-h-screen bg-background pb-20">
+        <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <div className="h-6 sm:h-8 bg-white/20 animate-pulse rounded w-24 mb-1" />
+                <div className="h-3 sm:h-4 bg-white/20 animate-pulse rounded w-32" />
+              </div>
+            </div>
+          </div>
+        </header>
+        <main className="max-w-7xl mx-auto p-3 sm:p-6">
+          <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <GoalCardSkeleton key={i} />
+            ))}
+          </div>
+        </main>
+        <BottomNav />
       </div>
     );
   }
