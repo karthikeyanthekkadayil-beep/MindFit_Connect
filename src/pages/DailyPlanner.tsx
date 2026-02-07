@@ -23,6 +23,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { BottomNav } from "@/components/BottomNav";
 import { AddActivityDialog } from "@/components/AddActivityDialog";
+import { StatsCardSkeleton, ActivityCardSkeleton } from "@/components/skeletons";
 
 type Activity = {
   id: string;
@@ -299,8 +300,10 @@ const DailyPlanner = () => {
             </CardHeader>
             <CardContent className="p-3 sm:p-6 pt-0 space-y-2 sm:space-y-3">
               {loading ? (
-                <div className="flex items-center justify-center py-6">
-                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                <div className="space-y-2 sm:space-y-3">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <ActivityCardSkeleton key={i} />
+                  ))}
                 </div>
               ) : activities.length === 0 ? (
                 <div className="text-center py-6 text-muted-foreground">

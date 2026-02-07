@@ -11,6 +11,7 @@ import { BreathingExercise } from "@/components/BreathingExercise";
 import { BottomNav } from "@/components/BottomNav";
 import { format } from "date-fns";
 import { useGamification } from "@/hooks/useGamification";
+import { StatsCardSkeleton, MeditationCardSkeleton } from "@/components/skeletons";
 
 interface MeditationProgram {
   id: string;
@@ -231,8 +232,24 @@ const Mindfulness = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="min-h-screen bg-background pb-20">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 max-w-6xl">
+          <div className="mb-3 sm:mb-6">
+            <div className="h-6 sm:h-8 bg-muted animate-pulse rounded w-32 mb-1" />
+            <div className="h-3 sm:h-4 bg-muted animate-pulse rounded w-48" />
+          </div>
+          <div className="grid gap-2 sm:gap-3 grid-cols-3 mb-3 sm:mb-6">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <StatsCardSkeleton key={i} />
+            ))}
+          </div>
+          <div className="grid gap-2 sm:gap-3 grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <MeditationCardSkeleton key={i} />
+            ))}
+          </div>
+        </div>
+        <BottomNav />
       </div>
     );
   }

@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { Loader2, Plus, Utensils, Calendar as CalendarIcon, Sparkles } from "lucide-react";
 import { format } from "date-fns";
 import { BottomNav } from "@/components/BottomNav";
+import { RecipeCardSkeleton } from "@/components/skeletons";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Recipe {
   id: string;
@@ -310,8 +312,31 @@ const Nutrition = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="min-h-screen bg-background pb-20">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 max-w-6xl">
+          <div className="mb-3 sm:mb-6">
+            <Skeleton className="h-6 sm:h-8 w-28 mb-1" />
+            <Skeleton className="h-3 sm:h-4 w-56" />
+          </div>
+          <div className="space-y-4">
+            {["Breakfast", "Lunch", "Dinner"].map((meal) => (
+              <div key={meal} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-5 w-24" />
+                  <Skeleton className="h-8 w-24" />
+                </div>
+                <Card>
+                  <CardContent className="py-6 sm:py-8">
+                    <div className="flex flex-col items-center gap-2">
+                      <Skeleton className="h-4 w-48" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
+        <BottomNav />
       </div>
     );
   }

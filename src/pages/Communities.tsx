@@ -10,6 +10,7 @@ import { Plus, Search, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CreateCommunityDialog } from "@/components/CreateCommunityDialog";
 import { BottomNav } from "@/components/BottomNav";
+import { CommunityCardSkeleton } from "@/components/skeletons";
 
 export default function Communities() {
   const navigate = useNavigate();
@@ -161,7 +162,11 @@ export default function Communities() {
             </div>
 
             {isLoading ? (
-              <div className="text-center py-6 sm:py-8 text-muted-foreground text-xs sm:text-sm">Loading communities...</div>
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <CommunityCardSkeleton key={i} />
+                ))}
+              </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
                 {communities?.map((community) => (
