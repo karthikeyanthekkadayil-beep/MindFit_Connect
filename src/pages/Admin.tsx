@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Shield, Users, Calendar, MessageSquare, TrendingUp, ArrowLeft } from "lucide-react";
+import { Shield, Users, Calendar, MessageSquare, TrendingUp, ArrowLeft, UserCheck } from "lucide-react";
+import { ModeratorRequestsTab } from "@/components/admin/ModeratorRequestsTab";
 import { BottomNav } from "@/components/BottomNav";
 
 interface UserProfile {
@@ -242,8 +243,13 @@ const Admin = () => {
 
         {/* Admin Tabs */}
         <Tabs defaultValue="users" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4 h-auto">
+          <TabsList className="grid w-full grid-cols-5 h-auto">
             <TabsTrigger value="users" className="text-xs sm:text-sm py-2">Users</TabsTrigger>
+            <TabsTrigger value="mod-requests" className="text-xs sm:text-sm py-2">
+              <UserCheck className="h-3 w-3 sm:hidden" />
+              <span className="hidden sm:inline">Mod Requests</span>
+              <span className="sm:hidden">Mods</span>
+            </TabsTrigger>
             <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">Communities</TabsTrigger>
             <TabsTrigger value="events" className="text-xs sm:text-sm py-2">Events</TabsTrigger>
             <TabsTrigger value="settings" className="text-xs sm:text-sm py-2">Settings</TabsTrigger>
@@ -298,6 +304,10 @@ const Admin = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="mod-requests" className="space-y-4">
+            <ModeratorRequestsTab />
           </TabsContent>
 
           <TabsContent value="communities" className="space-y-4">

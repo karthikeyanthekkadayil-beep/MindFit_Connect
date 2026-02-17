@@ -28,6 +28,7 @@ import Admin from "@/pages/Admin";
 import AdminAuth from "@/pages/AdminAuth";
 import Balance from "@/pages/Balance";
 import Moderator from "@/pages/Moderator";
+import ModeratorRequest from "@/pages/ModeratorRequest";
 import Rewards from "@/pages/Rewards";
 import Leaderboard from "@/pages/Leaderboard";
 import NotFound from "@/pages/NotFound";
@@ -64,6 +65,7 @@ export const AnimatedRoutes = () => {
         <Route path="/admin/login" element={<PageTransition><AdminAuth /></PageTransition>} />
         <Route path="/balance" element={<PageTransition><Balance /></PageTransition>} />
         <Route path="/moderator" element={<PageTransition><Moderator /></PageTransition>} />
+        <Route path="/moderator/request" element={<PageTransition><ModeratorRequest /></PageTransition>} />
         <Route path="/rewards" element={<PageTransition><Rewards /></PageTransition>} />
         <Route path="/leaderboard" element={<PageTransition><Leaderboard /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
