@@ -5,7 +5,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Send, Users, Search } from "lucide-react";
+import { ArrowLeft, Send, Users, Search, Trash2, MoreVertical } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { useTypingIndicator } from "@/hooks/useTypingIndicator";
@@ -164,7 +180,7 @@ export default function ChatThread() {
       .on(
         "postgres_changes",
         {
-          event: "INSERT",
+          event: "*",
           schema: "public",
           table: "messages",
           filter: `conversation_id=eq.${id}`,
@@ -244,6 +260,63 @@ export default function ChatThread() {
     onError: () => {
       toast.error("Failed to send message");
     },
+  });
+
+  const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
+  const [chatDeleteOpen, setChatDeleteOpen] = useState(false);
+
+  const deleteMessageMutation = useMutation({
+    mutationFn: async (messageId: string) => {
+      const { error } = await supabase
+        .from("messages")
+        .delete()
+        .eq("id", messageId)
+        .eq("sender_id", currentUserId!);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Message deleted");
+      queryClient.invalidateQueries({ queryKey: ["messages", id] });
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+    onError: () => toast.error("Failed to delete message"),
+  });
+
+  const deleteChatMutation = useMutation({
+    mutationFn: async () => {
+      // Delete all messages in the conversation first
+      const { error: msgError } = await supabase
+        .from("messages")
+        .delete()
+        .eq("conversation_id", id!)
+        .eq("sender_id", currentUserId!);
+
+      // Remove self from conversation members
+      const { error: memberError } = await supabase
+        .from("conversation_members")
+        .delete()
+        .eq("conversation_id", id!)
+        .eq("user_id", currentUserId!);
+      
+      if (memberError) throw memberError;
+
+      // Check if any members remain
+      const { count } = await supabase
+        .from("conversation_members")
+        .select("*", { count: "exact", head: true })
+        .eq("conversation_id", id!);
+
+      // If no members remain, delete the conversation
+      if (count === 0) {
+        await supabase.from("conversations").delete().eq("id", id!);
+      }
+    },
+    onSuccess: () => {
+      toast.success("Chat deleted");
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
+      navigate("/messages");
+    },
+    onError: () => toast.error("Failed to delete chat"),
   });
 
   const handleSendMessage = (e: React.FormEvent) => {
@@ -333,6 +406,22 @@ export default function ChatThread() {
           >
             <Search className="h-5 w-5" />
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreVertical className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive"
+                onClick={() => setChatDeleteOpen(true)}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Chat
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -424,6 +513,15 @@ export default function ChatThread() {
                       {format(new Date(msg.created_at), "p")}
                     </span>
                     {isCurrentUser && (
+                      <button
+                        onClick={() => setMessageToDelete(msg.id)}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
+                        title="Delete message"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    )}
+                    {isCurrentUser && (
                       <ReadReceiptIndicator
                         messageCreatedAt={msg.created_at}
                         isOwnMessage={isCurrentUser}
@@ -508,6 +606,51 @@ export default function ChatThread() {
           </Button>
         </form>
       </div>
+
+      {/* Delete Message Dialog */}
+      <AlertDialog open={!!messageToDelete} onOpenChange={(open) => !open && setMessageToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Message</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete this message. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (messageToDelete) deleteMessageMutation.mutate(messageToDelete);
+                setMessageToDelete(null);
+              }}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Chat Dialog */}
+      <AlertDialog open={chatDeleteOpen} onOpenChange={setChatDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Chat</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove you from this conversation and delete your messages. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => deleteChatMutation.mutate()}
+            >
+              Delete Chat
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

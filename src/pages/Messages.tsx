@@ -1,22 +1,35 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Search, MessageCircle } from "lucide-react";
+import { Plus, Search, MessageCircle, Trash2 } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { NewConversationDialog } from "@/components/NewConversationDialog";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function Messages() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [isNewConversationOpen, setIsNewConversationOpen] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [chatToDelete, setChatToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -108,6 +121,39 @@ export default function Messages() {
     enabled: !!currentUserId,
   });
 
+  const deleteConversationMutation = useMutation({
+    mutationFn: async (conversationId: string) => {
+      // Delete own messages
+      await supabase
+        .from("messages")
+        .delete()
+        .eq("conversation_id", conversationId)
+        .eq("sender_id", currentUserId!);
+
+      // Remove self from conversation
+      await supabase
+        .from("conversation_members")
+        .delete()
+        .eq("conversation_id", conversationId)
+        .eq("user_id", currentUserId!);
+
+      // Check if any members remain
+      const { count } = await supabase
+        .from("conversation_members")
+        .select("*", { count: "exact", head: true })
+        .eq("conversation_id", conversationId);
+
+      if (count === 0) {
+        await supabase.from("conversations").delete().eq("id", conversationId);
+      }
+    },
+    onSuccess: () => {
+      toast.success("Chat deleted");
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+    onError: () => toast.error("Failed to delete chat"),
+  });
+
   const getConversationTitle = (conversation: any) => {
     if (conversation.type === "direct") {
       return conversation.otherUser?.full_name || "Unknown User";
@@ -161,7 +207,7 @@ export default function Messages() {
               return (
                 <Card
                   key={conversation.id}
-                  className="p-3 sm:p-4 cursor-pointer hover:bg-accent/50 transition-colors active:scale-[0.99]"
+                  className="p-3 sm:p-4 cursor-pointer hover:bg-accent/50 transition-colors active:scale-[0.99] group"
                   onClick={() => navigate(`/messages/${conversation.id}`)}
                 >
                   <div className="flex items-center gap-3">
@@ -202,6 +248,17 @@ export default function Messages() {
                         </p>
                       )}
                     </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setChatToDelete(conversation.id);
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </Card>
               );
@@ -227,6 +284,30 @@ export default function Messages() {
       </div>
 
       <BottomNav />
+
+      {/* Delete Chat Confirmation */}
+      <AlertDialog open={!!chatToDelete} onOpenChange={(open) => !open && setChatToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Chat</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove you from this conversation and delete your messages. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (chatToDelete) deleteConversationMutation.mutate(chatToDelete);
+                setChatToDelete(null);
+              }}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
