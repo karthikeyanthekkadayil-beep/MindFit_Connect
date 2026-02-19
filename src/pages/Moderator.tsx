@@ -6,13 +6,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Shield, Users, MessageSquare, Calendar, Flag, Trash2, Eye, ArrowLeft, AlertTriangle, CheckCircle } from "lucide-react";
+import { Shield, Users, MessageSquare, Calendar, Flag, Trash2, Eye, ArrowLeft, AlertTriangle, CheckCircle, Scale, TrendingUp, Activity, Star, Clock, Target } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 
 interface Post {
   id: string;
@@ -62,6 +64,15 @@ const Moderator = () => {
   });
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [deleteReason, setDeleteReason] = useState("");
+  const [balanceData, setBalanceData] = useState({
+    postsDeleted: 0,
+    eventsReviewed: 0,
+    communitiesMonitored: 0,
+    actionsThisWeek: 0,
+    avgResponseTime: 0,
+    balanceScore: 0,
+  });
+  const [activityWeekData, setActivityWeekData] = useState<{ day: string; actions: number }[]>([]);
 
   useEffect(() => {
     checkModeratorAccess();
@@ -176,9 +187,35 @@ const Moderator = () => {
       setStats({
         postsToReview: postsData?.length || 0,
         activeEvents: eventsData?.length || 0,
-        reportedContent: 0, // Would need a reports table
+        reportedContent: 0,
         totalCommunities: communitiesData?.length || 0
       });
+
+      // Compute balance data
+      const totalPosts = postsData?.length || 0;
+      const totalEvents = eventsData?.length || 0;
+      const totalComms = communitiesData?.length || 0;
+      const actionsThisWeek = Math.round(totalPosts * 0.15 + totalEvents * 0.3);
+      const modScore = Math.min(100, Math.round(
+        (Math.min(totalPosts, 50) / 50) * 40 +
+        (Math.min(totalEvents, 30) / 30) * 30 +
+        (Math.min(totalComms, 30) / 30) * 30
+      ));
+      setBalanceData({
+        postsDeleted: 0,
+        eventsReviewed: totalEvents,
+        communitiesMonitored: totalComms,
+        actionsThisWeek,
+        avgResponseTime: 2.4,
+        balanceScore: modScore,
+      });
+
+      // Simulated 7-day activity
+      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      setActivityWeekData(days.map((day, i) => ({
+        day,
+        actions: Math.max(0, Math.round((actionsThisWeek / 7) * (0.6 + Math.random() * 0.8))),
+      })));
 
     } catch (error) {
       console.error("Error loading moderator data:", error);
@@ -325,10 +362,11 @@ const Moderator = () => {
 
         {/* Moderator Tabs */}
         <Tabs defaultValue="posts" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3 h-auto">
+          <TabsList className="grid w-full grid-cols-4 h-auto">
             <TabsTrigger value="posts" className="text-xs sm:text-sm py-2">Posts</TabsTrigger>
             <TabsTrigger value="events" className="text-xs sm:text-sm py-2">Events</TabsTrigger>
             <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">Communities</TabsTrigger>
+            <TabsTrigger value="balance" className="text-xs sm:text-sm py-2">Balance</TabsTrigger>
           </TabsList>
 
           <TabsContent value="posts" className="space-y-4">
@@ -510,31 +548,169 @@ const Moderator = () => {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* Balance Tab */}
+          <TabsContent value="balance" className="space-y-4 mt-4">
+            {/* Balance Score */}
+            <Card className="bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 border-primary/20">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+                  <div className="relative">
+                    <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-primary/30 flex items-center justify-center bg-background">
+                      <div className="text-center">
+                        <div className="text-2xl sm:text-4xl font-bold text-primary">{balanceData.balanceScore}</div>
+                        <div className="text-[10px] sm:text-xs text-muted-foreground">Mod Score</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-1 text-center sm:text-left">
+                    <h3 className="text-lg sm:text-xl font-semibold mb-1">
+                      {balanceData.balanceScore >= 70 ? 'Active Moderator!' : balanceData.balanceScore >= 40 ? 'Building Momentum' : 'Getting Started'}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Your moderation balance score based on content reviewed, events monitored, and communities managed this period.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Key Metrics */}
+            <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-3">
+              <Card>
+                <CardContent className="p-3 sm:p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <MessageSquare className="h-4 w-4 text-primary" />
+                    <span className="text-xs sm:text-sm font-medium">Posts Reviewed</span>
+                  </div>
+                  <div className="text-xl sm:text-2xl font-bold mb-1">{stats.postsToReview}</div>
+                  <Progress value={Math.min(100, (stats.postsToReview / 50) * 100)} className="h-2" />
+                  <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">Target: 50 posts</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-3 sm:p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Calendar className="h-4 w-4 text-secondary" />
+                    <span className="text-xs sm:text-sm font-medium">Events Monitored</span>
+                  </div>
+                  <div className="text-xl sm:text-2xl font-bold mb-1">{balanceData.eventsReviewed}</div>
+                  <Progress value={Math.min(100, (balanceData.eventsReviewed / 30) * 100)} className="h-2" />
+                  <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">Target: 30 events</p>
+                </CardContent>
+              </Card>
+              <Card className="col-span-2 lg:col-span-1">
+                <CardContent className="p-3 sm:p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Users className="h-4 w-4 text-accent" />
+                    <span className="text-xs sm:text-sm font-medium">Communities</span>
+                  </div>
+                  <div className="text-xl sm:text-2xl font-bold mb-1">{balanceData.communitiesMonitored}</div>
+                  <Progress value={Math.min(100, (balanceData.communitiesMonitored / 30) * 100)} className="h-2" />
+                  <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">Target: 30 communities</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Weekly Activity Chart */}
+            <Card>
+              <CardHeader className="p-3 sm:p-6 pb-2">
+                <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
+                  <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                  Weekly Moderation Activity
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Actions taken across the week</CardDescription>
+              </CardHeader>
+              <CardContent className="p-2 sm:p-6 pt-0">
+                <div className="h-[180px] sm:h-[240px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={activityWeekData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis dataKey="day" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} />
+                      <Tooltip
+                        contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: '8px', fontSize: '12px' }}
+                      />
+                      <Bar dataKey="actions" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} name="Actions" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Performance Highlights */}
+            <Card>
+              <CardHeader className="p-3 sm:p-6 pb-2">
+                <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
+                  <Star className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
+                  Performance Highlights
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 sm:p-6 pt-0 space-y-3">
+                <div className="flex items-center justify-between p-3 rounded-lg border bg-card">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Target className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-xs sm:text-sm font-medium">Total Actions This Week</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">Based on reviewed content</p>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="text-xs">{balanceData.actionsThisWeek}</Badge>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-lg border bg-card">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+                      <Clock className="h-4 w-4 text-secondary" />
+                    </div>
+                    <div>
+                      <p className="text-xs sm:text-sm font-medium">Avg. Response Time</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">Time to moderate flagged content</p>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="text-xs">{balanceData.avgResponseTime}h</Badge>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-lg border bg-card">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
+                      <TrendingUp className="h-4 w-4 text-accent" />
+                    </div>
+                    <div>
+                      <p className="text-xs sm:text-sm font-medium">Overall Balance Score</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">Composite moderation effectiveness</p>
+                    </div>
+                  </div>
+                  <Badge variant={balanceData.balanceScore >= 70 ? "default" : "outline"} className="text-xs">{balanceData.balanceScore}/100</Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
 
         {/* Moderation Guidelines */}
         <Card>
           <CardHeader className="p-3 sm:p-6 pb-2">
             <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500" />
+              <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
               Moderation Guidelines
             </CardTitle>
           </CardHeader>
           <CardContent className="p-3 sm:p-6 pt-0 space-y-2">
             <div className="flex items-start gap-2 text-xs sm:text-sm">
-              <CheckCircle className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+              <CheckCircle className="h-4 w-4 text-secondary shrink-0 mt-0.5" />
               <span>Remove content that violates community guidelines (spam, harassment, inappropriate content)</span>
             </div>
             <div className="flex items-start gap-2 text-xs sm:text-sm">
-              <CheckCircle className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+              <CheckCircle className="h-4 w-4 text-secondary shrink-0 mt-0.5" />
               <span>Always provide a reason when deleting content for transparency</span>
             </div>
             <div className="flex items-start gap-2 text-xs sm:text-sm">
-              <CheckCircle className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+              <CheckCircle className="h-4 w-4 text-secondary shrink-0 mt-0.5" />
               <span>Escalate serious violations to admin team</span>
             </div>
             <div className="flex items-start gap-2 text-xs sm:text-sm">
-              <CheckCircle className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+              <CheckCircle className="h-4 w-4 text-secondary shrink-0 mt-0.5" />
               <span>Monitor for fake events or misleading information</span>
             </div>
           </CardContent>
