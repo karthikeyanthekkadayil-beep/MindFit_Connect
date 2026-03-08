@@ -34,14 +34,14 @@ export const BottomNav = () => {
   };
 
   return (
-    <motion.nav
-      className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border/50 z-50 safe-area-bottom"
-      initial={{ y: 80 }}
-      animate={{ y: 0 }}
-      transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 28 }}
-    >
-      <div className="max-w-lg mx-auto">
-        <div className="flex justify-around items-center h-16">
+    <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-[env(safe-area-inset-bottom,8px)] pointer-events-none">
+      <motion.nav
+        className="pointer-events-auto max-w-lg mx-auto mb-2 rounded-2xl bg-card/80 backdrop-blur-xl border border-border/40 shadow-lg shadow-black/10"
+        initial={{ y: 80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 28 }}
+      >
+        <div className="flex justify-around items-center h-16 px-2">
           {tabs.map((tab, index) => {
             const isActive = activeTab === tab.id;
             return (
@@ -49,7 +49,7 @@ export const BottomNav = () => {
                 key={tab.id}
                 onClick={() => handleTabClick(tab.path)}
                 className={cn(
-                  "relative flex flex-col items-center justify-center flex-1 h-full touch-target",
+                  "relative flex flex-col items-center justify-center flex-1 h-full rounded-xl touch-target",
                   isActive ? "text-primary" : "text-muted-foreground"
                 )}
                 initial={{ opacity: 0, y: 10 }}
@@ -58,28 +58,28 @@ export const BottomNav = () => {
                 whileTap={{ scale: 0.85, transition: { type: "spring", stiffness: 500, damping: 25 } }}
                 transition={{ delay: 0.4 + index * 0.05, type: "spring", stiffness: 300, damping: 20 }}
               >
-                {/* Active indicator */}
+                {/* Active pill background */}
                 {isActive && (
                   <motion.span
-                    className="absolute -top-0.5 w-8 h-1 bg-primary rounded-full"
+                    className="absolute inset-1 rounded-xl bg-primary/10"
                     layoutId="activeTab"
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
-                
+
                 <motion.div
-                  className="flex flex-col items-center justify-center"
-                  animate={isActive ? { scale: 1.1 } : { scale: 1 }}
+                  className="relative z-10 flex flex-col items-center justify-center"
+                  animate={isActive ? { scale: 1.08 } : { scale: 1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
                 >
-                  <tab.icon 
+                  <tab.icon
                     className={cn(
-                      "h-6 w-6 transition-all duration-200",
+                      "h-5 w-5 transition-all duration-200",
                       isActive && "stroke-[2.5px]"
-                    )} 
+                    )}
                   />
                   <span className={cn(
-                    "text-[10px] mt-1 font-medium transition-all duration-200",
+                    "text-[10px] mt-0.5 font-medium transition-all duration-200",
                     isActive && "font-semibold"
                   )}>
                     {tab.label}
@@ -89,7 +89,7 @@ export const BottomNav = () => {
             );
           })}
         </div>
-      </div>
-    </motion.nav>
+      </motion.nav>
+    </div>
   );
 };
