@@ -31,6 +31,7 @@ import Moderator from "@/pages/Moderator";
 import ModeratorRequest from "@/pages/ModeratorRequest";
 import Rewards from "@/pages/Rewards";
 import Leaderboard from "@/pages/Leaderboard";
+import ReportProblem from "@/pages/ReportProblem";
 import NotFound from "@/pages/NotFound";
 
 export const AnimatedRoutes = () => {
