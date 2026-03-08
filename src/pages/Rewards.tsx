@@ -218,18 +218,19 @@ const Rewards = () => {
 
           {/* Achievements Tab */}
           <TabsContent value="achievements" className="space-y-4 mt-4">
-            {Object.entries(achievementsByCategory).map(([category, categoryAchievements]) => (
-              <Card key={category}>
-                <CardHeader className="p-3 sm:p-6 pb-2">
-                  <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
-                    {CATEGORY_LABELS[category] || category}
-                    <Badge variant="secondary" className="text-[10px] sm:text-xs">
-                      {categoryAchievements.filter(a => earnedIds.includes(a.id)).length}/{categoryAchievements.length}
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 sm:p-6 pt-0">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+            {Object.entries(achievementsByCategory).map(([category, categoryAchievements], catIndex) => (
+              <MotionFadeIn key={category} delay={0.1 + catIndex * 0.1}>
+                <Card>
+                  <CardHeader className="p-3 sm:p-6 pb-2">
+                    <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
+                      {CATEGORY_LABELS[category] || category}
+                      <Badge variant="secondary" className="text-[10px] sm:text-xs">
+                        {categoryAchievements.filter(a => earnedIds.includes(a.id)).length}/{categoryAchievements.length}
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 sm:p-6 pt-0">
+                    <MotionList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3" delay={0.15 + catIndex * 0.1}>
                     {categoryAchievements.map((achievement) => {
                       const isEarned = earnedIds.includes(achievement.id);
                       const IconComponent = ICON_MAP[achievement.icon] || Trophy;
@@ -237,48 +238,50 @@ const Rewards = () => {
                       const earnedData = earnedAchievements.find(ea => ea.achievement_id === achievement.id);
 
                       return (
-                        <motion.div
-                          key={achievement.id}
-                          className={`relative p-3 sm:p-4 rounded-xl border-2 transition-all ${
-                            isEarned
-                              ? colorClass
-                              : 'bg-muted/30 border-muted text-muted-foreground opacity-60'
-                          }`}
-                          whileHover={isEarned ? { scale: 1.05, y: -4, transition: { type: "spring", stiffness: 400, damping: 20 } } : {}}
-                          whileTap={isEarned ? { scale: 0.95 } : {}}
-                        >
-                          {!isEarned && (
-                            <Lock className="absolute top-2 right-2 h-3 w-3 sm:h-4 sm:w-4" />
-                          )}
-                          <div className="flex flex-col items-center text-center">
-                            <motion.div
-                              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-2 ${
-                                isEarned ? 'bg-background/50' : 'bg-muted/50'
-                              }`}
-                              whileHover={isEarned ? { rotate: [0, -12, 12, -6, 0], transition: { duration: 0.5 } } : {}}
-                            >
-                              <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" />
-                            </motion.div>
-                            <h4 className="font-semibold text-[10px] sm:text-xs line-clamp-1">{achievement.name}</h4>
-                            <p className="text-[8px] sm:text-[10px] mt-1 line-clamp-2 opacity-80">
-                              {achievement.description}
-                            </p>
-                            <div className="flex items-center gap-1 mt-2">
-                              <Star className="h-3 w-3" />
-                              <span className="text-[10px] sm:text-xs font-medium">{achievement.points_reward}</span>
-                            </div>
-                            {isEarned && earnedData && (
-                              <p className="text-[8px] mt-1 opacity-70">
-                                {format(parseISO(earnedData.earned_at), 'MMM d, yyyy')}
-                              </p>
+                        <MotionItem key={achievement.id}>
+                          <motion.div
+                            className={`relative p-3 sm:p-4 rounded-xl border-2 transition-all ${
+                              isEarned
+                                ? colorClass
+                                : 'bg-muted/30 border-muted text-muted-foreground opacity-60'
+                            }`}
+                            whileHover={isEarned ? { scale: 1.05, y: -4, transition: { type: "spring", stiffness: 400, damping: 20 } } : {}}
+                            whileTap={isEarned ? { scale: 0.95 } : {}}
+                          >
+                            {!isEarned && (
+                              <Lock className="absolute top-2 right-2 h-3 w-3 sm:h-4 sm:w-4" />
                             )}
-                          </div>
-                        </motion.div>
+                            <div className="flex flex-col items-center text-center">
+                              <motion.div
+                                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-2 ${
+                                  isEarned ? 'bg-background/50' : 'bg-muted/50'
+                                }`}
+                                whileHover={isEarned ? { rotate: [0, -12, 12, -6, 0], transition: { duration: 0.5 } } : {}}
+                              >
+                                <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" />
+                              </motion.div>
+                              <h4 className="font-semibold text-[10px] sm:text-xs line-clamp-1">{achievement.name}</h4>
+                              <p className="text-[8px] sm:text-[10px] mt-1 line-clamp-2 opacity-80">
+                                {achievement.description}
+                              </p>
+                              <div className="flex items-center gap-1 mt-2">
+                                <Star className="h-3 w-3" />
+                                <span className="text-[10px] sm:text-xs font-medium">{achievement.points_reward}</span>
+                              </div>
+                              {isEarned && earnedData && (
+                                <p className="text-[8px] mt-1 opacity-70">
+                                  {format(parseISO(earnedData.earned_at), 'MMM d, yyyy')}
+                                </p>
+                              )}
+                            </div>
+                          </motion.div>
+                        </MotionItem>
                       );
                     })}
-                  </div>
-                </CardContent>
-              </Card>
+                    </MotionList>
+                  </CardContent>
+                </Card>
+              </MotionFadeIn>
             ))}
           </TabsContent>
 

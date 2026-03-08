@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
+import { ScrollToTop } from "./ScrollToTop";
 import { PageTransition } from "./PageTransition";
 import { TransitionProvider, useTransitionOrigin } from "./TransitionContext";
 
@@ -97,6 +98,7 @@ const RoutesInner = () => {
 export const AnimatedRoutes = () => {
   return (
     <TransitionProvider>
+      <ScrollToTop />
       <ClickCapture>
         <RoutesInner />
       </ClickCapture>
