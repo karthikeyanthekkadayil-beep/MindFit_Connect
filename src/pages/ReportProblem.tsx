@@ -178,6 +178,7 @@ const ReportProblem = () => {
                 </form>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           <TabsContent value="history" className="mt-4 space-y-3">
