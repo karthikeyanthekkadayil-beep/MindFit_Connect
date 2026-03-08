@@ -755,6 +755,7 @@ const Balance = () => {
                 ))}
               </CardContent>
             </Card>
+            </MotionFadeIn>
 
             <Button 
               className="w-full" 
