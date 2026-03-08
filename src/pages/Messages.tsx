@@ -177,7 +177,7 @@ export default function Messages() {
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-4xl">
-        <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
+        <MotionFadeIn className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
           <div className="min-w-0">
             <h1 className="text-xl sm:text-3xl font-bold text-foreground">Messages</h1>
             <p className="text-muted-foreground text-xs sm:text-base">Your conversations</p>
@@ -186,7 +186,7 @@ export default function Messages() {
             <Plus className="h-4 w-4" />
             <span className="hidden sm:inline">New</span>
           </Button>
-        </div>
+        </MotionFadeIn>
 
         <div className="relative mb-4 sm:mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
