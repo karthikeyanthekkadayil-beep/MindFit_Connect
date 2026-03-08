@@ -366,52 +366,56 @@ const Progress = () => {
           </TabsContent>
 
           <TabsContent value="nutrition" className="space-y-3 sm:space-y-4">
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Nutrition Adherence</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Meal plan completion over the last 7 days</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  completed: { label: "Completed", color: "hsl(var(--primary))" },
-                  planned: { label: "Planned", color: "hsl(var(--muted))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={nutritionData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Legend wrapperStyle={{ fontSize: '12px' }} />
-                      <Bar dataKey="completed" fill="hsl(var(--primary))" name="Completed" />
-                      <Bar dataKey="planned" fill="hsl(var(--muted))" name="Planned" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <MotionFadeIn delay={0.1}>
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg">Nutrition Adherence</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Meal plan completion over the last 7 days</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    completed: { label: "Completed", color: "hsl(var(--primary))" },
+                    planned: { label: "Planned", color: "hsl(var(--muted))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={nutritionData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Legend wrapperStyle={{ fontSize: '12px' }} />
+                        <Bar dataKey="completed" fill="hsl(var(--primary))" name="Completed" />
+                        <Bar dataKey="planned" fill="hsl(var(--muted))" name="Planned" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </MotionFadeIn>
 
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Adherence Percentage</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Daily meal plan adherence rate</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  adherence: { label: "Adherence", color: "hsl(var(--primary))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={nutritionData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Line type="monotone" dataKey="adherence" stroke="hsl(var(--primary))" strokeWidth={2} name="Adherence %" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <MotionFadeIn delay={0.2}>
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg">Adherence Percentage</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Daily meal plan adherence rate</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    adherence: { label: "Adherence", color: "hsl(var(--primary))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={nutritionData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Line type="monotone" dataKey="adherence" stroke="hsl(var(--primary))" strokeWidth={2} name="Adherence %" />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           <TabsContent value="community" className="space-y-3 sm:space-y-4">
