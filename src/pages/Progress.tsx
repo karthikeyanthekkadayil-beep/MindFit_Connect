@@ -419,65 +419,70 @@ const Progress = () => {
           </TabsContent>
 
           <TabsContent value="community" className="space-y-3 sm:space-y-4">
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Community Engagement</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Your social activity breakdown</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  posts: { label: "Posts", color: "hsl(var(--primary))" },
-                  comments: { label: "Comments", color: "hsl(var(--secondary))" },
-                  reactions: { label: "Reactions", color: "hsl(var(--accent))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={[
-                          { name: 'Posts', value: communityStats.posts },
-                          { name: 'Comments', value: communityStats.comments },
-                          { name: 'Reactions', value: communityStats.reactions }
-                        ]}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                        outerRadius={60}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {[0, 1, 2].map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <MotionFadeIn delay={0.1}>
               <Card>
                 <CardHeader className="p-4 sm:p-6">
-                  <CardTitle className="text-sm sm:text-lg">Communities</CardTitle>
+                  <CardTitle className="text-base sm:text-lg">Community Engagement</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Your social activity breakdown</CardDescription>
                 </CardHeader>
-                <CardContent className="p-4 sm:p-6 pt-0">
-                  <div className="text-2xl sm:text-4xl font-bold text-primary">{communityStats.communities}</div>
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">Active</p>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    posts: { label: "Posts", color: "hsl(var(--primary))" },
+                    comments: { label: "Comments", color: "hsl(var(--secondary))" },
+                    reactions: { label: "Reactions", color: "hsl(var(--accent))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={[
+                            { name: 'Posts', value: communityStats.posts },
+                            { name: 'Comments', value: communityStats.comments },
+                            { name: 'Reactions', value: communityStats.reactions }
+                          ]}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          outerRadius={60}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {[0, 1, 2].map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
                 </CardContent>
               </Card>
+            </MotionFadeIn>
 
-              <Card>
-                <CardHeader className="p-4 sm:p-6">
-                  <CardTitle className="text-sm sm:text-lg">Interactions</CardTitle>
-                </CardHeader>
-                <CardContent className="p-4 sm:p-6 pt-0">
-                  <div className="text-2xl sm:text-4xl font-bold text-primary">{weeklyStats.communityEngagement}</div>
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">Total</p>
-                </CardContent>
-              </Card>
-            </div>
+            <MotionList className="grid grid-cols-2 gap-3 sm:gap-4" delay={0.2}>
+              <MotionItem>
+                <InteractiveCard className="border-0 shadow-sm">
+                  <CardHeader className="p-4 sm:p-6">
+                    <CardTitle className="text-sm sm:text-lg">Communities</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 sm:p-6 pt-0">
+                    <div className="text-2xl sm:text-4xl font-bold text-primary">{communityStats.communities}</div>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">Active</p>
+                  </CardContent>
+                </InteractiveCard>
+              </MotionItem>
+              <MotionItem>
+                <InteractiveCard className="border-0 shadow-sm">
+                  <CardHeader className="p-4 sm:p-6">
+                    <CardTitle className="text-sm sm:text-lg">Interactions</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 sm:p-6 pt-0">
+                    <div className="text-2xl sm:text-4xl font-bold text-primary">{weeklyStats.communityEngagement}</div>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">Total</p>
+                  </CardContent>
+                </InteractiveCard>
+              </MotionItem>
+            </MotionList>
           </TabsContent>
         </Tabs>
         </MotionFadeIn>
