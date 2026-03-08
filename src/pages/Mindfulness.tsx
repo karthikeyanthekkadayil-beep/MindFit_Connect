@@ -12,6 +12,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { format } from "date-fns";
 import { useGamification } from "@/hooks/useGamification";
 import { StatsCardSkeleton, MeditationCardSkeleton } from "@/components/skeletons";
+import { MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
 
 interface MeditationProgram {
   id: string;
