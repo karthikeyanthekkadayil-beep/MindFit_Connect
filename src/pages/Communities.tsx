@@ -11,9 +11,11 @@ import { useNavigate } from "react-router-dom";
 import { CreateCommunityDialog } from "@/components/CreateCommunityDialog";
 import { BottomNav } from "@/components/BottomNav";
 import { CommunityCardSkeleton } from "@/components/skeletons";
+import { useUserRole } from "@/hooks/useUserRole";
 
 export default function Communities() {
   const navigate = useNavigate();
+  const { isModOrAdmin } = useUserRole();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -116,10 +118,12 @@ export default function Communities() {
             <h1 className="text-xl sm:text-3xl font-bold text-foreground">Communities</h1>
             <p className="text-muted-foreground text-xs sm:text-base truncate">Connect with like-minded fitness enthusiasts</p>
           </div>
-          <Button onClick={() => setIsCreateDialogOpen(true)} className="gap-1 sm:gap-2 shrink-0 h-9 sm:h-10 text-xs sm:text-sm px-3 sm:px-4">
-            <Plus className="h-4 w-4" />
-            <span className="hidden sm:inline">Create</span>
-          </Button>
+          {isModOrAdmin && (
+            <Button onClick={() => setIsCreateDialogOpen(true)} className="gap-1 sm:gap-2 shrink-0 h-9 sm:h-10 text-xs sm:text-sm px-3 sm:px-4">
+              <Plus className="h-4 w-4" />
+              <span className="hidden sm:inline">Create</span>
+            </Button>
+          )}
         </div>
 
         <div className="relative mb-4 sm:mb-6">
