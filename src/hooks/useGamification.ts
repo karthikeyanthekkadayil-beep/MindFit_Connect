@@ -201,21 +201,22 @@ export const useGamification = (userId: string | null) => {
       const newLevel = calculateLevel(newTotalPoints);
       const leveledUp = newLevel > stats.current_level;
 
-      // Create point transaction
-      await supabase.from('point_transactions').insert({
-        user_id: userId,
-        points,
-        transaction_type: transactionType,
-        description,
-        reference_id: referenceId,
-        reference_type: referenceType,
+      // Use secure RPC to add points (validates on server)
+      const { error: pointsError } = await supabase.rpc('add_points', {
+        _user_id: userId,
+        _points: points,
+        _transaction_type: transactionType,
+        _description: description,
+        _reference_type: referenceType || null,
+        _reference_id: referenceId || null,
       });
 
-      // Update user stats
+      if (pointsError) throw pointsError;
+
+      // Update streak and level (user can only update their own row via RLS)
       const { error: updateError } = await supabase
         .from('user_gamification')
         .update({
-          total_points: newTotalPoints,
           current_level: newLevel,
           current_streak: newStreak,
           longest_streak: Math.max(stats.longest_streak, newStreak),
