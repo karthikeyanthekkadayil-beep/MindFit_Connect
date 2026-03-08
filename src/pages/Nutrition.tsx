@@ -429,6 +429,7 @@ const Nutrition = () => {
             </div>
           </TabsContent>
         </Tabs>
+        </MotionFadeIn>
       </div>
       <BottomNav />
     </div>

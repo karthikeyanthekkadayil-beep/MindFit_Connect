@@ -362,7 +362,7 @@ const Mindfulness = () => {
               <p className="text-[10px] text-muted-foreground sm:hidden">Week</p>
             </CardContent>
           </Card>
-        </div>
+        </MotionList>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-2 sm:space-y-4">
           <TabsList className="grid w-full grid-cols-2 h-9 sm:h-10">
