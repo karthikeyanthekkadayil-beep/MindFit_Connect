@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Send, Users, Search, Trash2, MoreVertical } from "lucide-react";
+import { ArrowLeft, Send, Users, Search, Trash2, MoreVertical, BarChart3, Pin } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
