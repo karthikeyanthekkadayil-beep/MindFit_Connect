@@ -228,8 +228,8 @@ const Dashboard = () => {
         {/* Admin Dashboard Card */}
         {isAdmin && (
           <MotionFadeIn delay={0.6}>
-            <Card 
-              className="border-0 shadow-sm card-press cursor-pointer bg-gradient-to-r from-destructive/10 to-primary/10"
+            <InteractiveCard 
+              className="border-0 shadow-sm cursor-pointer bg-gradient-to-r from-destructive/10 to-primary/10"
               onClick={() => navigate("/admin")}
             >
               <CardContent className="p-4 flex items-center gap-4">
