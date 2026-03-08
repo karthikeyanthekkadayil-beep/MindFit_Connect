@@ -576,6 +576,7 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           {/* Work-Life Balance */}
