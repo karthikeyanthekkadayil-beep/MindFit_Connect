@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Heart, MessageCircle, ThumbsUp, Trophy, Zap, Send, Trash2 } from "lucide-react";
+import { ReportContentDialog } from "@/components/ReportContentDialog";
 import { formatDistanceToNow } from "date-fns";
 
 interface CommunityFeedProps {
@@ -224,7 +225,7 @@ export const CommunityFeed = ({ communityId }: CommunityFeedProps) => {
                     </div>
                   </div>
                 </div>
-                {currentUserId === post.user_id && (
+                {currentUserId === post.user_id ? (
                   <Button
                     variant="ghost"
                     size="sm"
@@ -232,7 +233,9 @@ export const CommunityFeed = ({ communityId }: CommunityFeedProps) => {
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
-                )}
+                ) : currentUserId ? (
+                  <ReportContentDialog contentType="post" contentId={post.id} />
+                ) : null}
               </div>
             </CardHeader>
             <CardContent className="space-y-4">

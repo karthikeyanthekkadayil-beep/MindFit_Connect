@@ -11,10 +11,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Shield, Users, MessageSquare, Calendar, Flag, Trash2, Eye, ArrowLeft, AlertTriangle, CheckCircle, Scale, TrendingUp, Activity, Star, Clock, Target } from "lucide-react";
+import { Shield, Users, MessageSquare, Calendar, Flag, Trash2, Eye, ArrowLeft, AlertTriangle, CheckCircle, Scale, TrendingUp, Activity, Star, Clock, Target, History } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import { format, subDays } from "date-fns";
-import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { ReportsTab } from "@/components/moderator/ReportsTab";
+import { HistoryTab } from "@/components/moderator/HistoryTab";
+import { WarnUserDialog } from "@/components/moderator/WarnUserDialog";
 
 interface Post {
   id: string;
@@ -183,11 +186,17 @@ const Moderator = () => {
         setCommunities(communitiesData);
       }
 
+      // Fetch pending reports count
+      const { count: pendingReportsCount } = await supabase
+        .from("content_reports")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending");
+
       // Calculate stats
       setStats({
         postsToReview: postsData?.length || 0,
         activeEvents: eventsData?.length || 0,
-        reportedContent: 0,
+        reportedContent: pendingReportsCount || 0,
         totalCommunities: communitiesData?.length || 0
       });
 
@@ -362,12 +371,16 @@ const Moderator = () => {
 
         {/* Moderator Tabs */}
         <Tabs defaultValue="posts" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4 h-auto">
-            <TabsTrigger value="posts" className="text-xs sm:text-sm py-2">Posts</TabsTrigger>
-            <TabsTrigger value="events" className="text-xs sm:text-sm py-2">Events</TabsTrigger>
-            <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">Communities</TabsTrigger>
-            <TabsTrigger value="balance" className="text-xs sm:text-sm py-2">Balance</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto">
+            <TabsList className="inline-flex w-auto min-w-full sm:grid sm:grid-cols-6 h-auto">
+              <TabsTrigger value="posts" className="text-xs sm:text-sm py-2">Posts</TabsTrigger>
+              <TabsTrigger value="events" className="text-xs sm:text-sm py-2">Events</TabsTrigger>
+              <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">Communities</TabsTrigger>
+              <TabsTrigger value="reports" className="text-xs sm:text-sm py-2">Reports</TabsTrigger>
+              <TabsTrigger value="history" className="text-xs sm:text-sm py-2">History</TabsTrigger>
+              <TabsTrigger value="balance" className="text-xs sm:text-sm py-2">Balance</TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="posts" className="space-y-4">
             <Card>
@@ -403,6 +416,13 @@ const Moderator = () => {
                             >
                               <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
+                            {session && (
+                              <WarnUserDialog
+                                userId={post.user_id}
+                                userName={post.author_name || "Unknown"}
+                                moderatorId={session.user.id}
+                              />
+                            )}
                             <Dialog>
                               <DialogTrigger asChild>
                                 <Button
@@ -547,6 +567,18 @@ const Moderator = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Reports Tab */}
+          <TabsContent value="reports" className="space-y-4">
+            {session && (
+              <ReportsTab moderatorId={session.user.id} onActionTaken={() => loadModeratorData()} />
+            )}
+          </TabsContent>
+
+          {/* History Tab */}
+          <TabsContent value="history" className="space-y-4">
+            {session && <HistoryTab moderatorId={session.user.id} />}
           </TabsContent>
 
           {/* Balance Tab */}

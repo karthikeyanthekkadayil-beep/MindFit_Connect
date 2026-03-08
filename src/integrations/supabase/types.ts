@@ -237,6 +237,42 @@ export type Database = {
           },
         ]
       }
+      content_reports: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       conversation_members: {
         Row: {
           conversation_id: string
@@ -1362,6 +1398,33 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_warnings: {
+        Row: {
+          created_at: string
+          id: string
+          moderator_id: string
+          reason: string
+          user_id: string
+          warning_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          moderator_id: string
+          reason: string
+          user_id: string
+          warning_type?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          moderator_id?: string
+          reason?: string
+          user_id?: string
+          warning_type?: string
         }
         Relationships: []
       }
