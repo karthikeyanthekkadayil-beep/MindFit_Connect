@@ -496,6 +496,7 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           {/* Activity Balance Insights */}
