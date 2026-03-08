@@ -17,6 +17,7 @@ import { useTheme } from "next-themes";
 import { BottomNav } from "@/components/BottomNav";
 import { useCamera, base64ToBlob } from "@/hooks/useCamera";
 import { Capacitor } from "@capacitor/core";
+import { MotionFadeIn, MotionScaleIn, MotionSection } from "@/components/motion/MotionWrappers";
 
 interface Profile {
   id: string;
