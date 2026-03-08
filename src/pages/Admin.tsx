@@ -322,15 +322,7 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="settings" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Platform Settings</CardTitle>
-                <CardDescription>Configure platform-wide settings</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Platform settings coming soon...</p>
-              </CardContent>
-            </Card>
+            <PlatformSettingsTab />
           </TabsContent>
         </Tabs>
       </main>
