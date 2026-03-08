@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [greeting, setGreeting] = useState("Welcome");
   const [isAdmin, setIsAdmin] = useState(false);
   const [hasElevatedRole, setHasElevatedRole] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const hour = new Date().getHours();
