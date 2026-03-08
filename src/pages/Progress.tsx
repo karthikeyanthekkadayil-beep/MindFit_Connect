@@ -316,49 +316,53 @@ const Progress = () => {
           </TabsContent>
 
           <TabsContent value="meditation" className="space-y-3 sm:space-y-4">
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Meditation Consistency</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Daily meditation minutes over the last 7 days</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  minutes: { label: "Minutes", color: "hsl(var(--primary))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={meditationData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="minutes" fill="hsl(var(--primary))" name="Minutes" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <MotionFadeIn delay={0.1}>
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg">Meditation Consistency</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Daily meditation minutes over the last 7 days</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    minutes: { label: "Minutes", color: "hsl(var(--primary))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={meditationData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="minutes" fill="hsl(var(--primary))" name="Minutes" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </MotionFadeIn>
 
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Session Frequency</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Number of meditation sessions per day</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  sessions: { label: "Sessions", color: "hsl(var(--secondary))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={meditationData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Line type="monotone" dataKey="sessions" stroke="hsl(var(--secondary))" strokeWidth={2} name="Sessions" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <MotionFadeIn delay={0.2}>
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg">Session Frequency</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Number of meditation sessions per day</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    sessions: { label: "Sessions", color: "hsl(var(--secondary))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={meditationData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Line type="monotone" dataKey="sessions" stroke="hsl(var(--secondary))" strokeWidth={2} name="Sessions" />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           <TabsContent value="nutrition" className="space-y-3 sm:space-y-4">
