@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, MessageCircle, Send, Clock, CheckCircle, AlertTriangle, Eye } from "lucide-react";
+import { Loader2, MessageCircle, Send, Clock, CheckCircle, AlertTriangle, Paperclip, Image as ImageIcon, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 
 interface ProblemReport {
@@ -22,6 +22,7 @@ interface ProblemReport {
   responded_by: string | null;
   responded_at: string | null;
   created_at: string;
+  attachment_urls: string[] | null;
 }
 
 interface ProfileInfo {
@@ -53,6 +54,7 @@ export const ProblemReportsTab = () => {
   const [newStatus, setNewStatus] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
 
   useEffect(() => {
     fetchReports();
@@ -65,8 +67,7 @@ export const ProblemReportsTab = () => {
       .order("created_at", { ascending: false });
 
     if (!error && data) {
-      setReports(data);
-      // Fetch profile info for all reporters
+      setReports(data as ProblemReport[]);
       const userIds = [...new Set(data.map(r => r.user_id))];
       if (userIds.length > 0) {
         const { data: profileData } = await supabase.rpc("get_public_profiles_info", { profile_ids: userIds });
@@ -119,6 +120,8 @@ export const ProblemReportsTab = () => {
     setNewStatus(report.status);
   };
 
+  const isImageUrl = (url: string) => /\.(jpg|jpeg|png|gif|webp)$/i.test(url);
+
   const filtered = filterStatus === "all" ? reports : reports.filter(r => r.status === filterStatus);
   const openCount = reports.filter(r => r.status === "open").length;
 
@@ -158,6 +161,7 @@ export const ProblemReportsTab = () => {
               const config = statusConfig[report.status] || statusConfig.open;
               const StatusIcon = config.icon;
               const reporter = profiles[report.user_id];
+              const hasAttachments = report.attachment_urls && report.attachment_urls.length > 0;
               return (
                 <Card key={report.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => openReport(report)}>
                   <CardContent className="p-3 sm:p-4">
@@ -177,12 +181,20 @@ export const ProblemReportsTab = () => {
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{report.description}</p>
-                    {report.admin_response && (
-                      <div className="flex items-center gap-1 mt-2 text-xs text-primary">
-                        <MessageCircle className="h-3 w-3" />
-                        <span>Responded</span>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2 mt-2">
+                      {hasAttachments && (
+                        <Badge variant="secondary" className="text-xs gap-1">
+                          <ImageIcon className="h-3 w-3" />
+                          {report.attachment_urls!.length} file{report.attachment_urls!.length > 1 ? "s" : ""}
+                        </Badge>
+                      )}
+                      {report.admin_response && (
+                        <div className="flex items-center gap-1 text-xs text-primary">
+                          <MessageCircle className="h-3 w-3" />
+                          <span>Responded</span>
+                        </div>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               );
@@ -213,6 +225,42 @@ export const ProblemReportsTab = () => {
               <p className="text-xs font-medium text-muted-foreground mb-1">Description</p>
               <div className="bg-muted/50 rounded-lg p-3 text-sm">{selectedReport?.description}</div>
             </div>
+
+            {/* Attachments Section */}
+            {selectedReport?.attachment_urls && selectedReport.attachment_urls.length > 0 && (
+              <div>
+                <p className="text-xs font-medium text-muted-foreground mb-2">
+                  Attachments ({selectedReport.attachment_urls.length})
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {selectedReport.attachment_urls.map((url, i) => (
+                    isImageUrl(url) ? (
+                      <button
+                        key={i}
+                        onClick={() => setLightboxUrl(url)}
+                        className="relative group rounded-lg overflow-hidden border border-border aspect-square"
+                      >
+                        <img src={url} alt={`Attachment ${i + 1}`} className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                          <ExternalLink className="h-4 w-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                      </button>
+                    ) : (
+                      <a
+                        key={i}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-lg border border-border aspect-square flex flex-col items-center justify-center gap-1 bg-muted/30 hover:bg-muted/50 transition-colors"
+                      >
+                        <Paperclip className="h-5 w-5 text-muted-foreground" />
+                        <span className="text-[9px] text-muted-foreground">PDF</span>
+                      </a>
+                    )
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="space-y-2">
               <p className="text-xs font-medium text-muted-foreground">Update Status</p>
@@ -245,6 +293,15 @@ export const ProblemReportsTab = () => {
               Save Response
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Image Lightbox */}
+      <Dialog open={!!lightboxUrl} onOpenChange={(open) => { if (!open) setLightboxUrl(null); }}>
+        <DialogContent className="max-w-3xl p-2">
+          {lightboxUrl && (
+            <img src={lightboxUrl} alt="Attachment" className="w-full rounded-lg" />
+          )}
         </DialogContent>
       </Dialog>
     </>
