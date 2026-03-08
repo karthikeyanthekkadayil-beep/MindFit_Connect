@@ -418,6 +418,7 @@ const WorkoutBuilder = () => {
 
       <BottomNav />
     </div>
+    </AnimatedPage>
   );
 };
 

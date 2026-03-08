@@ -372,5 +372,6 @@ export default function CommunityDetail() {
         </Tabs>
       </div>
     </div>
+    </AnimatedPage>
   );
 }
