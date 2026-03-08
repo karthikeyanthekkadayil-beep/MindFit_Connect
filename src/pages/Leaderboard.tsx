@@ -9,7 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Loader2, Trophy, Medal, Crown, Flame, Star, Users, Globe, TrendingUp } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
-import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { MotionHeader, MotionFadeIn, MotionScaleIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { motion } from "framer-motion";
 
 interface LeaderboardEntry {
   user_id: string;
