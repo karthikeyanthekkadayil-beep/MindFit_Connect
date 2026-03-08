@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { PasswordStrengthIndicator } from "@/components/PasswordStrengthIndicator";
 import logo from "@/assets/logo.png";
+import { MotionFadeIn, MotionScaleIn } from "@/components/motion/MotionWrappers";
 
 const Auth = () => {
   const navigate = useNavigate();

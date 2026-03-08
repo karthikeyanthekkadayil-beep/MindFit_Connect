@@ -35,22 +35,28 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center space-y-8 max-w-4xl mx-auto">
-          <img src={logo} alt="MindFit Connect" className="w-24 h-24 mx-auto mb-2" />
-          <h1 className="text-5xl md:text-6xl font-heading font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-            Welcome to MindFit Connect
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground">
-            Combat social isolation and promote active, healthy lifestyles
-          </p>
+          <MotionScaleIn>
+            <img src={logo} alt="MindFit Connect" className="w-24 h-24 mx-auto mb-2" />
+          </MotionScaleIn>
+          <MotionFadeIn delay={0.15}>
+            <h1 className="text-5xl md:text-6xl font-heading font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+              Welcome to MindFit Connect
+            </h1>
+          </MotionFadeIn>
+          <MotionFadeIn delay={0.25}>
+            <p className="text-xl md:text-2xl text-muted-foreground">
+              Combat social isolation and promote active, healthy lifestyles
+            </p>
+          </MotionFadeIn>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
+          <MotionFadeIn delay={0.35} className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
             <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-8">
               Get Started
             </Button>
             <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="text-lg px-8">
               Learn More
             </Button>
-          </div>
+          </MotionFadeIn>
 
           <div className="grid md:grid-cols-3 gap-8 pt-16">
             <div className="space-y-4 p-6 rounded-lg bg-card shadow-md">
