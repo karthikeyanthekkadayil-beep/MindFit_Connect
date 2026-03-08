@@ -410,15 +410,23 @@ const Moderator = () => {
         </div>
 
         {/* Moderator Tabs */}
+        {(() => {
+          const visibleTabs = [
+            { value: "posts", label: "Posts", show: true },
+            { value: "events", label: "Events", show: true },
+            { value: "communities", label: "Communities", show: true },
+            { value: "reports", label: "Reports", show: permissions.canReviewReports },
+            { value: "history", label: "History", show: true },
+            { value: "balance", label: "Balance", show: true },
+          ].filter(t => t.show);
+          const colCount = visibleTabs.length;
+          return (
         <Tabs defaultValue="posts" className="space-y-4">
           <div className="overflow-x-auto">
-            <TabsList className="inline-flex w-auto min-w-full sm:grid sm:grid-cols-6 h-auto">
-              <TabsTrigger value="posts" className="text-xs sm:text-sm py-2">Posts</TabsTrigger>
-              <TabsTrigger value="events" className="text-xs sm:text-sm py-2">Events</TabsTrigger>
-              <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">Communities</TabsTrigger>
-              <TabsTrigger value="reports" className="text-xs sm:text-sm py-2">Reports</TabsTrigger>
-              <TabsTrigger value="history" className="text-xs sm:text-sm py-2">History</TabsTrigger>
-              <TabsTrigger value="balance" className="text-xs sm:text-sm py-2">Balance</TabsTrigger>
+            <TabsList className={`inline-flex w-auto min-w-full sm:grid h-auto`} style={{ gridTemplateColumns: `repeat(${colCount}, minmax(0, 1fr))` }}>
+              {visibleTabs.map(tab => (
+                <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm py-2">{tab.label}</TabsTrigger>
+              ))}
             </TabsList>
           </div>
 
