@@ -223,12 +223,12 @@ const SharedGoals = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white p-6 shadow-lg">
+      <MotionHeader className="bg-gradient-hero text-white p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-heading font-bold">Community Goals</h1>
           <p className="text-white/90 mt-1">Support friends on their wellness journey</p>
         </div>
-      </header>
+      </MotionHeader>
 
       <main className="max-w-3xl mx-auto p-6 space-y-6">
         {goals.length === 0 ? (

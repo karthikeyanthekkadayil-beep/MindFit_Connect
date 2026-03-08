@@ -5,6 +5,7 @@ import { Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Activity, Users, Heart } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { MotionFadeIn, MotionScaleIn } from "@/components/motion/MotionWrappers";
 
 const Index = () => {
   const navigate = useNavigate();
