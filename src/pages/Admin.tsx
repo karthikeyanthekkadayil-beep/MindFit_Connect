@@ -158,7 +158,7 @@ const Admin = () => {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     toast.success("Logged out successfully");
-    navigate("/admin/login");
+    navigate("/auth");
   };
 
   return (
