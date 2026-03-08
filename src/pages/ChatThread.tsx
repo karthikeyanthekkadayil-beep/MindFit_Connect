@@ -546,6 +546,12 @@ export default function ChatThread() {
                     <span className="text-xs text-muted-foreground">
                       {format(new Date(msg.created_at), "p")}
                     </span>
+                    <PinMessageButton
+                      messageId={msg.id}
+                      conversationId={id!}
+                      currentUserId={currentUserId}
+                      isPinned={pinnedMessageIds?.has(msg.id) || false}
+                    />
                     {isCurrentUser && (
                       <button
                         onClick={() => setMessageToDelete(msg.id)}
