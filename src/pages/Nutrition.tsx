@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { BottomNav } from "@/components/BottomNav";
 import { RecipeCardSkeleton } from "@/components/skeletons";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionFadeIn, MotionSection } from "@/components/motion/MotionWrappers";
 
 interface Recipe {
   id: string;
