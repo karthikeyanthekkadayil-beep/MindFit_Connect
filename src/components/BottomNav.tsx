@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, Calendar, Users, TrendingUp, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 const tabs = [
   { id: "home", icon: Home, label: "Home", path: "/dashboard" },
@@ -26,7 +27,6 @@ export const BottomNav = () => {
   const activeTab = getActiveTab();
 
   const handleTabClick = (path: string) => {
-    // Add haptic feedback if available
     if ('vibrate' in navigator) {
       navigator.vibrate(10);
     }
@@ -34,13 +34,18 @@ export const BottomNav = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border/50 z-50 safe-area-bottom">
+    <motion.nav
+      className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border/50 z-50 safe-area-bottom"
+      initial={{ y: 80 }}
+      animate={{ y: 0 }}
+      transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 28 }}
+    >
       <div className="max-w-lg mx-auto">
         <div className="flex justify-around items-center h-16">
-          {tabs.map((tab) => {
+          {tabs.map((tab, index) => {
             const isActive = activeTab === tab.id;
             return (
-              <button
+              <motion.button
                 key={tab.id}
                 onClick={() => handleTabClick(tab.path)}
                 className={cn(
@@ -48,10 +53,17 @@ export const BottomNav = () => {
                   "active:scale-90",
                   isActive ? "text-primary" : "text-muted-foreground"
                 )}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 + index * 0.05, type: "spring", stiffness: 300, damping: 20 }}
               >
                 {/* Active indicator */}
                 {isActive && (
-                  <span className="absolute -top-0.5 w-8 h-1 bg-primary rounded-full" />
+                  <motion.span
+                    className="absolute -top-0.5 w-8 h-1 bg-primary rounded-full"
+                    layoutId="activeTab"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
                 )}
                 
                 <div className={cn(
@@ -71,11 +83,11 @@ export const BottomNav = () => {
                     {tab.label}
                   </span>
                 </div>
-              </button>
+              </motion.button>
             );
           })}
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };

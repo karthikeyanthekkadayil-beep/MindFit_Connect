@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
+import { MotionHeader, MotionFadeIn, MotionScaleIn, MotionSection, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { motion } from "framer-motion";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -48,7 +50,6 @@ const Dashboard = () => {
       if (!session) {
         navigate("/auth");
       } else {
-        // Check user roles
         supabase
           .from("user_roles")
           .select("role")
@@ -95,135 +96,138 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <header className="bg-gradient-hero text-white px-4 pt-12 pb-6 safe-area-top">
+      <MotionHeader className="bg-gradient-hero text-white px-4 pt-12 pb-6 safe-area-top">
         <div className="max-w-lg mx-auto">
           <div className="flex items-start justify-between">
-            <div className="animate-in-up flex items-center gap-2.5">
+            <MotionFadeIn className="flex items-center gap-2.5" delay={0.1}>
               <img src={logo} alt="MindFit Connect" className="w-9 h-9 rounded-lg shadow-md" />
               <h1 className="text-2xl font-heading font-bold text-accent drop-shadow-md">MindFit Connect</h1>
-            </div>
-            <Button 
-              onClick={handleLogout} 
-              variant="ghost" 
-              size="icon"
-              className="text-white hover:bg-white/20 rounded-full h-10 w-10"
+            </MotionFadeIn>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 300 }}
             >
-              <LogOut className="h-5 w-5" />
-            </Button>
+              <Button 
+                onClick={handleLogout} 
+                variant="ghost" 
+                size="icon"
+                className="text-white hover:bg-white/20 rounded-full h-10 w-10"
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
+            </motion.div>
           </div>
         </div>
-      </header>
+      </MotionHeader>
 
       {/* Main Content */}
       <main className="max-w-lg mx-auto px-4 -mt-3 space-y-5">
         {/* Stats Card */}
-        <Card 
-          className="overflow-hidden border-0 shadow-lg animate-in-up card-press cursor-pointer"
-          onClick={() => navigate('/rewards')}
-        >
-          <CardContent className="p-0">
-            {gamificationLoading ? (
-              <div className="p-5 animate-pulse space-y-3">
-                <div className="h-16 bg-muted rounded-lg"></div>
-                <div className="h-4 bg-muted rounded w-3/4"></div>
-              </div>
-            ) : (
-              <>
-                {/* Stats Grid */}
-                <div className="grid grid-cols-4 divide-x divide-border">
-                  <div className="text-center py-4 px-2">
-                    <Star className="h-5 w-5 text-amber-500 mx-auto mb-1" />
-                    <p className="text-lg font-bold">{stats?.total_points || 0}</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Points</p>
-                  </div>
-                  <div className="text-center py-4 px-2">
-                    <Crown className="h-5 w-5 text-primary mx-auto mb-1" />
-                    <p className="text-lg font-bold">{stats?.current_level || 1}</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Level</p>
-                  </div>
-                  <div className="text-center py-4 px-2">
-                    <Flame className="h-5 w-5 text-secondary mx-auto mb-1" />
-                    <p className="text-lg font-bold">{stats?.current_streak || 0}</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Streak</p>
-                  </div>
-                  <div className="text-center py-4 px-2">
-                    <Trophy className="h-5 w-5 text-accent mx-auto mb-1" />
-                    <p className="text-lg font-bold">{earnedAchievements.length}</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Badges</p>
-                  </div>
+        <MotionScaleIn delay={0.15}>
+          <Card 
+            className="overflow-hidden border-0 shadow-lg card-press cursor-pointer"
+            onClick={() => navigate('/rewards')}
+          >
+            <CardContent className="p-0">
+              {gamificationLoading ? (
+                <div className="p-5 animate-pulse space-y-3">
+                  <div className="h-16 bg-muted rounded-lg"></div>
+                  <div className="h-4 bg-muted rounded w-3/4"></div>
                 </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-4 divide-x divide-border">
+                    {[
+                      { icon: Star, value: stats?.total_points || 0, label: "Points", color: "text-amber-500" },
+                      { icon: Crown, value: stats?.current_level || 1, label: "Level", color: "text-primary" },
+                      { icon: Flame, value: stats?.current_streak || 0, label: "Streak", color: "text-secondary" },
+                      { icon: Trophy, value: earnedAchievements.length, label: "Badges", color: "text-accent" },
+                    ].map((stat, i) => (
+                      <motion.div
+                        key={stat.label}
+                        className="text-center py-4 px-2"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25 + i * 0.08, type: "spring", stiffness: 300, damping: 20 }}
+                      >
+                        <stat.icon className={cn("h-5 w-5 mx-auto mb-1", stat.color)} />
+                        <p className="text-lg font-bold">{stat.value}</p>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wide">{stat.label}</p>
+                      </motion.div>
+                    ))}
+                  </div>
 
-                {/* Level Progress */}
-                <div className="px-4 pb-4 pt-2 bg-muted/30">
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span className="font-medium flex items-center gap-1">
-                      <Sparkles className="h-3 w-3 text-primary" />
-                      Level {stats?.current_level || 1}
-                    </span>
-                    <span className="text-muted-foreground">{levelProgress.current} / {levelProgress.next} XP</span>
-                  </div>
-                  <Progress value={levelProgress.percentage} className="h-2" />
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
+                  <MotionFadeIn delay={0.5} className="px-4 pb-4 pt-2 bg-muted/30">
+                    <div className="flex justify-between text-xs mb-1.5">
+                      <span className="font-medium flex items-center gap-1">
+                        <Sparkles className="h-3 w-3 text-primary" />
+                        Level {stats?.current_level || 1}
+                      </span>
+                      <span className="text-muted-foreground">{levelProgress.current} / {levelProgress.next} XP</span>
+                    </div>
+                    <Progress value={levelProgress.percentage} className="h-2" />
+                  </MotionFadeIn>
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </MotionScaleIn>
 
         {/* Quick Actions */}
-        <section className="animate-in-up delay-1">
+        <MotionSection delay={0.3}>
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
             Quick Actions
           </h2>
-          <div className="scroll-x -mx-4 px-4">
-            {quickActions.map((action, index) => (
-              <button
-                key={action.path}
-                onClick={() => navigate(action.path)}
-                className={cn(
-                  "flex flex-col items-center justify-center w-20 h-20 rounded-2xl press-effect",
-                  action.color
-                )}
-              >
-                <action.icon className="h-6 w-6 mb-1" />
-                <span className="text-xs font-medium">{action.title}</span>
-              </button>
+          <MotionList className="scroll-x -mx-4 px-4" delay={0.35}>
+            {quickActions.map((action) => (
+              <MotionItem key={action.path}>
+                <button
+                  onClick={() => navigate(action.path)}
+                  className={cn(
+                    "flex flex-col items-center justify-center w-20 h-20 rounded-2xl press-effect",
+                    action.color
+                  )}
+                >
+                  <action.icon className="h-6 w-6 mb-1" />
+                  <span className="text-xs font-medium">{action.title}</span>
+                </button>
+              </MotionItem>
             ))}
-          </div>
-        </section>
+          </MotionList>
+        </MotionSection>
 
         {/* Features List */}
-        <section className="animate-in-up delay-2">
+        <MotionSection delay={0.4}>
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
             Explore
           </h2>
-          <div className="space-y-2">
-            {dashboardItems.map((item, index) => (
-              <Card 
-                key={item.path}
-                className={cn(
-                  "border-0 shadow-sm card-press cursor-pointer",
-                  `delay-${Math.min(index + 1, 5)}`
-                )}
-                onClick={() => navigate(item.path)}
-              >
-                <CardContent className="p-4 flex items-center gap-4">
-                  <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <item.icon className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm">{item.title}</h3>
-                    <p className="text-xs text-muted-foreground truncate">{item.description}</p>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                </CardContent>
-              </Card>
+          <MotionList className="space-y-2" delay={0.45}>
+            {dashboardItems.map((item) => (
+              <MotionItem key={item.path}>
+                <Card 
+                  className="border-0 shadow-sm card-press cursor-pointer"
+                  onClick={() => navigate(item.path)}
+                >
+                  <CardContent className="p-4 flex items-center gap-4">
+                    <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <item.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-sm">{item.title}</h3>
+                      <p className="text-xs text-muted-foreground truncate">{item.description}</p>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                  </CardContent>
+                </Card>
+              </MotionItem>
             ))}
-          </div>
-        </section>
+          </MotionList>
+        </MotionSection>
 
-        {/* Admin Dashboard Card - only for admins */}
+        {/* Admin Dashboard Card */}
         {isAdmin && (
-          <section className="animate-in-up delay-3">
+          <MotionFadeIn delay={0.6}>
             <Card 
               className="border-0 shadow-sm card-press cursor-pointer bg-gradient-to-r from-destructive/10 to-primary/10"
               onClick={() => navigate("/admin")}
@@ -239,12 +243,12 @@ const Dashboard = () => {
                 <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
               </CardContent>
             </Card>
-          </section>
+          </MotionFadeIn>
         )}
 
-        {/* Moderator Panel Card - for mods/admins */}
+        {/* Moderator Panel Card */}
         {hasElevatedRole && (
-          <section className="animate-in-up delay-3">
+          <MotionFadeIn delay={0.65}>
             <Card 
               className="border-0 shadow-sm card-press cursor-pointer bg-gradient-to-r from-primary/10 to-secondary/10"
               onClick={() => navigate("/moderator")}
@@ -260,7 +264,7 @@ const Dashboard = () => {
                 <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
               </CardContent>
             </Card>
-          </section>
+          </MotionFadeIn>
         )}
 
       </main>

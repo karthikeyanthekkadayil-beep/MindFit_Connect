@@ -10,6 +10,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend } from "recharts";
 import { format, subDays, startOfWeek, endOfWeek } from "date-fns";
 import { StatsCardSkeleton, ChartSkeleton } from "@/components/skeletons";
+import { MotionHeader, MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
 
 const Progress = () => {
   const navigate = useNavigate();
@@ -184,7 +185,7 @@ const Progress = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
+      <MotionHeader className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           <div className="min-w-0">
             <h1 className="text-xl sm:text-3xl font-heading font-bold">Progress</h1>
@@ -199,53 +200,59 @@ const Progress = () => {
             Goals
           </Button>
         </div>
-      </header>
+      </MotionHeader>
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
         {/* Weekly Summary Cards */}
-        <div className="grid grid-cols-4 gap-2 sm:gap-4">
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center justify-between mb-1">
-                <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-              </div>
-              <div className="text-base sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
-              <p className="text-[9px] sm:text-xs text-muted-foreground">Fitness</p>
-            </CardContent>
-          </Card>
-
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center justify-between mb-1">
-                <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-              </div>
-              <div className="text-base sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-[10px] sm:text-sm">m</span></div>
-              <p className="text-[9px] sm:text-xs text-muted-foreground">Meditate</p>
-            </CardContent>
-          </Card>
-
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center justify-between mb-1">
-                <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-              </div>
-              <div className="text-base sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
-              <p className="text-[9px] sm:text-xs text-muted-foreground">Nutrition</p>
-            </CardContent>
-          </Card>
-
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center justify-between mb-1">
-                <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-              </div>
-              <div className="text-base sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
-              <p className="text-[9px] sm:text-xs text-muted-foreground">Social</p>
-            </CardContent>
-          </Card>
-        </div>
+        <MotionList className="grid grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
+          <MotionItem>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center justify-between mb-1">
+                  <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                </div>
+                <div className="text-base sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
+                <p className="text-[9px] sm:text-xs text-muted-foreground">Fitness</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center justify-between mb-1">
+                  <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                </div>
+                <div className="text-base sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-[10px] sm:text-sm">m</span></div>
+                <p className="text-[9px] sm:text-xs text-muted-foreground">Meditate</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center justify-between mb-1">
+                  <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                </div>
+                <div className="text-base sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
+                <p className="text-[9px] sm:text-xs text-muted-foreground">Nutrition</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center justify-between mb-1">
+                  <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                </div>
+                <div className="text-base sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
+                <p className="text-[9px] sm:text-xs text-muted-foreground">Social</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+        </MotionList>
 
         {/* Detailed Charts */}
+        <MotionFadeIn delay={0.3}>
         <Tabs defaultValue="fitness" className="w-full">
           <TabsList className="grid w-full grid-cols-4 h-9 sm:h-10">
             <TabsTrigger value="fitness" className="text-[10px] sm:text-sm px-1 sm:px-3">Fitness</TabsTrigger>
@@ -460,6 +467,7 @@ const Progress = () => {
             </div>
           </TabsContent>
         </Tabs>
+        </MotionFadeIn>
       </main>
 
       <BottomNav />

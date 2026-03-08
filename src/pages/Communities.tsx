@@ -12,6 +12,8 @@ import { CreateCommunityDialog } from "@/components/CreateCommunityDialog";
 import { BottomNav } from "@/components/BottomNav";
 import { CommunityCardSkeleton } from "@/components/skeletons";
 import { useUserRole } from "@/hooks/useUserRole";
+import { MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
+import { motion } from "framer-motion";
 
 export default function Communities() {
   const navigate = useNavigate();
@@ -39,7 +41,6 @@ export default function Communities() {
       const { data, error } = await query;
       if (error) throw error;
       
-      // Fetch creator profiles using RPC
       const creatorIds = [...new Set(data?.map(c => c.creator_id) || [])];
       const { data: profiles } = await supabase
         .rpc("get_public_profiles_info", { profile_ids: creatorIds });
@@ -113,7 +114,7 @@ export default function Communities() {
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-4xl">
-        <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
+        <MotionFadeIn className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
           <div className="min-w-0">
             <h1 className="text-xl sm:text-3xl font-bold text-foreground">Communities</h1>
             <p className="text-muted-foreground text-xs sm:text-base truncate">Connect with like-minded fitness enthusiasts</p>
@@ -124,9 +125,9 @@ export default function Communities() {
               <span className="hidden sm:inline">Create</span>
             </Button>
           )}
-        </div>
+        </MotionFadeIn>
 
-        <div className="relative mb-4 sm:mb-6">
+        <MotionFadeIn delay={0.1} className="relative mb-4 sm:mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search communities..."
@@ -134,76 +135,85 @@ export default function Communities() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 h-10 sm:h-11"
           />
-        </div>
+        </MotionFadeIn>
 
-        <Tabs defaultValue="discover" className="space-y-4 sm:space-y-6">
-          <TabsList className="grid w-full grid-cols-2 h-10 sm:h-11">
-            <TabsTrigger value="discover" className="text-xs sm:text-sm">Discover</TabsTrigger>
-            <TabsTrigger value="my-communities" className="text-xs sm:text-sm">My Communities</TabsTrigger>
-          </TabsList>
+        <MotionFadeIn delay={0.15}>
+          <Tabs defaultValue="discover" className="space-y-4 sm:space-y-6">
+            <TabsList className="grid w-full grid-cols-2 h-10 sm:h-11">
+              <TabsTrigger value="discover" className="text-xs sm:text-sm">Discover</TabsTrigger>
+              <TabsTrigger value="my-communities" className="text-xs sm:text-sm">My Communities</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="discover" className="space-y-4">
-            <div className="flex gap-1.5 sm:gap-2 flex-wrap">
-              <Button
-                variant={selectedCategory === "all" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory("all")}
-                className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
-              >
-                All
-              </Button>
-              {categories.map((category) => (
-                <Button
-                  key={category.value}
-                  variant={selectedCategory === category.value ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category.value)}
-                  className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  {category.label}
-                </Button>
-              ))}
-            </div>
-
-            {isLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <CommunityCardSkeleton key={i} />
+            <TabsContent value="discover" className="space-y-4">
+              <MotionList className="flex gap-1.5 sm:gap-2 flex-wrap" delay={0.2}>
+                <MotionItem>
+                  <Button
+                    variant={selectedCategory === "all" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCategory("all")}
+                    className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
+                  >
+                    All
+                  </Button>
+                </MotionItem>
+                {categories.map((category) => (
+                  <MotionItem key={category.value}>
+                    <Button
+                      variant={selectedCategory === category.value ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedCategory(category.value)}
+                      className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
+                    >
+                      {category.label}
+                    </Button>
+                  </MotionItem>
                 ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
-                {communities?.map((community) => (
-                  <CommunityCard key={community.id} community={community} />
-                ))}
-              </div>
-            )}
-          </TabsContent>
+              </MotionList>
 
-          <TabsContent value="my-communities" className="space-y-3 sm:space-y-4">
-            {myCommunities && myCommunities.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
-                {myCommunities.map((community) => (
-                  <CommunityCard key={community.id} community={community} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 sm:py-12">
-                <Users className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-base sm:text-lg font-semibold mb-2">No communities yet</h3>
-                <p className="text-muted-foreground mb-4 text-sm">
-                  Join a community to connect with others
-                </p>
-                <Button onClick={() => {
-                  const discoverTab = document.querySelector('[value="discover"]') as HTMLElement;
-                  discoverTab?.click();
-                }}>
-                  Discover Communities
-                </Button>
-              </div>
-            )}
-          </TabsContent>
-        </Tabs>
+              {isLoading ? (
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <CommunityCardSkeleton key={i} />
+                  ))}
+                </div>
+              ) : (
+                <MotionList className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4" delay={0.1}>
+                  {communities?.map((community) => (
+                    <MotionItem key={community.id}>
+                      <CommunityCard community={community} />
+                    </MotionItem>
+                  ))}
+                </MotionList>
+              )}
+            </TabsContent>
+
+            <TabsContent value="my-communities" className="space-y-3 sm:space-y-4">
+              {myCommunities && myCommunities.length > 0 ? (
+                <MotionList className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
+                  {myCommunities.map((community) => (
+                    <MotionItem key={community.id}>
+                      <CommunityCard community={community} />
+                    </MotionItem>
+                  ))}
+                </MotionList>
+              ) : (
+                <MotionFadeIn className="text-center py-8 sm:py-12">
+                  <Users className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-base sm:text-lg font-semibold mb-2">No communities yet</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">
+                    Join a community to connect with others
+                  </p>
+                  <Button onClick={() => {
+                    const discoverTab = document.querySelector('[value="discover"]') as HTMLElement;
+                    discoverTab?.click();
+                  }}>
+                    Discover Communities
+                  </Button>
+                </MotionFadeIn>
+              )}
+            </TabsContent>
+          </Tabs>
+        </MotionFadeIn>
 
         <CreateCommunityDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} />
       </div>

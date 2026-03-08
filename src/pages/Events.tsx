@@ -14,6 +14,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { format } from "date-fns";
 import { EventCardSkeleton } from "@/components/skeletons";
 import { useUserRole } from "@/hooks/useUserRole";
+import { MotionFadeIn, MotionList, MotionItem, MotionScaleIn } from "@/components/motion/MotionWrappers";
 
 export default function Events() {
   const navigate = useNavigate();
@@ -47,7 +48,6 @@ export default function Events() {
       const { data, error } = await query;
       if (error) throw error;
       
-      // Fetch creator profiles using RPC
       const creatorIds = [...new Set(data?.map(e => e.creator_id) || [])];
       const { data: profiles } = await supabase
         .rpc("get_public_profiles_info", { profile_ids: creatorIds });
@@ -82,7 +82,6 @@ export default function Events() {
       
       const events = data.map(item => item.event).filter(Boolean);
       
-      // Fetch creator profiles using RPC
       const creatorIds = [...new Set(events.map((e: any) => e.creator_id))];
       const { data: profiles } = await supabase
         .rpc("get_public_profiles_info", { profile_ids: creatorIds });
@@ -159,7 +158,7 @@ export default function Events() {
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-4xl">
-        <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
+        <MotionFadeIn className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
           <div className="min-w-0">
             <h1 className="text-xl sm:text-3xl font-bold text-foreground">Events</h1>
             <p className="text-muted-foreground text-xs sm:text-base">Discover and join fitness activities</p>
@@ -170,9 +169,9 @@ export default function Events() {
               <span className="hidden sm:inline">Create</span>
             </Button>
           )}
-        </div>
+        </MotionFadeIn>
 
-        <div className="relative mb-4 sm:mb-6">
+        <MotionFadeIn delay={0.1} className="relative mb-4 sm:mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search events..."
@@ -180,112 +179,121 @@ export default function Events() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 h-10 sm:h-11"
           />
-        </div>
+        </MotionFadeIn>
 
-        <Tabs defaultValue="discover" className="space-y-4 sm:space-y-6">
-          <TabsList className="grid w-full grid-cols-2 h-10 sm:h-11">
-            <TabsTrigger value="discover" className="text-xs sm:text-sm">Discover</TabsTrigger>
-            <TabsTrigger value="my-events" className="text-xs sm:text-sm">My Events</TabsTrigger>
-          </TabsList>
+        <MotionFadeIn delay={0.15}>
+          <Tabs defaultValue="discover" className="space-y-4 sm:space-y-6">
+            <TabsList className="grid w-full grid-cols-2 h-10 sm:h-11">
+              <TabsTrigger value="discover" className="text-xs sm:text-sm">Discover</TabsTrigger>
+              <TabsTrigger value="my-events" className="text-xs sm:text-sm">My Events</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="discover" className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <div className="flex gap-1.5 sm:gap-2 flex-wrap">
-                <Button
-                  variant={selectedType === "all" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedType("all")}
-                  className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  All
-                </Button>
-                {eventTypes.map((type) => (
+            <TabsContent value="discover" className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <MotionList className="flex gap-1.5 sm:gap-2 flex-wrap" delay={0.2}>
+                  <MotionItem>
+                    <Button
+                      variant={selectedType === "all" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedType("all")}
+                      className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
+                    >
+                      All
+                    </Button>
+                  </MotionItem>
+                  {eventTypes.map((type) => (
+                    <MotionItem key={type.value}>
+                      <Button
+                        variant={selectedType === type.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setSelectedType(type.value)}
+                        className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
+                      >
+                        {type.label}
+                      </Button>
+                    </MotionItem>
+                  ))}
+                </MotionList>
+                <div className="flex gap-2">
                   <Button
-                    key={type.value}
-                    variant={selectedType === type.value ? "default" : "outline"}
+                    variant={viewMode === "list" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedType(type.value)}
-                    className="h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
+                    onClick={() => setViewMode("list")}
+                    className="h-7 sm:h-8 text-xs sm:text-sm"
                   >
-                    {type.label}
+                    List
                   </Button>
-                ))}
+                  <Button
+                    variant={viewMode === "map" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setViewMode("map")}
+                    className="h-7 sm:h-8 text-xs sm:text-sm"
+                  >
+                    Map
+                  </Button>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant={viewMode === "list" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setViewMode("list")}
-                  className="h-7 sm:h-8 text-xs sm:text-sm"
-                >
-                  List
-                </Button>
-                <Button
-                  variant={viewMode === "map" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setViewMode("map")}
-                  className="h-7 sm:h-8 text-xs sm:text-sm"
-                >
-                  Map
-                </Button>
-              </div>
-            </div>
 
-            {viewMode === "map" ? (
-              <div className="h-[300px] sm:h-[500px] rounded-lg overflow-hidden border">
-                <EventsMap events={events || []} onEventClick={(eventId) => navigate(`/events/${eventId}`)} />
-              </div>
-            ) : (
-              <>
-                {isLoading ? (
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
-                    {Array.from({ length: 6 }).map((_, i) => (
-                      <EventCardSkeleton key={i} />
-                    ))}
-                  </div>
-                ) : events && events.length > 0 ? (
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
-                    {events.map((event) => (
-                      <EventCard key={event.id} event={event} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 sm:py-12">
-                    <Calendar className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
-                    <h3 className="text-base sm:text-lg font-semibold mb-2">No events found</h3>
-                    <p className="text-muted-foreground mb-4 text-sm">
-                      Be the first to create an event
-                    </p>
-                  </div>
-                )}
-              </>
-            )}
-          </TabsContent>
+              {viewMode === "map" ? (
+                <MotionScaleIn className="h-[300px] sm:h-[500px] rounded-lg overflow-hidden border">
+                  <EventsMap events={events || []} onEventClick={(eventId) => navigate(`/events/${eventId}`)} />
+                </MotionScaleIn>
+              ) : (
+                <>
+                  {isLoading ? (
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
+                      {Array.from({ length: 6 }).map((_, i) => (
+                        <EventCardSkeleton key={i} />
+                      ))}
+                    </div>
+                  ) : events && events.length > 0 ? (
+                    <MotionList className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4" delay={0.1}>
+                      {events.map((event) => (
+                        <MotionItem key={event.id}>
+                          <EventCard event={event} />
+                        </MotionItem>
+                      ))}
+                    </MotionList>
+                  ) : (
+                    <MotionFadeIn className="text-center py-8 sm:py-12">
+                      <Calendar className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
+                      <h3 className="text-base sm:text-lg font-semibold mb-2">No events found</h3>
+                      <p className="text-muted-foreground mb-4 text-sm">
+                        Be the first to create an event
+                      </p>
+                    </MotionFadeIn>
+                  )}
+                </>
+              )}
+            </TabsContent>
 
-          <TabsContent value="my-events" className="space-y-3 sm:space-y-4">
-            {myEvents && myEvents.length > 0 ? (
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
-                {myEvents.map((event) => (
-                  <EventCard key={event.id} event={event} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 sm:py-12">
-                <Calendar className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-base sm:text-lg font-semibold mb-2">No events yet</h3>
-                <p className="text-muted-foreground mb-4 text-sm">
-                  RSVP to events to see them here
-                </p>
-                <Button onClick={() => {
-                  const discoverTab = document.querySelector('[value="discover"]') as HTMLElement;
-                  discoverTab?.click();
-                }}>
-                  Discover Events
-                </Button>
-              </div>
-            )}
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="my-events" className="space-y-3 sm:space-y-4">
+              {myEvents && myEvents.length > 0 ? (
+                <MotionList className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
+                  {myEvents.map((event) => (
+                    <MotionItem key={event.id}>
+                      <EventCard event={event} />
+                    </MotionItem>
+                  ))}
+                </MotionList>
+              ) : (
+                <MotionFadeIn className="text-center py-8 sm:py-12">
+                  <Calendar className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-base sm:text-lg font-semibold mb-2">No events yet</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">
+                    RSVP to events to see them here
+                  </p>
+                  <Button onClick={() => {
+                    const discoverTab = document.querySelector('[value="discover"]') as HTMLElement;
+                    discoverTab?.click();
+                  }}>
+                    Discover Events
+                  </Button>
+                </MotionFadeIn>
+              )}
+            </TabsContent>
+          </Tabs>
+        </MotionFadeIn>
 
         <CreateEventDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} />
       </div>
