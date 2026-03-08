@@ -188,43 +188,50 @@ const DailyPlanner = () => {
         {/* Stats Cards */}
         <MotionList className="grid grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
           <MotionItem>
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="text-base sm:text-2xl font-bold">{stats.completed}/{stats.total}</div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Done</p>
-            </CardContent>
-          </Card>
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
-            onClick={() => navigate("/workouts")}
-          >
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center gap-1 sm:gap-2">
-                <Dumbbell className="h-3 w-3 sm:h-5 sm:w-5 text-primary" />
-                <div className="text-base sm:text-2xl font-bold">{stats.workout}</div>
-              </div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Workouts</p>
-            </CardContent>
-          </Card>
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center gap-1 sm:gap-2">
-                <Heart className="h-3 w-3 sm:h-5 sm:w-5 text-secondary" />
-                <div className="text-base sm:text-2xl font-bold">{stats.meditation}</div>
-              </div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Meditate</p>
-            </CardContent>
-          </Card>
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center gap-1 sm:gap-2">
-                <Apple className="h-3 w-3 sm:h-5 sm:w-5 text-accent" />
-                <div className="text-base sm:text-2xl font-bold">{stats.nutrition}</div>
-              </div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Nutrition</p>
-            </CardContent>
-          </Card>
-        </div>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="text-base sm:text-2xl font-bold">{stats.completed}/{stats.total}</div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Done</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card 
+              className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
+              onClick={() => navigate("/workouts")}
+            >
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <Dumbbell className="h-3 w-3 sm:h-5 sm:w-5 text-primary" />
+                  <div className="text-base sm:text-2xl font-bold">{stats.workout}</div>
+                </div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Workouts</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <Heart className="h-3 w-3 sm:h-5 sm:w-5 text-secondary" />
+                  <div className="text-base sm:text-2xl font-bold">{stats.meditation}</div>
+                </div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Meditate</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <Apple className="h-3 w-3 sm:h-5 sm:w-5 text-accent" />
+                  <div className="text-base sm:text-2xl font-bold">{stats.nutrition}</div>
+                </div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Nutrition</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+        </MotionList>
 
         <div className="grid gap-3 sm:gap-6 lg:grid-cols-3">
           {/* Calendar - Hidden on mobile, shown as compact on larger screens */}
