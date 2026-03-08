@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Users, UserPlus, UserMinus, Calendar, MapPin, Clock, Plus, BarChart3 } from "lucide-react";
+import { ArrowLeft, Users, UserPlus, UserMinus, Calendar, MapPin, Clock, Plus, BarChart3, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
@@ -96,6 +96,20 @@ export default function CommunityDetail() {
       return !!data;
     },
     enabled: !!id && !!currentUserId,
+  });
+
+  const { data: communityConversation } = useQuery({
+    queryKey: ["community-conversation", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("conversations")
+        .select("id")
+        .eq("community_id", id!)
+        .single();
+      if (error) return null;
+      return data;
+    },
+    enabled: !!id && !!isMember,
   });
 
   const { data: communityEvents } = useQuery({
@@ -233,15 +247,27 @@ export default function CommunityDetail() {
             </div>
           </div>
           {isMember ? (
-            <Button
-              variant="outline"
-              onClick={() => leaveMutation.mutate()}
-              disabled={leaveMutation.isPending}
-              className="gap-2"
-            >
-              <UserMinus className="h-4 w-4" />
-              Leave
-            </Button>
+            <div className="flex gap-2">
+              {communityConversation && (
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(`/messages/${communityConversation.id}`)}
+                  className="gap-2"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  Chat
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                onClick={() => leaveMutation.mutate()}
+                disabled={leaveMutation.isPending}
+                className="gap-2"
+              >
+                <UserMinus className="h-4 w-4" />
+                Leave
+              </Button>
+            </div>
           ) : (
             <Button
               onClick={() => joinMutation.mutate()}
