@@ -306,7 +306,7 @@ export const useGamification = (userId: string | null) => {
             _achievement_id: achievement.id,
           });
 
-          if (!error) {
+          if (!error && awarded === true) {
             toast.success(`🏆 Achievement Unlocked!`, {
               description: `${achievement.name}: ${achievement.description}`,
             });
