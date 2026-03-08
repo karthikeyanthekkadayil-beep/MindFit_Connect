@@ -281,11 +281,11 @@
   .glass .min-h-screen {
     background: linear-gradient(
       140deg,
-      hsl(210 35% 78%),
-      hsl(220 30% 82%),
-      hsl(230 25% 80%),
-      hsl(215 30% 76%),
-      hsl(205 35% 84%)
+      hsl(0 0% 82%),
+      hsl(0 0% 78%),
+      hsl(0 0% 84%),
+      hsl(0 0% 80%),
+      hsl(0 0% 86%)
     ) !important;
     background-size: 300% 300% !important;
     animation: glassGradientShift 30s ease infinite !important;
