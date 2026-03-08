@@ -482,6 +482,7 @@ const Profile = () => {
 
           {/* Health Profile Tab */}
           <TabsContent value="health">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6">
                 <CardTitle className="text-sm sm:text-lg">Health Profile</CardTitle>
