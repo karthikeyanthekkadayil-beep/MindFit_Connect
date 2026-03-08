@@ -243,24 +243,26 @@ const Dashboard = () => {
           </section>
         )}
 
-        {/* Become a Moderator Card */}
-        <section className="animate-in-up delay-3">
-          <Card 
-            className="border-0 shadow-sm card-press cursor-pointer bg-gradient-to-r from-secondary/10 to-primary/10"
-            onClick={() => navigate("/moderator/request")}
-          >
-            <CardContent className="p-4 flex items-center gap-4">
-              <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-secondary/20 flex items-center justify-center">
-                <Shield className="h-5 w-5 text-secondary" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm">Become a Moderator</h3>
-                <p className="text-xs text-muted-foreground">Help keep our community safe & welcoming</p>
-              </div>
-              <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-            </CardContent>
-          </Card>
-        </section>
+        {/* Become a Moderator Card - hidden for admins/moderators */}
+        {!hasElevatedRole && (
+          <section className="animate-in-up delay-3">
+            <Card 
+              className="border-0 shadow-sm card-press cursor-pointer bg-gradient-to-r from-secondary/10 to-primary/10"
+              onClick={() => navigate("/moderator/request")}
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-secondary/20 flex items-center justify-center">
+                  <Shield className="h-5 w-5 text-secondary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-sm">Become a Moderator</h3>
+                  <p className="text-xs text-muted-foreground">Help keep our community safe & welcoming</p>
+                </div>
+                <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+              </CardContent>
+            </Card>
+          </section>
+        )}
       </main>
 
       <BottomNav />
