@@ -14,6 +14,7 @@ import { ModeratorRequestsTab } from "@/components/admin/ModeratorRequestsTab";
 import { CommunityManagementTab } from "@/components/admin/CommunityManagementTab";
 import { EventManagementTab } from "@/components/admin/EventManagementTab";
 import { PlatformSettingsTab } from "@/components/admin/PlatformSettingsTab";
+import { ModeratorManagementTab } from "@/components/admin/ModeratorManagementTab";
 import { BottomNav } from "@/components/BottomNav";
 
 interface UserProfile {
