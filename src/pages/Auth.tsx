@@ -256,14 +256,7 @@ const Auth = () => {
           </CardFooter>
         </Card>
 
-        {/* Admin link */}
-        <Button
-          variant="link"
-          className="mt-6 text-xs text-muted-foreground"
-          onClick={() => navigate("/admin/login")}
-        >
-          Admin login
-        </Button>
+
       </div>
     </div>
   );
