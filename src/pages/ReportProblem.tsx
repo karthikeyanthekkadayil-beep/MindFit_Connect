@@ -122,6 +122,7 @@ const ReportProblem = () => {
           </TabsList>
 
           <TabsContent value="new" className="mt-4">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-4">
                 <CardTitle className="text-base">Submit a Report</CardTitle>
