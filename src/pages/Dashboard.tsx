@@ -75,10 +75,10 @@ const Dashboard = () => {
   };
 
   const quickActions = [
-    { title: "Planner", icon: Calendar, path: "/planner", color: "bg-primary/10 text-primary" },
-    { title: "Workouts", icon: Dumbbell, path: "/workouts", color: "bg-secondary/10 text-secondary" },
-    { title: "Mindfulness", icon: Brain, path: "/mindfulness", color: "bg-accent/10 text-accent" },
-    { title: "Nutrition", icon: Utensils, path: "/nutrition", color: "bg-primary/10 text-primary" },
+    { title: "Planner", icon: Calendar, path: "/planner", color: "bg-primary/10 text-primary", hoverBg: "hsl(var(--primary) / 0.2)", rotate: -8 },
+    { title: "Workouts", icon: Dumbbell, path: "/workouts", color: "bg-secondary/10 text-secondary", hoverBg: "hsl(var(--secondary) / 0.2)", rotate: 8 },
+    { title: "Mindfulness", icon: Brain, path: "/mindfulness", color: "bg-accent/10 text-accent", hoverBg: "hsl(var(--accent) / 0.2)", rotate: -6 },
+    { title: "Nutrition", icon: Utensils, path: "/nutrition", color: "bg-primary/10 text-primary", hoverBg: "hsl(var(--primary) / 0.2)", rotate: 6 },
   ];
 
   const dashboardItems = [
@@ -180,18 +180,31 @@ const Dashboard = () => {
             Quick Actions
           </h2>
           <MotionList className="scroll-x -mx-4 px-4" delay={0.35}>
-            {quickActions.map((action) => (
+            {quickActions.map((action, i) => (
               <MotionItem key={action.path}>
                 <motion.button
                   onClick={() => navigate(action.path)}
                   className={cn(
-                    "flex flex-col items-center justify-center w-20 h-20 rounded-2xl",
+                    "relative flex flex-col items-center justify-center w-20 h-20 rounded-2xl overflow-hidden",
                     action.color
                   )}
-                  whileHover={{ scale: 1.1, y: -4, transition: { type: "spring", stiffness: 400, damping: 20 } }}
-                  whileTap={{ scale: 0.9, transition: { type: "spring", stiffness: 500, damping: 25 } }}
+                  whileHover={{
+                    scale: 1.12,
+                    y: -6,
+                    backgroundColor: action.hoverBg,
+                    transition: { type: "spring", stiffness: 400, damping: 18 },
+                  }}
+                  whileTap={{
+                    scale: 0.88,
+                    rotate: action.rotate,
+                    transition: { type: "spring", stiffness: 600, damping: 15 },
+                  }}
                 >
-                  <action.icon className="h-6 w-6 mb-1" />
+                  <motion.div
+                    whileHover={{ rotate: [0, -12, 12, -6, 0], transition: { duration: 0.5 } }}
+                  >
+                    <action.icon className="h-6 w-6 mb-1" />
+                  </motion.div>
                   <span className="text-xs font-medium">{action.title}</span>
                 </motion.button>
               </MotionItem>
