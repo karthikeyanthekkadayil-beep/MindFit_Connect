@@ -10,7 +10,8 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend } from "recharts";
 import { format, subDays, startOfWeek, endOfWeek } from "date-fns";
 import { StatsCardSkeleton, ChartSkeleton } from "@/components/skeletons";
-import { MotionHeader, MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
+import { MotionHeader, MotionFadeIn, MotionScaleIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
+import { InteractiveCard } from "@/components/ui/card";
 
 const Progress = () => {
   const navigate = useNavigate();
@@ -206,7 +207,7 @@ const Progress = () => {
         {/* Weekly Summary Cards */}
         <MotionList className="grid grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
           <MotionItem>
-            <Card className="active:scale-[0.98] transition-transform">
+            <InteractiveCard className="border-0 shadow-sm">
               <CardContent className="p-2.5 sm:p-4">
                 <div className="flex items-center justify-between mb-1">
                   <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
@@ -214,10 +215,10 @@ const Progress = () => {
                 <div className="text-base sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
                 <p className="text-[9px] sm:text-xs text-muted-foreground">Fitness</p>
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionItem>
           <MotionItem>
-            <Card className="active:scale-[0.98] transition-transform">
+            <InteractiveCard className="border-0 shadow-sm">
               <CardContent className="p-2.5 sm:p-4">
                 <div className="flex items-center justify-between mb-1">
                   <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
@@ -225,10 +226,10 @@ const Progress = () => {
                 <div className="text-base sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-[10px] sm:text-sm">m</span></div>
                 <p className="text-[9px] sm:text-xs text-muted-foreground">Meditate</p>
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionItem>
           <MotionItem>
-            <Card className="active:scale-[0.98] transition-transform">
+            <InteractiveCard className="border-0 shadow-sm">
               <CardContent className="p-2.5 sm:p-4">
                 <div className="flex items-center justify-between mb-1">
                   <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
@@ -236,10 +237,10 @@ const Progress = () => {
                 <div className="text-base sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
                 <p className="text-[9px] sm:text-xs text-muted-foreground">Nutrition</p>
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionItem>
           <MotionItem>
-            <Card className="active:scale-[0.98] transition-transform">
+            <InteractiveCard className="border-0 shadow-sm">
               <CardContent className="p-2.5 sm:p-4">
                 <div className="flex items-center justify-between mb-1">
                   <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
@@ -247,7 +248,7 @@ const Progress = () => {
                 <div className="text-base sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
                 <p className="text-[9px] sm:text-xs text-muted-foreground">Social</p>
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionItem>
         </MotionList>
 
@@ -262,209 +263,226 @@ const Progress = () => {
           </TabsList>
 
           <TabsContent value="fitness" className="space-y-3 sm:space-y-4">
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Fitness Activity Trends</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Daily activity completion over the last 7 days</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  completed: { label: "Completed", color: "hsl(var(--primary))" },
-                  total: { label: "Total", color: "hsl(var(--muted))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={fitnessData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Legend wrapperStyle={{ fontSize: '12px' }} />
-                      <Bar dataKey="completed" fill="hsl(var(--primary))" name="Completed" />
-                      <Bar dataKey="total" fill="hsl(var(--muted))" name="Total" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <MotionFadeIn delay={0.1}>
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg">Fitness Activity Trends</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Daily activity completion over the last 7 days</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    completed: { label: "Completed", color: "hsl(var(--primary))" },
+                    total: { label: "Total", color: "hsl(var(--muted))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={fitnessData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Legend wrapperStyle={{ fontSize: '12px' }} />
+                        <Bar dataKey="completed" fill="hsl(var(--primary))" name="Completed" />
+                        <Bar dataKey="total" fill="hsl(var(--muted))" name="Total" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </MotionFadeIn>
 
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Completion Rate</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Percentage of completed activities</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  completionRate: { label: "Completion Rate", color: "hsl(var(--primary))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={fitnessData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Line type="monotone" dataKey="completionRate" stroke="hsl(var(--primary))" strokeWidth={2} name="Completion %" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <MotionFadeIn delay={0.2}>
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg">Completion Rate</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Percentage of completed activities</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    completionRate: { label: "Completion Rate", color: "hsl(var(--primary))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={fitnessData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Line type="monotone" dataKey="completionRate" stroke="hsl(var(--primary))" strokeWidth={2} name="Completion %" />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           <TabsContent value="meditation" className="space-y-3 sm:space-y-4">
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Meditation Consistency</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Daily meditation minutes over the last 7 days</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  minutes: { label: "Minutes", color: "hsl(var(--primary))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={meditationData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="minutes" fill="hsl(var(--primary))" name="Minutes" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <MotionFadeIn delay={0.1}>
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg">Meditation Consistency</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Daily meditation minutes over the last 7 days</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    minutes: { label: "Minutes", color: "hsl(var(--primary))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={meditationData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="minutes" fill="hsl(var(--primary))" name="Minutes" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </MotionFadeIn>
 
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Session Frequency</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Number of meditation sessions per day</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  sessions: { label: "Sessions", color: "hsl(var(--secondary))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={meditationData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Line type="monotone" dataKey="sessions" stroke="hsl(var(--secondary))" strokeWidth={2} name="Sessions" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <MotionFadeIn delay={0.2}>
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg">Session Frequency</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Number of meditation sessions per day</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    sessions: { label: "Sessions", color: "hsl(var(--secondary))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={meditationData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Line type="monotone" dataKey="sessions" stroke="hsl(var(--secondary))" strokeWidth={2} name="Sessions" />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           <TabsContent value="nutrition" className="space-y-3 sm:space-y-4">
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Nutrition Adherence</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Meal plan completion over the last 7 days</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  completed: { label: "Completed", color: "hsl(var(--primary))" },
-                  planned: { label: "Planned", color: "hsl(var(--muted))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={nutritionData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Legend wrapperStyle={{ fontSize: '12px' }} />
-                      <Bar dataKey="completed" fill="hsl(var(--primary))" name="Completed" />
-                      <Bar dataKey="planned" fill="hsl(var(--muted))" name="Planned" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <MotionFadeIn delay={0.1}>
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg">Nutrition Adherence</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Meal plan completion over the last 7 days</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    completed: { label: "Completed", color: "hsl(var(--primary))" },
+                    planned: { label: "Planned", color: "hsl(var(--muted))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={nutritionData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Legend wrapperStyle={{ fontSize: '12px' }} />
+                        <Bar dataKey="completed" fill="hsl(var(--primary))" name="Completed" />
+                        <Bar dataKey="planned" fill="hsl(var(--muted))" name="Planned" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </MotionFadeIn>
 
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Adherence Percentage</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Daily meal plan adherence rate</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  adherence: { label: "Adherence", color: "hsl(var(--primary))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={nutritionData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Line type="monotone" dataKey="adherence" stroke="hsl(var(--primary))" strokeWidth={2} name="Adherence %" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <MotionFadeIn delay={0.2}>
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg">Adherence Percentage</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Daily meal plan adherence rate</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    adherence: { label: "Adherence", color: "hsl(var(--primary))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={nutritionData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <YAxis stroke="hsl(var(--foreground))" tick={{ fontSize: 10 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Line type="monotone" dataKey="adherence" stroke="hsl(var(--primary))" strokeWidth={2} name="Adherence %" />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           <TabsContent value="community" className="space-y-3 sm:space-y-4">
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Community Engagement</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Your social activity breakdown</CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-6 pt-0">
-                <ChartContainer config={{
-                  posts: { label: "Posts", color: "hsl(var(--primary))" },
-                  comments: { label: "Comments", color: "hsl(var(--secondary))" },
-                  reactions: { label: "Reactions", color: "hsl(var(--accent))" }
-                }} className="h-[200px] sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={[
-                          { name: 'Posts', value: communityStats.posts },
-                          { name: 'Comments', value: communityStats.comments },
-                          { name: 'Reactions', value: communityStats.reactions }
-                        ]}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                        outerRadius={60}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {[0, 1, 2].map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <MotionFadeIn delay={0.1}>
               <Card>
                 <CardHeader className="p-4 sm:p-6">
-                  <CardTitle className="text-sm sm:text-lg">Communities</CardTitle>
+                  <CardTitle className="text-base sm:text-lg">Community Engagement</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Your social activity breakdown</CardDescription>
                 </CardHeader>
-                <CardContent className="p-4 sm:p-6 pt-0">
-                  <div className="text-2xl sm:text-4xl font-bold text-primary">{communityStats.communities}</div>
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">Active</p>
+                <CardContent className="p-2 sm:p-6 pt-0">
+                  <ChartContainer config={{
+                    posts: { label: "Posts", color: "hsl(var(--primary))" },
+                    comments: { label: "Comments", color: "hsl(var(--secondary))" },
+                    reactions: { label: "Reactions", color: "hsl(var(--accent))" }
+                  }} className="h-[200px] sm:h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={[
+                            { name: 'Posts', value: communityStats.posts },
+                            { name: 'Comments', value: communityStats.comments },
+                            { name: 'Reactions', value: communityStats.reactions }
+                          ]}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          outerRadius={60}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {[0, 1, 2].map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
                 </CardContent>
               </Card>
+            </MotionFadeIn>
 
-              <Card>
-                <CardHeader className="p-4 sm:p-6">
-                  <CardTitle className="text-sm sm:text-lg">Interactions</CardTitle>
-                </CardHeader>
-                <CardContent className="p-4 sm:p-6 pt-0">
-                  <div className="text-2xl sm:text-4xl font-bold text-primary">{weeklyStats.communityEngagement}</div>
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">Total</p>
-                </CardContent>
-              </Card>
-            </div>
+            <MotionList className="grid grid-cols-2 gap-3 sm:gap-4" delay={0.2}>
+              <MotionItem>
+                <InteractiveCard className="border-0 shadow-sm">
+                  <CardHeader className="p-4 sm:p-6">
+                    <CardTitle className="text-sm sm:text-lg">Communities</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 sm:p-6 pt-0">
+                    <div className="text-2xl sm:text-4xl font-bold text-primary">{communityStats.communities}</div>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">Active</p>
+                  </CardContent>
+                </InteractiveCard>
+              </MotionItem>
+              <MotionItem>
+                <InteractiveCard className="border-0 shadow-sm">
+                  <CardHeader className="p-4 sm:p-6">
+                    <CardTitle className="text-sm sm:text-lg">Interactions</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 sm:p-6 pt-0">
+                    <div className="text-2xl sm:text-4xl font-bold text-primary">{weeklyStats.communityEngagement}</div>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">Total</p>
+                  </CardContent>
+                </InteractiveCard>
+              </MotionItem>
+            </MotionList>
           </TabsContent>
         </Tabs>
         </MotionFadeIn>

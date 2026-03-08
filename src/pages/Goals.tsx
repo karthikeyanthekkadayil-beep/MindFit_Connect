@@ -13,7 +13,8 @@ import { ShareGoalDialog } from "@/components/ShareGoalDialog";
 import { toast } from "sonner";
 import { format, differenceInDays } from "date-fns";
 import { GoalCardSkeleton } from "@/components/skeletons";
-import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { MotionHeader, MotionFadeIn, MotionScaleIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
+import { InteractiveCard } from "@/components/ui/card";
 
 interface Goal {
   id: string;
@@ -161,7 +162,7 @@ const Goals = () => {
     const isCompleted = progress >= 100;
 
     return (
-      <Card key={goal.id} className="hover:shadow-lg transition-shadow">
+      <InteractiveCard key={goal.id} className="border-0 shadow-sm">
         <CardHeader className="p-3 sm:p-6 pb-2 sm:pb-4">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-start gap-2 min-w-0">
@@ -264,7 +265,7 @@ const Goals = () => {
             </Button>
           </div>
         </CardContent>
-      </Card>
+      </InteractiveCard>
     );
   };
 
@@ -328,77 +329,93 @@ const Goals = () => {
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6">
         {goals.length === 0 ? (
-          <Card className="text-center py-8 sm:py-12">
-            <CardContent className="space-y-4">
-              <Target className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-muted-foreground" />
-              <div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-2">No goals yet</h3>
-                <p className="text-muted-foreground mb-4 text-sm">
-                  Start your wellness journey by setting your first goal
-                </p>
-                <Button onClick={() => setShowCreateDialog(true)} className="h-10">
-                  <Plus className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-                  Create Your First Goal
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <MotionScaleIn delay={0.15}>
+            <Card className="text-center py-8 sm:py-12">
+              <CardContent className="space-y-4">
+                <Target className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-muted-foreground" />
+                <div>
+                  <h3 className="text-lg sm:text-xl font-semibold mb-2">No goals yet</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">
+                    Start your wellness journey by setting your first goal
+                  </p>
+                  <Button onClick={() => setShowCreateDialog(true)} className="h-10">
+                    <Plus className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                    Create Your First Goal
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </MotionScaleIn>
         ) : (
-          <Tabs defaultValue="active" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 h-9 sm:h-10">
-              <TabsTrigger value="active" className="text-xs sm:text-sm">
-                Active ({activeGoals.length})
-              </TabsTrigger>
-              <TabsTrigger value="completed" className="text-xs sm:text-sm">
-                Done ({completedGoals.length})
-              </TabsTrigger>
-              <TabsTrigger value="paused" className="text-xs sm:text-sm">
-                Paused ({pausedGoals.length})
-              </TabsTrigger>
-            </TabsList>
+          <MotionFadeIn delay={0.1}>
+            <Tabs defaultValue="active" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 h-9 sm:h-10">
+                <TabsTrigger value="active" className="text-xs sm:text-sm">
+                  Active ({activeGoals.length})
+                </TabsTrigger>
+                <TabsTrigger value="completed" className="text-xs sm:text-sm">
+                  Done ({completedGoals.length})
+                </TabsTrigger>
+                <TabsTrigger value="paused" className="text-xs sm:text-sm">
+                  Paused ({pausedGoals.length})
+                </TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="active" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
-              {activeGoals.length === 0 ? (
-                <Card className="text-center py-6 sm:py-8">
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm">No active goals</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
-                  {activeGoals.map(renderGoalCard)}
-                </div>
-              )}
-            </TabsContent>
+              <TabsContent value="active" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
+                {activeGoals.length === 0 ? (
+                  <MotionFadeIn>
+                    <Card className="text-center py-6 sm:py-8">
+                      <CardContent>
+                        <p className="text-muted-foreground text-sm">No active goals</p>
+                      </CardContent>
+                    </Card>
+                  </MotionFadeIn>
+                ) : (
+                  <MotionList className="grid gap-3 sm:gap-4 md:grid-cols-2" delay={0.15}>
+                    {activeGoals.map(goal => (
+                      <MotionItem key={goal.id}>{renderGoalCard(goal)}</MotionItem>
+                    ))}
+                  </MotionList>
+                )}
+              </TabsContent>
 
-            <TabsContent value="completed" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
-              {completedGoals.length === 0 ? (
-                <Card className="text-center py-6 sm:py-8">
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm">No completed goals yet</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
-                  {completedGoals.map(renderGoalCard)}
-                </div>
-              )}
-            </TabsContent>
+              <TabsContent value="completed" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
+                {completedGoals.length === 0 ? (
+                  <MotionFadeIn>
+                    <Card className="text-center py-6 sm:py-8">
+                      <CardContent>
+                        <p className="text-muted-foreground text-sm">No completed goals yet</p>
+                      </CardContent>
+                    </Card>
+                  </MotionFadeIn>
+                ) : (
+                  <MotionList className="grid gap-3 sm:gap-4 md:grid-cols-2" delay={0.15}>
+                    {completedGoals.map(goal => (
+                      <MotionItem key={goal.id}>{renderGoalCard(goal)}</MotionItem>
+                    ))}
+                  </MotionList>
+                )}
+              </TabsContent>
 
-            <TabsContent value="paused" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
-              {pausedGoals.length === 0 ? (
-                <Card className="text-center py-6 sm:py-8">
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm">No paused goals</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
-                  {pausedGoals.map(renderGoalCard)}
-                </div>
-              )}
-            </TabsContent>
-          </Tabs>
+              <TabsContent value="paused" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
+                {pausedGoals.length === 0 ? (
+                  <MotionFadeIn>
+                    <Card className="text-center py-6 sm:py-8">
+                      <CardContent>
+                        <p className="text-muted-foreground text-sm">No paused goals</p>
+                      </CardContent>
+                    </Card>
+                  </MotionFadeIn>
+                ) : (
+                  <MotionList className="grid gap-3 sm:gap-4 md:grid-cols-2" delay={0.15}>
+                    {pausedGoals.map(goal => (
+                      <MotionItem key={goal.id}>{renderGoalCard(goal)}</MotionItem>
+                    ))}
+                  </MotionList>
+                )}
+              </TabsContent>
+            </Tabs>
+          </MotionFadeIn>
         )}
       </main>
 
