@@ -36,7 +36,7 @@ export const BottomNav = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-[env(safe-area-inset-bottom,8px)] pointer-events-none">
       <motion.nav
-        className="pointer-events-auto max-w-lg mx-auto mb-2 rounded-2xl bg-card/80 backdrop-blur-xl border border-border/40 shadow-lg shadow-black/10"
+        className="pointer-events-auto max-w-lg mx-auto mb-2 rounded-2xl bg-card/60 backdrop-blur-2xl border border-white/10 shadow-xl shadow-black/15"
         initial={{ y: 80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 28 }}
