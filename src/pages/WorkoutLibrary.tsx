@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Loader2, Search, Dumbbell, Heart, Plus } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import PersonalizedWorkouts from "@/components/PersonalizedWorkouts";
+import { MotionFadeIn, MotionSection } from "@/components/motion/MotionWrappers";
 
 interface Exercise {
   id: string;
