@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Activity, Users, Heart } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const Index = () => {
   const navigate = useNavigate();
