@@ -268,27 +268,33 @@ const Leaderboard = () => {
 
         {/* User's Current Rank Card */}
         {userRank && userRank.global_rank > 0 && (
-          <Card className="mb-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="bg-primary/20 p-3 rounded-full">
-                    <TrendingUp className="h-6 w-6 text-primary" />
+          <MotionScaleIn delay={0.15}>
+            <Card className="mb-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <motion.div 
+                      className="bg-primary/20 p-3 rounded-full"
+                      whileHover={{ rotate: [0, -15, 15, 0], scale: 1.15, transition: { duration: 0.4 } }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <TrendingUp className="h-6 w-6 text-primary" />
+                    </motion.div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Your Global Rank</p>
+                      <p className="text-2xl font-bold text-primary">
+                        #{userRank.global_rank}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Your Global Rank</p>
-                    <p className="text-2xl font-bold text-primary">
-                      #{userRank.global_rank}
-                    </p>
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground">Out of</p>
+                    <p className="text-lg font-semibold">{userRank.total_users} users</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Out of</p>
-                  <p className="text-lg font-semibold">{userRank.total_users} users</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </MotionScaleIn>
         )}
 
         {/* Tabs */}

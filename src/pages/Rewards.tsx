@@ -452,22 +452,29 @@ const Rewards = () => {
               </CardHeader>
               <CardContent className="p-3 sm:p-6 pt-0 space-y-2">
                 {[
-                  { action: 'Complete a workout', points: 50, icon: Dumbbell },
-                  { action: 'Finish a meditation session', points: 30, icon: Brain },
-                  { action: 'Log your mood', points: 10, icon: Smile },
-                  { action: 'Attend an event', points: 40, icon: Calendar },
+                  { action: 'Complete a workout', points: '50-100', icon: Dumbbell },
+                  { action: 'Finish a meditation session', points: '25-70', icon: Brain },
+                  { action: 'Log your mood', points: '10', icon: Smile },
+                  { action: 'Attend an event', points: '40', icon: Calendar },
                   { action: 'Maintain daily streak', points: '5-50', icon: Flame },
                   { action: 'Unlock achievements', points: 'Varies', icon: Trophy },
                 ].map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
+                  <motion.div 
+                    key={index} 
+                    className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50"
+                    whileHover={{ x: 6, transition: { type: "spring", stiffness: 400 } }}
+                    whileTap={{ scale: 0.97 }}
+                  >
                     <div className="flex items-center gap-3">
-                      <item.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                      <motion.div whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.4 } }}>
+                        <item.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                      </motion.div>
                       <span className="text-xs sm:text-sm">{item.action}</span>
                     </div>
                     <Badge variant="secondary" className="text-xs">
                       +{item.points}
                     </Badge>
-                  </div>
+                  </motion.div>
                 ))}
               </CardContent>
             </Card>
