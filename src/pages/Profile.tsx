@@ -35,6 +35,41 @@ interface Profile {
   privacy_settings: any;
 }
 
+const ModeratorSection = ({ navigate }: { navigate: (path: string) => void }) => {
+  const [isMod, setIsMod] = useState(false);
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) { setChecked(true); return; }
+      supabase.from("user_roles").select("role").eq("user_id", session.user.id)
+        .in("role", ["moderator", "admin"]).then(({ data }) => {
+          setIsMod(!!(data && data.length > 0));
+          setChecked(true);
+        });
+    });
+  }, []);
+
+  if (!checked) return null;
+
+  return (
+    <div>
+      <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Moderation</h3>
+      {isMod ? (
+        <Button variant="outline" onClick={() => navigate("/moderator")} className="w-full sm:w-auto h-8 sm:h-10 text-xs sm:text-sm">
+          <Shield className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          Moderator Panel
+        </Button>
+      ) : (
+        <Button variant="outline" onClick={() => navigate("/moderator/request")} className="w-full sm:w-auto h-8 sm:h-10 text-xs sm:text-sm">
+          <Shield className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          Request Moderator Access
+        </Button>
+      )}
+    </div>
+  );
+};
+
 const Profile = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
