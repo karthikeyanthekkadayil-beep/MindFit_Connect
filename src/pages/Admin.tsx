@@ -9,13 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Shield, Users, Calendar, MessageSquare, TrendingUp, ArrowLeft, UserCheck, AlertCircle } from "lucide-react";
+import { Shield, Users, Calendar, MessageSquare, TrendingUp, ArrowLeft, UserCheck, AlertCircle, MessagesSquare } from "lucide-react";
 import { ModeratorRequestsTab } from "@/components/admin/ModeratorRequestsTab";
 import { CommunityManagementTab } from "@/components/admin/CommunityManagementTab";
 import { EventManagementTab } from "@/components/admin/EventManagementTab";
 import { PlatformSettingsTab } from "@/components/admin/PlatformSettingsTab";
 import { ModeratorManagementTab } from "@/components/admin/ModeratorManagementTab";
 import { ProblemReportsTab } from "@/components/admin/ProblemReportsTab";
+import { GroupManagementTab } from "@/components/admin/GroupManagementTab";
 import { BottomNav } from "@/components/BottomNav";
 
 interface UserProfile {
@@ -248,29 +249,33 @@ const Admin = () => {
 
         {/* Admin Tabs */}
         <Tabs defaultValue="users" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-7 h-auto">
+          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8 h-auto gap-1">
             <TabsTrigger value="users" className="text-xs sm:text-sm py-2">Users</TabsTrigger>
             <TabsTrigger value="moderators" className="text-xs sm:text-sm py-2">
-              <Shield className="h-3 w-3 sm:hidden" />
               <span className="hidden sm:inline">Moderators</span>
               <span className="sm:hidden">Mods</span>
             </TabsTrigger>
             <TabsTrigger value="mod-requests" className="text-xs sm:text-sm py-2">
-              <UserCheck className="h-3 w-3 sm:hidden" />
               <span className="hidden sm:inline">Requests</span>
               <span className="sm:hidden">Reqs</span>
             </TabsTrigger>
             <TabsTrigger value="problems" className="text-xs sm:text-sm py-2">
-              <AlertCircle className="h-3 w-3 sm:hidden" />
               <span className="hidden sm:inline">Problems</span>
               <span className="sm:hidden">Prob</span>
             </TabsTrigger>
             <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">
               <span className="hidden sm:inline">Communities</span>
-              <span className="sm:hidden">Groups</span>
+              <span className="sm:hidden">Comm</span>
+            </TabsTrigger>
+            <TabsTrigger value="groups" className="text-xs sm:text-sm py-2">
+              <span className="hidden sm:inline">Groups</span>
+              <span className="sm:hidden">Grps</span>
             </TabsTrigger>
             <TabsTrigger value="events" className="text-xs sm:text-sm py-2">Events</TabsTrigger>
-            <TabsTrigger value="settings" className="text-xs sm:text-sm py-2">Settings</TabsTrigger>
+            <TabsTrigger value="settings" className="text-xs sm:text-sm py-2">
+              <span className="hidden sm:inline">Settings</span>
+              <span className="sm:hidden">Set</span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="users" className="space-y-4">
@@ -338,6 +343,10 @@ const Admin = () => {
 
           <TabsContent value="communities" className="space-y-4">
             <CommunityManagementTab />
+          </TabsContent>
+
+          <TabsContent value="groups" className="space-y-4">
+            <GroupManagementTab />
           </TabsContent>
 
           <TabsContent value="events" className="space-y-4">
