@@ -197,12 +197,8 @@ export const useGamification = (userId: string | null) => {
         }
       }
 
-      const newTotalPoints = stats.total_points + points;
-      const newLevel = calculateLevel(newTotalPoints);
-      const leveledUp = newLevel > stats.current_level;
-
-      // Use secure RPC to add points (validates on server)
-      const { error: pointsError } = await supabase.rpc('add_points', {
+      // Use secure RPC to add points (validates on server and updates total_points)
+      const { data: pointsAdded, error: pointsError } = await supabase.rpc('add_points', {
         _user_id: userId,
         _points: points,
         _transaction_type: transactionType,
@@ -213,7 +209,11 @@ export const useGamification = (userId: string | null) => {
 
       if (pointsError) throw pointsError;
 
-      // Update streak and level (user can only update their own row via RLS)
+      const newTotalPoints = stats.total_points + points;
+      const newLevel = calculateLevel(newTotalPoints);
+      const leveledUp = newLevel > stats.current_level;
+
+      // Update streak and level only (total_points already updated by RPC)
       const { error: updateError } = await supabase
         .from('user_gamification')
         .update({
@@ -221,7 +221,6 @@ export const useGamification = (userId: string | null) => {
           current_streak: newStreak,
           longest_streak: Math.max(stats.longest_streak, newStreak),
           last_activity_date: today,
-          updated_at: new Date().toISOString(),
         })
         .eq('user_id', userId);
 
@@ -307,7 +306,7 @@ export const useGamification = (userId: string | null) => {
             _achievement_id: achievement.id,
           });
 
-          if (!error) {
+          if (!error && awarded === true) {
             toast.success(`🏆 Achievement Unlocked!`, {
               description: `${achievement.name}: ${achievement.description}`,
             });
