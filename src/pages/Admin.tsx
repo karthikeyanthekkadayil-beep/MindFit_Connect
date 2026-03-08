@@ -42,7 +42,7 @@ const Admin = () => {
       
       if (!session) {
         toast.error("Please log in to access this page");
-        navigate("/admin/login");
+        navigate("/auth");
         return;
       }
 
@@ -58,7 +58,7 @@ const Admin = () => {
 
       if (roleError || !roleData) {
         toast.error("Access denied. Admin privileges required.");
-        navigate("/admin/login");
+        navigate("/auth");
         return;
       }
 
@@ -158,7 +158,7 @@ const Admin = () => {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     toast.success("Logged out successfully");
-    navigate("/admin/login");
+    navigate("/auth");
   };
 
   return (
@@ -171,7 +171,7 @@ const Admin = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate("/admin/login")}
+                onClick={() => navigate("/dashboard")}
                 className="text-white hover:bg-white/20 shrink-0"
               >
                 <ArrowLeft className="h-4 w-4" />

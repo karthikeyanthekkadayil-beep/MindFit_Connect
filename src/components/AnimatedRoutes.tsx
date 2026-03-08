@@ -25,7 +25,7 @@ import EventDetail from "@/pages/EventDetail";
 import Messages from "@/pages/Messages";
 import ChatThread from "@/pages/ChatThread";
 import Admin from "@/pages/Admin";
-import AdminAuth from "@/pages/AdminAuth";
+
 import Balance from "@/pages/Balance";
 import Moderator from "@/pages/Moderator";
 import ModeratorRequest from "@/pages/ModeratorRequest";
@@ -62,7 +62,7 @@ export const AnimatedRoutes = () => {
         <Route path="/messages" element={<PageTransition><Messages /></PageTransition>} />
         <Route path="/messages/:id" element={<PageTransition><ChatThread /></PageTransition>} />
         <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
-        <Route path="/admin/login" element={<PageTransition><AdminAuth /></PageTransition>} />
+        
         <Route path="/balance" element={<PageTransition><Balance /></PageTransition>} />
         <Route path="/moderator" element={<PageTransition><Moderator /></PageTransition>} />
         <Route path="/moderator/request" element={<PageTransition><ModeratorRequest /></PageTransition>} />
