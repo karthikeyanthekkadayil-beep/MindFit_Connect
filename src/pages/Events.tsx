@@ -152,7 +152,7 @@ export default function Events() {
       <CardFooter className="p-2.5 pt-0 sm:p-4 sm:pt-0">
         <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 sm:px-2">{event.community?.name}</Badge>
       </CardFooter>
-    </Card>
+    </InteractiveCard>
   );
 
   return (

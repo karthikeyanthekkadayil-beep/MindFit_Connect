@@ -108,7 +108,7 @@ export default function Communities() {
         <Users className="h-3 w-3 sm:h-4 sm:w-4" />
         <span>{community.member_count || 0} members</span>
       </CardFooter>
-    </Card>
+    </InteractiveCard>
   );
 
   return (
