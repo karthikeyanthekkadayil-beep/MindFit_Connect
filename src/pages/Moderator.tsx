@@ -563,6 +563,18 @@ const Moderator = () => {
             </Card>
           </TabsContent>
 
+          {/* Reports Tab */}
+          <TabsContent value="reports" className="space-y-4">
+            {session && (
+              <ReportsTab moderatorId={session.user.id} onActionTaken={() => loadModeratorData()} />
+            )}
+          </TabsContent>
+
+          {/* History Tab */}
+          <TabsContent value="history" className="space-y-4">
+            {session && <HistoryTab moderatorId={session.user.id} />}
+          </TabsContent>
+
           {/* Balance Tab */}
           <TabsContent value="balance" className="space-y-4 mt-4">
             {/* Balance Score */}
