@@ -16,6 +16,8 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGri
 import { ReportsTab } from "@/components/moderator/ReportsTab";
 import { HistoryTab } from "@/components/moderator/HistoryTab";
 import { WarnUserDialog } from "@/components/moderator/WarnUserDialog";
+import { AnalyticsTab } from "@/components/moderator/AnalyticsTab";
+import { BulkPostActions, BulkCheckbox } from "@/components/moderator/BulkPostActions";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Post {
@@ -67,13 +69,14 @@ interface ModPermissions {
   maxWarningsPerDay: number;
 }
 
-type ModTab = "posts" | "events" | "communities" | "reports" | "history" | "balance";
+type ModTab = "posts" | "events" | "communities" | "reports" | "history" | "balance" | "analytics";
 
 const TAB_CONFIG: { value: ModTab; label: string; icon: React.ReactNode; permKey?: keyof ModPermissions }[] = [
   { value: "posts", label: "Posts", icon: <MessageSquare className="h-5 w-5" /> },
   { value: "events", label: "Events", icon: <Calendar className="h-5 w-5" /> },
   { value: "communities", label: "Groups", icon: <Users className="h-5 w-5" /> },
   { value: "reports", label: "Reports", icon: <Flag className="h-5 w-5" />, permKey: "canReviewReports" },
+  { value: "analytics", label: "Analytics", icon: <TrendingUp className="h-5 w-5" /> },
   { value: "history", label: "History", icon: <History className="h-5 w-5" /> },
   { value: "balance", label: "Balance", icon: <Scale className="h-5 w-5" /> },
 ];
@@ -91,6 +94,7 @@ const Moderator = () => {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [deleteReason, setDeleteReason] = useState("");
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
+  const [selectedPostIds, setSelectedPostIds] = useState<Set<string>>(new Set());
   const [postComments, setPostComments] = useState<Record<string, PostComment[]>>({});
   const [loadingComments, setLoadingComments] = useState<string | null>(null);
   const [balanceData, setBalanceData] = useState({
@@ -365,17 +369,37 @@ const Moderator = () => {
             {/* POSTS TAB */}
             {activeTab === "posts" && (
               <div className="space-y-3">
-                <h2 className="text-base font-semibold flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-primary" /> Recent Posts
-                </h2>
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <h2 className="text-base font-semibold flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4 text-primary" /> Recent Posts
+                  </h2>
+                  {permissions.canDeleteContent && (
+                    <BulkPostActions
+                      selectedIds={selectedPostIds}
+                      onToggle={(id) => setSelectedPostIds(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; })}
+                      onSelectAll={() => setSelectedPostIds(new Set(posts.slice(0, 15).map(p => p.id)))}
+                      onClearAll={() => setSelectedPostIds(new Set())}
+                      totalCount={posts.slice(0, 15).length}
+                      onDeleted={(ids) => { setPosts(prev => prev.filter(p => !ids.includes(p.id))); setSelectedPostIds(new Set()); }}
+                      requireNotes={permissions.requireNotes}
+                    />
+                  )}
+                </div>
                 {posts.length === 0 ? (
                   <Card><CardContent className="py-12 text-center text-muted-foreground text-sm">No posts to review</CardContent></Card>
                 ) : (
                   posts.slice(0, 15).map(post => (
                     <Card key={post.id} className="overflow-hidden">
                       <div className="p-4">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex-1 min-w-0">
+                         <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-start gap-3 flex-1 min-w-0">
+                            {permissions.canDeleteContent && (
+                              <BulkCheckbox
+                                checked={selectedPostIds.has(post.id)}
+                                onToggle={() => setSelectedPostIds(prev => { const n = new Set(prev); n.has(post.id) ? n.delete(post.id) : n.add(post.id); return n; })}
+                              />
+                            )}
+                            <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap mb-1">
                               <span className="font-semibold text-sm">{post.author_name}</span>
                               <Badge variant="secondary" className="text-[10px]">{post.community_name}</Badge>
@@ -384,8 +408,9 @@ const Moderator = () => {
                             <p className="text-[11px] text-muted-foreground mt-2">
                               {format(new Date(post.created_at), "MMM d, yyyy · h:mm a")}
                             </p>
+                            </div>
                           </div>
-                        </div>
+                         </div>
 
                         {/* Action bar */}
                         <div className="flex items-center gap-1.5 mt-3 pt-3 border-t overflow-x-auto scrollbar-hide">
@@ -544,6 +569,11 @@ const Moderator = () => {
             {/* REPORTS TAB */}
             {activeTab === "reports" && permissions.canReviewReports && session && (
               <ReportsTab moderatorId={session.user.id} onActionTaken={() => loadModeratorData()} />
+            )}
+
+            {/* ANALYTICS TAB */}
+            {activeTab === "analytics" && session && (
+              <AnalyticsTab moderatorId={session.user.id} />
             )}
 
             {/* HISTORY TAB */}
