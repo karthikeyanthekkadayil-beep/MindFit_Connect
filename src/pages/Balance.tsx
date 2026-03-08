@@ -280,6 +280,7 @@ const Balance = () => {
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
         {/* Overall Balance Score */}
+        <MotionScaleIn delay={0.1}>
         <Card className="bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 border-primary/20">
           <CardContent className="p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
@@ -304,6 +305,7 @@ const Balance = () => {
             </div>
           </CardContent>
         </Card>
+        </MotionScaleIn>
 
         <Tabs defaultValue="dashboard" className="w-full">
           <TabsList className="grid w-full grid-cols-5 h-auto">
