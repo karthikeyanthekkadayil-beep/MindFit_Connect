@@ -301,7 +301,8 @@ export default function EventDetail() {
             </div>
           </CardContent>
         </Card>
-      </div>
+    </div>
+    </AnimatedPage>
     </div>
   );
 }
