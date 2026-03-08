@@ -317,15 +317,7 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="events" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Event Management</CardTitle>
-                <CardDescription>Review and manage platform events</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Event management features coming soon...</p>
-              </CardContent>
-            </Card>
+            <EventManagementTab />
           </TabsContent>
 
           <TabsContent value="settings" className="space-y-4">
