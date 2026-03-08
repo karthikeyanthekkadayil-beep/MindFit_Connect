@@ -405,18 +405,23 @@ const Rewards = () => {
                   ].map((reward, index) => {
                     const canAfford = (stats?.total_points || 0) >= reward.points;
                     return (
-                      <div
+                      <motion.div
                         key={index}
                         className={`flex items-center justify-between p-4 rounded-xl border ${
                           canAfford ? 'border-primary/30 bg-primary/5' : 'border-muted bg-muted/30 opacity-60'
                         }`}
+                        whileHover={canAfford ? { scale: 1.02, x: 4, transition: { type: "spring", stiffness: 400 } } : {}}
+                        whileTap={canAfford ? { scale: 0.98 } : {}}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center ${
-                            canAfford ? 'bg-primary/10' : 'bg-muted/50'
-                          }`}>
+                          <motion.div 
+                            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center ${
+                              canAfford ? 'bg-primary/10' : 'bg-muted/50'
+                            }`}
+                            whileHover={canAfford ? { rotate: [0, -10, 10, 0], transition: { duration: 0.4 } } : {}}
+                          >
                             <reward.icon className={`h-5 w-5 sm:h-6 sm:w-6 ${canAfford ? 'text-primary' : 'text-muted-foreground'}`} />
-                          </div>
+                          </motion.div>
                           <div>
                             <p className="font-semibold text-sm sm:text-base">{reward.name}</p>
                             <div className="flex items-center gap-1">
@@ -433,7 +438,7 @@ const Rewards = () => {
                         >
                           {canAfford ? 'Redeem' : 'Locked'}
                         </Button>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
