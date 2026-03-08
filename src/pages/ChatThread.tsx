@@ -175,6 +175,19 @@ export default function ChatThread() {
     enabled: !!id && !!currentUserId,
   });
 
+  const { data: pinnedMessageIds } = useQuery({
+    queryKey: ["pinned-messages-ids", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("pinned_messages")
+        .select("message_id")
+        .eq("conversation_id", id!);
+      if (error) throw error;
+      return new Set(data?.map((p) => p.message_id) || []);
+    },
+    enabled: !!id,
+  });
+
   // Real-time subscription for new messages
   useEffect(() => {
     if (!id) return;
