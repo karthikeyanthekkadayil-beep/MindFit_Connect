@@ -186,11 +186,17 @@ const Moderator = () => {
         setCommunities(communitiesData);
       }
 
+      // Fetch pending reports count
+      const { count: pendingReportsCount } = await supabase
+        .from("content_reports")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending");
+
       // Calculate stats
       setStats({
         postsToReview: postsData?.length || 0,
         activeEvents: eventsData?.length || 0,
-        reportedContent: 0,
+        reportedContent: pendingReportsCount || 0,
         totalCommunities: communitiesData?.length || 0
       });
 
