@@ -10,7 +10,8 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend } from "recharts";
 import { format, subDays, startOfWeek, endOfWeek } from "date-fns";
 import { StatsCardSkeleton, ChartSkeleton } from "@/components/skeletons";
-import { MotionHeader, MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
+import { MotionHeader, MotionFadeIn, MotionScaleIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
+import { InteractiveCard } from "@/components/ui/card";
 
 const Progress = () => {
   const navigate = useNavigate();
