@@ -17,6 +17,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 
 export default function Events() {
   const navigate = useNavigate();
+  const { isModOrAdmin } = useUserRole();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
