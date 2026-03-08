@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Shield, Users, Calendar, MessageSquare, TrendingUp, ArrowLeft, UserCheck } from "lucide-react";
 import { ModeratorRequestsTab } from "@/components/admin/ModeratorRequestsTab";
 import { CommunityManagementTab } from "@/components/admin/CommunityManagementTab";
+import { EventManagementTab } from "@/components/admin/EventManagementTab";
 import { BottomNav } from "@/components/BottomNav";
 
 interface UserProfile {
