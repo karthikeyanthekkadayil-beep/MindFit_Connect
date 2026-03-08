@@ -187,6 +187,7 @@ const DailyPlanner = () => {
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
         {/* Stats Cards */}
         <MotionList className="grid grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
+          <MotionItem>
           <Card className="active:scale-[0.98] transition-transform">
             <CardContent className="p-2.5 sm:p-4">
               <div className="text-base sm:text-2xl font-bold">{stats.completed}/{stats.total}</div>
