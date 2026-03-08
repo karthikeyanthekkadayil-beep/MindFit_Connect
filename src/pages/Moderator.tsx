@@ -464,7 +464,7 @@ const Moderator = () => {
                             >
                               <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
-                            {session && (
+                            {session && permissions.canIssueWarnings && (
                               <WarnUserDialog
                                 userId={post.user_id}
                                 userName={post.author_name || "Unknown"}
