@@ -114,9 +114,7 @@ const Auth = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-5 py-8">
         {/* Logo/Brand */}
         <div className="mb-8 text-center animate-in-up">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-hero flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <Heart className="h-8 w-8 text-primary-foreground" />
-          </div>
+          <img src={logo} alt="MindFit Connect logo" className="w-20 h-20 mx-auto mb-4" />
           <h1 className="text-2xl font-heading font-bold">MindFit Connect</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Your wellness journey starts here
