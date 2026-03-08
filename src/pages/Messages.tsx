@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { NewConversationDialog } from "@/components/NewConversationDialog";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
+import { MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
 import {
   AlertDialog,
   AlertDialogAction,
