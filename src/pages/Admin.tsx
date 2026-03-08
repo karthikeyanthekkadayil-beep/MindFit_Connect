@@ -332,6 +332,10 @@ const Admin = () => {
             <ModeratorRequestsTab />
           </TabsContent>
 
+          <TabsContent value="problems" className="space-y-4">
+            <ProblemReportsTab />
+          </TabsContent>
+
           <TabsContent value="communities" className="space-y-4">
             <CommunityManagementTab />
           </TabsContent>

@@ -89,6 +89,7 @@ const Dashboard = () => {
     { title: "Messages", description: "Chat with friends", icon: MessageSquare, path: "/messages" },
     { title: "Progress Analytics", description: "Track your trends", icon: TrendingUp, path: "/progress" },
     { title: "My Goals", description: "Set and track targets", icon: Target, path: "/goals" },
+    { title: "Report a Problem", description: "Submit issues or feedback", icon: AlertCircle, path: "/report-problem" },
   ];
 
   return (

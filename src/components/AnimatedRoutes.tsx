@@ -69,6 +69,7 @@ export const AnimatedRoutes = () => {
         <Route path="/moderator/request" element={<PageTransition><ModeratorRequest /></PageTransition>} />
         <Route path="/rewards" element={<PageTransition><Rewards /></PageTransition>} />
         <Route path="/leaderboard" element={<PageTransition><Leaderboard /></PageTransition>} />
+        <Route path="/report-problem" element={<PageTransition><ReportProblem /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>
