@@ -316,14 +316,14 @@ const Mindfulness = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 max-w-6xl">
-        <div className="mb-3 sm:mb-6">
+        <MotionFadeIn className="mb-3 sm:mb-6">
           <h1 className="text-xl sm:text-3xl font-bold font-heading mb-0.5 sm:mb-2">Mindfulness</h1>
           <p className="text-xs sm:text-sm text-muted-foreground">
             Find calm, reduce stress, and improve focus
           </p>
-        </div>
+        </MotionFadeIn>
 
-        <div className="grid gap-2 sm:gap-3 grid-cols-3 mb-3 sm:mb-6">
+        <MotionList className="grid gap-2 sm:gap-3 grid-cols-3 mb-3 sm:mb-6" delay={0.1}>
           <Card>
             <CardHeader className="p-2.5 sm:p-3 pb-0.5 sm:pb-2">
               <CardTitle className="text-[10px] sm:text-sm font-medium flex items-center gap-1 sm:gap-2">

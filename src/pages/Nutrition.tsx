@@ -345,12 +345,14 @@ const Nutrition = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 max-w-6xl">
-        <div className="mb-3 sm:mb-6">
+        <MotionFadeIn className="mb-3 sm:mb-6">
           <h1 className="text-xl sm:text-3xl font-bold font-heading mb-0.5 sm:mb-2">Nutrition</h1>
           <p className="text-xs sm:text-sm text-muted-foreground">
             Plan meals and get personalized recommendations
           </p>
-        </div>
+        </MotionFadeIn>
+
+        <MotionFadeIn delay={0.15}>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-2 sm:space-y-4">
           <TabsList className="grid w-full grid-cols-2 h-9 sm:h-10">
