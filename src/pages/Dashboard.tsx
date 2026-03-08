@@ -97,7 +97,8 @@ const Dashboard = () => {
       <header className="bg-gradient-hero text-white px-4 pt-12 pb-6 safe-area-top">
         <div className="max-w-lg mx-auto">
           <div className="flex items-start justify-between">
-            <div className="animate-in-up">
+            <div className="animate-in-up flex items-center gap-2.5">
+              <img src={logo} alt="MindFit Connect" className="w-9 h-9 rounded-lg shadow-md" />
               <h1 className="text-2xl font-heading font-bold text-accent drop-shadow-md">MindFit Connect</h1>
             </div>
             <Button 
