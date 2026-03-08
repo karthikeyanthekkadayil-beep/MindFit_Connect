@@ -16,6 +16,8 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGri
 import { ReportsTab } from "@/components/moderator/ReportsTab";
 import { HistoryTab } from "@/components/moderator/HistoryTab";
 import { WarnUserDialog } from "@/components/moderator/WarnUserDialog";
+import { AnalyticsTab } from "@/components/moderator/AnalyticsTab";
+import { BulkPostActions, BulkCheckbox } from "@/components/moderator/BulkPostActions";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Post {
