@@ -301,10 +301,10 @@ export const useGamification = (userId: string | null) => {
         }
 
         if (isEarned) {
-          // Award the achievement
-          const { error } = await supabase.from('user_achievements').insert({
-            user_id: userId,
-            achievement_id: achievement.id,
+          // Award achievement via secure RPC (validates requirements server-side)
+          const { data: awarded, error } = await supabase.rpc('award_achievement', {
+            _user_id: userId,
+            _achievement_id: achievement.id,
           });
 
           if (!error) {
