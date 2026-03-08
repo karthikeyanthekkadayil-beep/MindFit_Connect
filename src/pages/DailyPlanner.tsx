@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { BottomNav } from "@/components/BottomNav";
 import { AddActivityDialog } from "@/components/AddActivityDialog";
 import { StatsCardSkeleton, ActivityCardSkeleton } from "@/components/skeletons";
+import { MotionHeader, MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
 
 type Activity = {
   id: string;
