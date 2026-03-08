@@ -312,15 +312,7 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="communities" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Community Management</CardTitle>
-                <CardDescription>Monitor and moderate communities</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Community management features coming soon...</p>
-              </CardContent>
-            </Card>
+            <CommunityManagementTab />
           </TabsContent>
 
           <TabsContent value="events" className="space-y-4">
