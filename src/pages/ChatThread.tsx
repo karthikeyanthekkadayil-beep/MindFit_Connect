@@ -294,9 +294,10 @@ export default function ChatThread() {
 
   const deleteMessageMutation = useMutation({
     mutationFn: async (messageId: string) => {
+      // Soft delete: mark as deleted instead of removing
       const { error } = await supabase
         .from("messages")
-        .delete()
+        .update({ is_deleted: true, content: "", attachment_url: null, attachment_type: null, attachment_name: null } as any)
         .eq("id", messageId)
         .eq("sender_id", currentUserId!);
       if (error) throw error;
@@ -307,6 +308,23 @@ export default function ChatThread() {
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
     onError: () => toast.error("Failed to delete message"),
+  });
+
+  const editMessageMutation = useMutation({
+    mutationFn: async ({ messageId, content }: { messageId: string; content: string }) => {
+      const { error } = await supabase
+        .from("messages")
+        .update({ content, edited_at: new Date().toISOString() } as any)
+        .eq("id", messageId)
+        .eq("sender_id", currentUserId!);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      setEditingMessageId(null);
+      setEditContent("");
+      queryClient.invalidateQueries({ queryKey: ["messages", id] });
+    },
+    onError: () => toast.error("Failed to edit message"),
   });
 
   const deleteChatMutation = useMutation({
