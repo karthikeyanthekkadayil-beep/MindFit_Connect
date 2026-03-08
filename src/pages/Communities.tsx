@@ -15,6 +15,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 
 export default function Communities() {
   const navigate = useNavigate();
+  const { isModOrAdmin } = useUserRole();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
