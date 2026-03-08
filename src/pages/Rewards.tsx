@@ -218,18 +218,19 @@ const Rewards = () => {
 
           {/* Achievements Tab */}
           <TabsContent value="achievements" className="space-y-4 mt-4">
-            {Object.entries(achievementsByCategory).map(([category, categoryAchievements]) => (
-              <Card key={category}>
-                <CardHeader className="p-3 sm:p-6 pb-2">
-                  <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
-                    {CATEGORY_LABELS[category] || category}
-                    <Badge variant="secondary" className="text-[10px] sm:text-xs">
-                      {categoryAchievements.filter(a => earnedIds.includes(a.id)).length}/{categoryAchievements.length}
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 sm:p-6 pt-0">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+            {Object.entries(achievementsByCategory).map(([category, categoryAchievements], catIndex) => (
+              <MotionFadeIn key={category} delay={0.1 + catIndex * 0.1}>
+                <Card>
+                  <CardHeader className="p-3 sm:p-6 pb-2">
+                    <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
+                      {CATEGORY_LABELS[category] || category}
+                      <Badge variant="secondary" className="text-[10px] sm:text-xs">
+                        {categoryAchievements.filter(a => earnedIds.includes(a.id)).length}/{categoryAchievements.length}
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 sm:p-6 pt-0">
+                    <MotionList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3" delay={0.15 + catIndex * 0.1}>
                     {categoryAchievements.map((achievement) => {
                       const isEarned = earnedIds.includes(achievement.id);
                       const IconComponent = ICON_MAP[achievement.icon] || Trophy;
