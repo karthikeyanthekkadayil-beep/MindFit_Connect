@@ -185,6 +185,7 @@ export default function CommunityDetail() {
   }
 
   return (
+    <AnimatedPage>
     <div className="min-h-screen bg-background pb-20">
       <div className="relative">
         {community.image_url && (

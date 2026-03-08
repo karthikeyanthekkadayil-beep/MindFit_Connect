@@ -285,6 +285,7 @@ const WorkoutDetail = () => {
 
       <BottomNav />
     </div>
+    </AnimatedPage>
   );
 };
 
