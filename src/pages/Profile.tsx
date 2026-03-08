@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus } from "lucide-react";
+import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus, Shield } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import { useCamera, base64ToBlob } from "@/hooks/useCamera";
 import { Capacitor } from "@capacitor/core";
