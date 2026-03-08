@@ -162,7 +162,7 @@ const Goals = () => {
     const isCompleted = progress >= 100;
 
     return (
-      <Card key={goal.id} className="hover:shadow-lg transition-shadow">
+      <InteractiveCard key={goal.id} className="border-0 shadow-sm">
         <CardHeader className="p-3 sm:p-6 pb-2 sm:pb-4">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-start gap-2 min-w-0">
@@ -265,7 +265,7 @@ const Goals = () => {
             </Button>
           </div>
         </CardContent>
-      </Card>
+      </InteractiveCard>
     );
   };
 
