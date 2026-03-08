@@ -190,9 +190,9 @@ const WorkoutLibrary = () => {
             ) : (
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                 {filteredWorkouts.map((workout) => (
-                  <Card 
+                  <InteractiveCard 
                     key={workout.id} 
-                    className="cursor-pointer hover:shadow-lg transition-shadow active:scale-[0.98]"
+                    className="cursor-pointer"
                     onClick={() => navigate(`/workouts/${workout.id}`)}
                   >
                     <CardHeader className="p-2 sm:p-4 pb-1 sm:pb-2">
