@@ -318,6 +318,10 @@ const Admin = () => {
             </Card>
           </TabsContent>
 
+          <TabsContent value="moderators" className="space-y-4">
+            <ModeratorManagementTab />
+          </TabsContent>
+
           <TabsContent value="mod-requests" className="space-y-4">
             <ModeratorRequestsTab />
           </TabsContent>
