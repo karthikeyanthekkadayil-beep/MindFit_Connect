@@ -382,6 +382,7 @@ const Profile = () => {
 
           {/* Personal Info Tab */}
           <TabsContent value="personal">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6">
                 <CardTitle className="text-sm sm:text-lg">Personal Information</CardTitle>
