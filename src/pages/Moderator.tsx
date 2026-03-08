@@ -622,12 +622,14 @@ const Moderator = () => {
             </Card>
           </TabsContent>
 
-          {/* Reports Tab */}
+          {/* Reports Tab - only if permission granted */}
+          {permissions.canReviewReports && (
           <TabsContent value="reports" className="space-y-4">
             {session && (
               <ReportsTab moderatorId={session.user.id} onActionTaken={() => loadModeratorData()} />
             )}
           </TabsContent>
+          )}
 
           {/* History Tab */}
           <TabsContent value="history" className="space-y-4">
