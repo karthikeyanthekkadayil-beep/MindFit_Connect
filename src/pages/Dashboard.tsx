@@ -256,14 +256,20 @@ const Dashboard = () => {
               onClick={() => navigate("/admin")}
             >
               <CardContent className="p-4 flex items-center gap-4">
-                <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-destructive/20 flex items-center justify-center">
+                <motion.div 
+                  className="flex-shrink-0 w-11 h-11 rounded-xl bg-destructive/20 flex items-center justify-center"
+                  whileHover={{ rotate: [0, -15, 15, 0], scale: 1.15, transition: { duration: 0.4 } }}
+                  whileTap={{ scale: 0.9 }}
+                >
                   <Shield className="h-5 w-5 text-destructive" />
-                </div>
+                </motion.div>
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-sm">Admin Dashboard</h3>
                   <p className="text-xs text-muted-foreground">Manage users, content & platform settings</p>
                 </div>
-                <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                <motion.div whileHover={{ x: 4 }}>
+                  <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                </motion.div>
               </CardContent>
             </InteractiveCard>
           </MotionFadeIn>
