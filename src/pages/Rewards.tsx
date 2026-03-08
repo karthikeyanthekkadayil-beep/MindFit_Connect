@@ -237,23 +237,28 @@ const Rewards = () => {
                       const earnedData = earnedAchievements.find(ea => ea.achievement_id === achievement.id);
 
                       return (
-                        <div
+                        <motion.div
                           key={achievement.id}
                           className={`relative p-3 sm:p-4 rounded-xl border-2 transition-all ${
                             isEarned
                               ? colorClass
                               : 'bg-muted/30 border-muted text-muted-foreground opacity-60'
                           }`}
+                          whileHover={isEarned ? { scale: 1.05, y: -4, transition: { type: "spring", stiffness: 400, damping: 20 } } : {}}
+                          whileTap={isEarned ? { scale: 0.95 } : {}}
                         >
                           {!isEarned && (
                             <Lock className="absolute top-2 right-2 h-3 w-3 sm:h-4 sm:w-4" />
                           )}
                           <div className="flex flex-col items-center text-center">
-                            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-2 ${
-                              isEarned ? 'bg-background/50' : 'bg-muted/50'
-                            }`}>
+                            <motion.div
+                              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-2 ${
+                                isEarned ? 'bg-background/50' : 'bg-muted/50'
+                              }`}
+                              whileHover={isEarned ? { rotate: [0, -12, 12, -6, 0], transition: { duration: 0.5 } } : {}}
+                            >
                               <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" />
-                            </div>
+                            </motion.div>
                             <h4 className="font-semibold text-[10px] sm:text-xs line-clamp-1">{achievement.name}</h4>
                             <p className="text-[8px] sm:text-[10px] mt-1 line-clamp-2 opacity-80">
                               {achievement.description}
@@ -268,7 +273,7 @@ const Rewards = () => {
                               </p>
                             )}
                           </div>
-                        </div>
+                        </motion.div>
                       );
                     })}
                   </div>
