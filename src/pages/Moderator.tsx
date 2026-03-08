@@ -388,7 +388,7 @@ const Moderator = () => {
                         </div>
 
                         {/* Action bar */}
-                        <div className="flex items-center gap-2 mt-3 pt-3 border-t flex-wrap">
+                        <div className="flex items-center gap-1.5 mt-3 pt-3 border-t overflow-x-auto scrollbar-hide">
                           <Button size="sm" variant="ghost" className="h-10 text-xs gap-1.5" onClick={() => navigate(`/communities/${post.community_id}`)}>
                             <Eye className="h-4 w-4" /> View
                           </Button>
