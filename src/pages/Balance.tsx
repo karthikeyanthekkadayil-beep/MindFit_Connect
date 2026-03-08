@@ -266,7 +266,7 @@ const Balance = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
+      <MotionHeader className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-2 sm:gap-3">
             <Scale className="h-6 w-6 sm:h-8 sm:w-8" />
@@ -276,7 +276,7 @@ const Balance = () => {
             </div>
           </div>
         </div>
-      </header>
+      </MotionHeader>
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
         {/* Overall Balance Score */}
