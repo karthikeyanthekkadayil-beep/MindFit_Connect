@@ -13,6 +13,7 @@ import { Shield, Users, Calendar, MessageSquare, TrendingUp, ArrowLeft, UserChec
 import { ModeratorRequestsTab } from "@/components/admin/ModeratorRequestsTab";
 import { CommunityManagementTab } from "@/components/admin/CommunityManagementTab";
 import { EventManagementTab } from "@/components/admin/EventManagementTab";
+import { PlatformSettingsTab } from "@/components/admin/PlatformSettingsTab";
 import { BottomNav } from "@/components/BottomNav";
 
 interface UserProfile {
