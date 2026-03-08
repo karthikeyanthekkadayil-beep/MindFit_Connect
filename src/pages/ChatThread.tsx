@@ -31,6 +31,9 @@ import { ReadReceiptIndicator } from "@/components/ReadReceiptIndicator";
 import { ChatAttachment, MessageAttachmentPreview } from "@/components/ChatAttachment";
 import { VoiceRecorder, VoiceMessagePlayer } from "@/components/VoiceRecorder";
 import { MessageSearch, HighlightedText } from "@/components/MessageSearch";
+import { CreateChatPollDialog } from "@/components/CreateChatPollDialog";
+import { ChatPollInline } from "@/components/ChatPollInline";
+import { PinnedMessagesBar, PinMessageButton } from "@/components/PinnedMessages";
 
 export default function ChatThread() {
   const { id } = useParams<{ id: string }>();
