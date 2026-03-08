@@ -171,7 +171,7 @@ const Admin = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate("/admin/login")}
+                onClick={() => navigate("/dashboard")}
                 className="text-white hover:bg-white/20 shrink-0"
               >
                 <ArrowLeft className="h-4 w-4" />
