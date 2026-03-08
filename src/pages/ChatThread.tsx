@@ -691,6 +691,16 @@ export default function ChatThread() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Create Poll Dialog */}
+      {conversation?.type === "group" && currentUserId && (
+        <CreateChatPollDialog
+          open={showPollDialog}
+          onOpenChange={setShowPollDialog}
+          conversationId={id!}
+          currentUserId={currentUserId}
+        />
+      )}
     </div>
   );
 }
