@@ -59,6 +59,7 @@ const Dashboard = () => {
             const roles = data?.map(r => r.role) || [];
             setIsAdmin(roles.includes("admin"));
             setHasElevatedRole(roles.includes("admin") || roles.includes("moderator"));
+            setIsLoading(false);
           });
       }
     });
