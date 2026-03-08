@@ -248,7 +248,7 @@ const Admin = () => {
 
         {/* Admin Tabs */}
         <Tabs defaultValue="users" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-6 h-auto">
+          <TabsList className="grid w-full grid-cols-7 h-auto">
             <TabsTrigger value="users" className="text-xs sm:text-sm py-2">Users</TabsTrigger>
             <TabsTrigger value="moderators" className="text-xs sm:text-sm py-2">
               <Shield className="h-3 w-3 sm:hidden" />
@@ -259,6 +259,11 @@ const Admin = () => {
               <UserCheck className="h-3 w-3 sm:hidden" />
               <span className="hidden sm:inline">Requests</span>
               <span className="sm:hidden">Reqs</span>
+            </TabsTrigger>
+            <TabsTrigger value="problems" className="text-xs sm:text-sm py-2">
+              <AlertCircle className="h-3 w-3 sm:hidden" />
+              <span className="hidden sm:inline">Problems</span>
+              <span className="sm:hidden">Prob</span>
             </TabsTrigger>
             <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">
               <span className="hidden sm:inline">Communities</span>
