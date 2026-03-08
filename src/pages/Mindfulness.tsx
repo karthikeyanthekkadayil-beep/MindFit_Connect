@@ -12,6 +12,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { format } from "date-fns";
 import { useGamification } from "@/hooks/useGamification";
 import { StatsCardSkeleton, MeditationCardSkeleton } from "@/components/skeletons";
+import { MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
 
 interface MeditationProgram {
   id: string;
@@ -315,53 +316,57 @@ const Mindfulness = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 max-w-6xl">
-        <div className="mb-3 sm:mb-6">
+        <MotionFadeIn className="mb-3 sm:mb-6">
           <h1 className="text-xl sm:text-3xl font-bold font-heading mb-0.5 sm:mb-2">Mindfulness</h1>
           <p className="text-xs sm:text-sm text-muted-foreground">
             Find calm, reduce stress, and improve focus
           </p>
-        </div>
+        </MotionFadeIn>
 
-        <div className="grid gap-2 sm:gap-3 grid-cols-3 mb-3 sm:mb-6">
-          <Card>
-            <CardHeader className="p-2.5 sm:p-3 pb-0.5 sm:pb-2">
-              <CardTitle className="text-[10px] sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
-                <Brain className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">Sessions</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-2.5 sm:p-3 pt-0">
-              <div className="text-lg sm:text-2xl font-bold">{stats.totalSessions}</div>
-              <p className="text-[10px] text-muted-foreground sm:hidden">Sessions</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="p-2.5 sm:p-3 pb-0.5 sm:pb-2">
-              <CardTitle className="text-[10px] sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
-                <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">Minutes</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-2.5 sm:p-3 pt-0">
-              <div className="text-lg sm:text-2xl font-bold">{stats.totalMinutes}</div>
-              <p className="text-[10px] text-muted-foreground sm:hidden">Minutes</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="p-2.5 sm:p-3 pb-0.5 sm:pb-2">
-              <CardTitle className="text-[10px] sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
-                <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">This Week</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-2.5 sm:p-3 pt-0">
-              <div className="text-lg sm:text-2xl font-bold">{stats.weekStreak}</div>
-              <p className="text-[10px] text-muted-foreground sm:hidden">Week</p>
-            </CardContent>
-          </Card>
-        </div>
+        <MotionList className="grid gap-2 sm:gap-3 grid-cols-3 mb-3 sm:mb-6" delay={0.1}>
+          <MotionItem>
+            <Card>
+              <CardHeader className="p-2.5 sm:p-3 pb-0.5 sm:pb-2">
+                <CardTitle className="text-[10px] sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                  <Brain className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Sessions</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-2.5 sm:p-3 pt-0">
+                <div className="text-lg sm:text-2xl font-bold">{stats.totalSessions}</div>
+                <p className="text-[10px] text-muted-foreground sm:hidden">Sessions</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card>
+              <CardHeader className="p-2.5 sm:p-3 pb-0.5 sm:pb-2">
+                <CardTitle className="text-[10px] sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                  <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Minutes</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-2.5 sm:p-3 pt-0">
+                <div className="text-lg sm:text-2xl font-bold">{stats.totalMinutes}</div>
+                <p className="text-[10px] text-muted-foreground sm:hidden">Minutes</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card>
+              <CardHeader className="p-2.5 sm:p-3 pb-0.5 sm:pb-2">
+                <CardTitle className="text-[10px] sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                  <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">This Week</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-2.5 sm:p-3 pt-0">
+                <div className="text-lg sm:text-2xl font-bold">{stats.weekStreak}</div>
+                <p className="text-[10px] text-muted-foreground sm:hidden">Week</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+        </MotionList>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-2 sm:space-y-4">
           <TabsList className="grid w-full grid-cols-2 h-9 sm:h-10">

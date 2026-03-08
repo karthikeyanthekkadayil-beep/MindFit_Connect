@@ -13,6 +13,7 @@ import { ShareGoalDialog } from "@/components/ShareGoalDialog";
 import { toast } from "sonner";
 import { format, differenceInDays } from "date-fns";
 import { GoalCardSkeleton } from "@/components/skeletons";
+import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
 
 interface Goal {
   id: string;
@@ -298,7 +299,7 @@ const Goals = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
+      <MotionHeader className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">
@@ -323,7 +324,7 @@ const Goals = () => {
             Community Goals
           </Button>
         </div>
-      </header>
+      </MotionHeader>
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6">
         {goals.length === 0 ? (

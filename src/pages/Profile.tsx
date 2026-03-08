@@ -17,6 +17,7 @@ import { useTheme } from "next-themes";
 import { BottomNav } from "@/components/BottomNav";
 import { useCamera, base64ToBlob } from "@/hooks/useCamera";
 import { Capacitor } from "@capacitor/core";
+import { MotionFadeIn, MotionScaleIn, MotionSection } from "@/components/motion/MotionWrappers";
 
 interface Profile {
   id: string;
@@ -275,7 +276,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="container max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3 sm:space-y-6">
-        {/* Header */}
+        <MotionScaleIn>
         <Card>
           <CardContent className="pt-3 sm:pt-6 p-3 sm:p-6">
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
@@ -360,6 +361,7 @@ const Profile = () => {
             </div>
           </CardContent>
         </Card>
+        </MotionScaleIn>
 
         {/* Profile Tabs */}
         <Tabs defaultValue="personal" className="w-full">

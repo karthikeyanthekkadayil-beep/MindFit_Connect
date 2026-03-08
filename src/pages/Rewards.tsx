@@ -14,6 +14,7 @@ import {
   TrendingUp, Gift, Sparkles, Heart, Brain, Users, Dumbbell,
   Calendar, Smile, ArrowRight, Lock
 } from "lucide-react";
+import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
 
 const ICON_MAP: Record<string, React.ElementType> = {
   trophy: Trophy,
@@ -110,7 +111,7 @@ const Rewards = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
+      <MotionHeader className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
@@ -131,7 +132,7 @@ const Rewards = () => {
             </Button>
           </div>
         </div>
-      </header>
+      </MotionHeader>
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
         {/* Stats Overview */}

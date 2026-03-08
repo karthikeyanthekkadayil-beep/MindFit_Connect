@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { MotionHeader, MotionFadeIn } from "@/components/motion/MotionWrappers";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
@@ -99,7 +100,7 @@ const ReportProblem = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white px-4 pt-12 pb-6 safe-area-top">
+      <MotionHeader className="bg-gradient-hero text-white px-4 pt-12 pb-6 safe-area-top">
         <div className="max-w-lg mx-auto">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="text-white hover:bg-white/20 rounded-full">
@@ -111,7 +112,7 @@ const ReportProblem = () => {
             </div>
           </div>
         </div>
-      </header>
+      </MotionHeader>
 
       <main className="max-w-lg mx-auto px-4 py-4 space-y-4">
         <Tabs defaultValue="new">

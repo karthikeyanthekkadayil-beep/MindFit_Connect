@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Loader2, Search, Dumbbell, Heart, Plus } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import PersonalizedWorkouts from "@/components/PersonalizedWorkouts";
+import { MotionFadeIn, MotionSection } from "@/components/motion/MotionWrappers";
 
 interface Exercise {
   id: string;
@@ -118,8 +119,7 @@ const WorkoutLibrary = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="container max-w-6xl mx-auto px-3 sm:px-4 py-4 space-y-4 sm:space-y-6">
-        {/* Header */}
-        <div className="flex flex-col gap-3">
+        <MotionFadeIn className="flex flex-col gap-3">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold">Workout Library</h1>
             <p className="text-sm text-muted-foreground mt-1">
@@ -133,7 +133,7 @@ const WorkoutLibrary = () => {
             <Plus className="mr-2 h-4 w-4" />
             Create Workout
           </Button>
-        </div>
+        </MotionFadeIn>
 
         {/* Filters */}
         <Card>
