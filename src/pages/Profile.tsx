@@ -547,6 +547,11 @@ const Profile = () => {
               <CardContent className="space-y-3 sm:space-y-4 p-3 pt-0 sm:p-6 sm:pt-0">
                 <div className="space-y-3 sm:space-y-4">
                   <div>
+                    <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Theme</h3>
+                    <ThemeSwitcher />
+                  </div>
+
+                  <div>
                     <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Email</h3>
                     <p className="text-[10px] sm:text-sm text-muted-foreground break-all">{profile.email}</p>
                   </div>
