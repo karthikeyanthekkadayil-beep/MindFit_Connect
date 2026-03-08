@@ -47,15 +47,15 @@ const Dashboard = () => {
       if (!session) {
         navigate("/auth");
       } else {
-        // Check admin role
+        // Check user roles
         supabase
           .from("user_roles")
           .select("role")
           .eq("user_id", session.user.id)
-          .eq("role", "admin")
-          .single()
           .then(({ data }) => {
-            setIsAdmin(!!data);
+            const roles = data?.map(r => r.role) || [];
+            setIsAdmin(roles.includes("admin"));
+            setHasElevatedRole(roles.includes("admin") || roles.includes("moderator"));
           });
       }
     });
