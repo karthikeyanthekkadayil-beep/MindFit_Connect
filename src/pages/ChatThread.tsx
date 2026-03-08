@@ -417,6 +417,12 @@ export default function ChatThread() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              {conversation?.type === "group" && (
+                <DropdownMenuItem onClick={() => setShowPollDialog(true)}>
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  Create Poll
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 className="text-destructive focus:text-destructive"
                 onClick={() => setChatDeleteOpen(true)}
