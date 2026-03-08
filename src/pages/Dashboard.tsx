@@ -171,7 +171,7 @@ const Dashboard = () => {
                 </>
               )}
             </CardContent>
-          </Card>
+          </InteractiveCard>
         </MotionScaleIn>
 
         {/* Quick Actions */}
