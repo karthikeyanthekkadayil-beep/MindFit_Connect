@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus, Shield, Sun, Moon, Monitor } from "lucide-react";
+import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus, Shield, Sun, Moon, Monitor, Smartphone } from "lucide-react";
 import { useTheme } from "next-themes";
 import { BottomNav } from "@/components/BottomNav";
 import { useCamera, base64ToBlob } from "@/hooks/useCamera";
@@ -41,17 +41,18 @@ const ThemeSwitcher = () => {
   const options = [
     { value: "light", label: "Light", icon: Sun },
     { value: "dark", label: "Dark", icon: Moon },
+    { value: "glass", label: "Glass", icon: Smartphone },
     { value: "system", label: "System", icon: Monitor },
   ];
   return (
-    <div className="flex gap-2">
+    <div className="grid grid-cols-2 gap-2">
       {options.map(({ value, label, icon: Icon }) => (
         <Button
           key={value}
           variant={theme === value ? "default" : "outline"}
           size="sm"
           onClick={() => setTheme(value)}
-          className="flex-1 h-9 sm:h-10 text-xs sm:text-sm gap-1.5"
+          className="h-9 sm:h-10 text-xs sm:text-sm gap-1.5"
         >
           <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           {label}
