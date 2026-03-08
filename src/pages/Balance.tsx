@@ -319,9 +319,10 @@ const Balance = () => {
           {/* Wellness Dashboard */}
           <TabsContent value="dashboard" className="space-y-4 mt-4">
             {/* Category Scores */}
-            <div className="grid grid-cols-2 gap-2 sm:gap-4">
+            <MotionList className="grid grid-cols-2 gap-2 sm:gap-4" delay={0.1}>
               {wellnessScores.map((item) => (
-                <Card key={item.category}>
+                <MotionItem key={item.category}>
+                <Card>
                   <CardContent className="p-3 sm:p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <item.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
@@ -331,8 +332,9 @@ const Balance = () => {
                     <Progress value={item.score} className="h-2" />
                   </CardContent>
                 </Card>
+                </MotionItem>
               ))}
-            </div>
+            </MotionList>
 
             {/* Radar Chart */}
             <Card>
