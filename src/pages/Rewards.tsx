@@ -111,7 +111,7 @@ const Rewards = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20 overflow-x-hidden">
+    <div className="min-h-screen bg-background pb-20 overflow-x-hidden overflow-y-auto">
       <MotionHeader className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
@@ -135,7 +135,7 @@ const Rewards = () => {
         </div>
       </MotionHeader>
 
-      <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
+      <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6 overflow-hidden">
         {/* Stats Overview */}
         <MotionList className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
           <MotionItem>
@@ -229,7 +229,7 @@ const Rewards = () => {
                       </Badge>
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="p-3 sm:p-6 pt-0">
+                  <CardContent className="p-3 sm:p-6 pt-0 overflow-hidden">
                     <MotionList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3" delay={0.15 + catIndex * 0.1}>
                     {categoryAchievements.map((achievement) => {
                       const isEarned = earnedIds.includes(achievement.id);
