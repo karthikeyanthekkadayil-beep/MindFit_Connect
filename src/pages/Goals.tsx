@@ -13,6 +13,7 @@ import { ShareGoalDialog } from "@/components/ShareGoalDialog";
 import { toast } from "sonner";
 import { format, differenceInDays } from "date-fns";
 import { GoalCardSkeleton } from "@/components/skeletons";
+import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
 
 interface Goal {
   id: string;
