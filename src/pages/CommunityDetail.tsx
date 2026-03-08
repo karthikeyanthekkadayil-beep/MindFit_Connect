@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Users, UserPlus, UserMinus, Calendar, MapPin, Clock, Plus } from "lucide-react";
+import { ArrowLeft, Users, UserPlus, UserMinus, Calendar, MapPin, Clock, Plus, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
@@ -14,6 +14,8 @@ import { AnimatedPage } from "@/components/motion/AnimatedPage";
 import { MotionFadeIn } from "@/components/motion/MotionWrappers";
 import { CreatePostDialog } from "@/components/CreatePostDialog";
 import { CommunityFeed } from "@/components/CommunityFeed";
+import { CreatePollDialog } from "@/components/CreatePollDialog";
+import { CommunityPolls } from "@/components/CommunityPolls";
 
 export default function CommunityDetail() {
   const { id } = useParams<{ id: string }>();
