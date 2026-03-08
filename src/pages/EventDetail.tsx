@@ -263,6 +263,9 @@ export default function EventDetail() {
           >
             View Community
           </Button>
+          {currentUserId && currentUserId !== event.creator_id && (
+            <ReportContentDialog contentType="event" contentId={event.id} />
+          )}
         </div>
 
         <Card>
