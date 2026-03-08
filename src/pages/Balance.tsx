@@ -644,8 +644,10 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
 
             {/* Reminders Section */}
+            <MotionFadeIn delay={0.2}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
