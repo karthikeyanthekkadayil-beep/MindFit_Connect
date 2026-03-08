@@ -477,6 +477,7 @@ const Profile = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           {/* Health Profile Tab */}
