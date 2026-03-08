@@ -464,6 +464,7 @@ const Balance = () => {
                 </Button>
               </CardContent>
             </Card>
+            </MotionFadeIn>
 
             {/* Mental Wellness Tips */}
             <Card>
