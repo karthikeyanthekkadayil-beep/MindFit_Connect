@@ -51,6 +51,15 @@ interface Community {
   creator_id: string;
 }
 
+interface ModPermissions {
+  canReviewReports: boolean;
+  canIssueWarnings: boolean;
+  canDeleteContent: boolean;
+  canBanUsers: boolean;
+  requireNotes: boolean;
+  maxWarningsPerDay: number;
+}
+
 const Moderator = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
@@ -76,6 +85,14 @@ const Moderator = () => {
     balanceScore: 0,
   });
   const [activityWeekData, setActivityWeekData] = useState<{ day: string; actions: number }[]>([]);
+  const [permissions, setPermissions] = useState<ModPermissions>({
+    canReviewReports: true,
+    canIssueWarnings: true,
+    canDeleteContent: true,
+    canBanUsers: false,
+    requireNotes: true,
+    maxWarningsPerDay: 10,
+  });
 
   useEffect(() => {
     checkModeratorAccess();
