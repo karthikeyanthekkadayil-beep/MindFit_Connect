@@ -1715,6 +1715,21 @@ export type Database = {
       }
     }
     Functions: {
+      add_points: {
+        Args: {
+          _description?: string
+          _points: number
+          _reference_id?: string
+          _reference_type?: string
+          _transaction_type: string
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      award_achievement: {
+        Args: { _achievement_id: string; _user_id: string }
+        Returns: boolean
+      }
       get_community_leaderboard: {
         Args: { community_uuid: string; limit_count?: number }
         Returns: {
