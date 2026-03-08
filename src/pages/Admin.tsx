@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Shield, Users, Calendar, MessageSquare, TrendingUp, ArrowLeft, UserCheck, AlertCircle } from "lucide-react";
+import { Shield, Users, Calendar, MessageSquare, TrendingUp, ArrowLeft, UserCheck, AlertCircle, MessagesSquare } from "lucide-react";
 import { ModeratorRequestsTab } from "@/components/admin/ModeratorRequestsTab";
 import { CommunityManagementTab } from "@/components/admin/CommunityManagementTab";
 import { EventManagementTab } from "@/components/admin/EventManagementTab";
