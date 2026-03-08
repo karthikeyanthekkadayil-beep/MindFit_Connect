@@ -242,7 +242,7 @@ const Dashboard = () => {
                 </div>
                 <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionFadeIn>
         )}
 
