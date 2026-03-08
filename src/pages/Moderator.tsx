@@ -556,6 +556,7 @@ const Moderator = () => {
                             >
                               <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
+                            {permissions.canDeleteContent && (
                             <Button
                               size="sm"
                               variant="ghost"
@@ -564,6 +565,7 @@ const Moderator = () => {
                             >
                               <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
+                            )}
                           </div>
                         </div>
                       </div>
