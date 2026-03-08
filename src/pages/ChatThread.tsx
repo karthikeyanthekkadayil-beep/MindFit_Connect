@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Send, Users, Search, Trash2, MoreVertical } from "lucide-react";
+import { ArrowLeft, Send, Users, Search, Trash2, MoreVertical, BarChart3, Pin } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,6 +31,9 @@ import { ReadReceiptIndicator } from "@/components/ReadReceiptIndicator";
 import { ChatAttachment, MessageAttachmentPreview } from "@/components/ChatAttachment";
 import { VoiceRecorder, VoiceMessagePlayer } from "@/components/VoiceRecorder";
 import { MessageSearch, HighlightedText } from "@/components/MessageSearch";
+import { CreateChatPollDialog } from "@/components/CreateChatPollDialog";
+import { ChatPollInline } from "@/components/ChatPollInline";
+import { PinnedMessagesBar, PinMessageButton } from "@/components/PinnedMessages";
 
 export default function ChatThread() {
   const { id } = useParams<{ id: string }>();
@@ -47,6 +50,7 @@ export default function ChatThread() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
+  const [showPollDialog, setShowPollDialog] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
@@ -171,6 +175,19 @@ export default function ChatThread() {
     enabled: !!id && !!currentUserId,
   });
 
+  const { data: pinnedMessageIds } = useQuery({
+    queryKey: ["pinned-messages-ids", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("pinned_messages")
+        .select("message_id")
+        .eq("conversation_id", id!);
+      if (error) throw error;
+      return new Set(data?.map((p) => p.message_id) || []);
+    },
+    enabled: !!id,
+  });
+
   // Real-time subscription for new messages
   useEffect(() => {
     if (!id) return;
@@ -187,6 +204,8 @@ export default function ChatThread() {
         },
         () => {
           queryClient.invalidateQueries({ queryKey: ["messages", id] });
+          queryClient.invalidateQueries({ queryKey: ["pinned-messages-ids", id] });
+          queryClient.invalidateQueries({ queryKey: ["pinned-messages", id] });
         }
       )
       .subscribe();
@@ -413,6 +432,12 @@ export default function ChatThread() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              {conversation?.type === "group" && (
+                <DropdownMenuItem onClick={() => setShowPollDialog(true)}>
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  Create Poll
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 className="text-destructive focus:text-destructive"
                 onClick={() => setChatDeleteOpen(true)}
@@ -425,6 +450,13 @@ export default function ChatThread() {
         </div>
       </div>
 
+      {/* Pinned Messages Bar */}
+      <PinnedMessagesBar
+        conversationId={id!}
+        currentUserId={currentUserId}
+        onMessageClick={scrollToMessage}
+      />
+
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-20 relative">
         {isSearchOpen && messages && (
@@ -432,12 +464,16 @@ export default function ChatThread() {
             messages={messages}
             onResultSelect={(messageId) => {
               scrollToMessage(messageId);
-              // Track the current search query for highlighting
               const input = document.querySelector('input[placeholder="Search messages..."]') as HTMLInputElement;
               if (input) setSearchQuery(input.value);
             }}
             onClose={handleSearchClose}
           />
+        )}
+
+        {/* Chat Polls */}
+        {conversation?.type === "group" && (
+          <ChatPollInline conversationId={id!} currentUserId={currentUserId} />
         )}
         
         {messages && messages.length > 0 ? (
@@ -512,6 +548,12 @@ export default function ChatThread() {
                     <span className="text-xs text-muted-foreground">
                       {format(new Date(msg.created_at), "p")}
                     </span>
+                    <PinMessageButton
+                      messageId={msg.id}
+                      conversationId={id!}
+                      currentUserId={currentUserId}
+                      isPinned={pinnedMessageIds?.has(msg.id) || false}
+                    />
                     {isCurrentUser && (
                       <button
                         onClick={() => setMessageToDelete(msg.id)}
@@ -651,6 +693,16 @@ export default function ChatThread() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Create Poll Dialog */}
+      {conversation?.type === "group" && currentUserId && (
+        <CreateChatPollDialog
+          open={showPollDialog}
+          onOpenChange={setShowPollDialog}
+          conversationId={id!}
+          currentUserId={currentUserId}
+        />
+      )}
     </div>
   );
 }
