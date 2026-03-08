@@ -324,7 +324,7 @@ const Goals = () => {
             Community Goals
           </Button>
         </div>
-      </header>
+      </MotionHeader>
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6">
         {goals.length === 0 ? (
