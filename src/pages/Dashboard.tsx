@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [greeting, setGreeting] = useState("Welcome");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const hour = new Date().getHours();
