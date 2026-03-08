@@ -41,17 +41,18 @@ const ThemeSwitcher = () => {
   const options = [
     { value: "light", label: "Light", icon: Sun },
     { value: "dark", label: "Dark", icon: Moon },
+    { value: "glass", label: "Glass", icon: Smartphone },
     { value: "system", label: "System", icon: Monitor },
   ];
   return (
-    <div className="flex gap-2">
+    <div className="grid grid-cols-2 gap-2">
       {options.map(({ value, label, icon: Icon }) => (
         <Button
           key={value}
           variant={theme === value ? "default" : "outline"}
           size="sm"
           onClick={() => setTheme(value)}
-          className="flex-1 h-9 sm:h-10 text-xs sm:text-sm gap-1.5"
+          className="h-9 sm:h-10 text-xs sm:text-sm gap-1.5"
         >
           <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           {label}
