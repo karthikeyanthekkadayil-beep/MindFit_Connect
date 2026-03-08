@@ -80,8 +80,8 @@ export default function Communities() {
   ];
 
   const CommunityCard = ({ community }: { community: any }) => (
-    <Card
-      className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
+    <InteractiveCard
+      className="cursor-pointer"
       onClick={() => navigate(`/communities/${community.id}`)}
     >
       {community.image_url && (

@@ -104,8 +104,8 @@ export default function Events() {
   ];
 
   const EventCard = ({ event }: { event: any }) => (
-    <Card
-      className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
+    <InteractiveCard
+      className="cursor-pointer"
       onClick={() => navigate(`/events/${event.id}`)}
     >
       {event.image_url && (
