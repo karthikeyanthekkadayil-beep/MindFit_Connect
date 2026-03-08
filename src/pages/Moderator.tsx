@@ -331,6 +331,27 @@ const Moderator = () => {
         </div>
       </div>
 
+      {/* Restricted Permissions Banner */}
+      {(() => {
+        const restricted: string[] = [];
+        if (!permissions.canReviewReports) restricted.push("Review Reports");
+        if (!permissions.canIssueWarnings) restricted.push("Issue Warnings");
+        if (!permissions.canDeleteContent) restricted.push("Delete Content");
+        if (!permissions.canBanUsers) restricted.push("Ban Users");
+        if (restricted.length === 0) return null;
+        return (
+          <div className="mx-4 mt-1 mb-0 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2.5">
+            <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs font-medium text-amber-700 dark:text-amber-400">Restricted Permissions</p>
+              <p className="text-[11px] text-amber-600/80 dark:text-amber-400/70 mt-0.5">
+                {restricted.join(", ")} — disabled by admin
+              </p>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Tab Content */}
       <main className="px-4 space-y-4">
         <AnimatePresence mode="wait">
