@@ -255,8 +255,9 @@ export default function CommunityDetail() {
         </div>
 
         <Tabs defaultValue="feed" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="feed">Feed</TabsTrigger>
+            <TabsTrigger value="polls">Polls</TabsTrigger>
             <TabsTrigger value="members">Members</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
           </TabsList>
