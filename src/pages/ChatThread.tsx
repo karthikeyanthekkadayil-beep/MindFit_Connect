@@ -204,6 +204,8 @@ export default function ChatThread() {
         },
         () => {
           queryClient.invalidateQueries({ queryKey: ["messages", id] });
+          queryClient.invalidateQueries({ queryKey: ["pinned-messages-ids", id] });
+          queryClient.invalidateQueries({ queryKey: ["pinned-messages", id] });
         }
       )
       .subscribe();
