@@ -233,7 +233,7 @@ const DailyPlanner = () => {
           </MotionItem>
         </MotionList>
 
-        <div className="grid gap-3 sm:gap-6 lg:grid-cols-3">
+        <MotionFadeIn delay={0.2} className="grid gap-3 sm:gap-6 lg:grid-cols-3">
           {/* Calendar - Hidden on mobile, shown as compact on larger screens */}
           <Card className="hidden sm:block">
             <CardHeader className="p-3 sm:p-6 pb-2">
