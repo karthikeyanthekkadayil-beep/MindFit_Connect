@@ -61,7 +61,7 @@ const ThemeSwitcher = () => {
   );
 };
 
-
+const ModeratorSection = ({ navigate }: { navigate: (path: string) => void }) => {
   const [isMod, setIsMod] = useState(false);
   const [checked, setChecked] = useState(false);
 
