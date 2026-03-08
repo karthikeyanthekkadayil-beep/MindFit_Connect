@@ -286,6 +286,31 @@ export default function CommunityDetail() {
             )}
           </TabsContent>
 
+          <TabsContent value="polls" className="space-y-4">
+            {isMember ? (
+              <>
+                <Button
+                  onClick={() => setShowCreatePoll(true)}
+                  className="w-full gap-2"
+                  variant="secondary"
+                >
+                  <BarChart3 className="h-4 w-4" />
+                  Create Poll
+                </Button>
+                <CommunityPolls communityId={id!} />
+                <CreatePollDialog
+                  open={showCreatePoll}
+                  onOpenChange={setShowCreatePoll}
+                  communityId={id!}
+                />
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">Join this community to see and create polls</p>
+              </div>
+            )}
+          </TabsContent>
+
           <TabsContent value="members" className="space-y-4">
             <div className="grid gap-4">
               {members?.map((member) => (
