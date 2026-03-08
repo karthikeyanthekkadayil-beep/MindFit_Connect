@@ -49,12 +49,13 @@ export const BottomNav = () => {
                 key={tab.id}
                 onClick={() => handleTabClick(tab.path)}
                 className={cn(
-                  "relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-200 touch-target",
-                  "active:scale-90",
+                  "relative flex flex-col items-center justify-center flex-1 h-full touch-target",
                   isActive ? "text-primary" : "text-muted-foreground"
                 )}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -2, transition: { type: "spring", stiffness: 400, damping: 20 } }}
+                whileTap={{ scale: 0.85, transition: { type: "spring", stiffness: 500, damping: 25 } }}
                 transition={{ delay: 0.4 + index * 0.05, type: "spring", stiffness: 300, damping: 20 }}
               >
                 {/* Active indicator */}
@@ -66,10 +67,11 @@ export const BottomNav = () => {
                   />
                 )}
                 
-                <div className={cn(
-                  "flex flex-col items-center justify-center transition-transform duration-200",
-                  isActive && "scale-110"
-                )}>
+                <motion.div
+                  className="flex flex-col items-center justify-center"
+                  animate={isActive ? { scale: 1.1 } : { scale: 1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                >
                   <tab.icon 
                     className={cn(
                       "h-6 w-6 transition-all duration-200",
@@ -82,7 +84,7 @@ export const BottomNav = () => {
                   )}>
                     {tab.label}
                   </span>
-                </div>
+                </motion.div>
               </motion.button>
             );
           })}
