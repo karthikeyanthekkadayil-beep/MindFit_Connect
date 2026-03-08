@@ -1,6 +1,8 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
 import { PageTransition } from "./PageTransition";
+import { TransitionProvider, useTransitionOrigin } from "./TransitionContext";
 
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
@@ -25,7 +27,6 @@ import EventDetail from "@/pages/EventDetail";
 import Messages from "@/pages/Messages";
 import ChatThread from "@/pages/ChatThread";
 import Admin from "@/pages/Admin";
-
 import Balance from "@/pages/Balance";
 import Moderator from "@/pages/Moderator";
 import ModeratorRequest from "@/pages/ModeratorRequest";
@@ -34,7 +35,25 @@ import Leaderboard from "@/pages/Leaderboard";
 import ReportProblem from "@/pages/ReportProblem";
 import NotFound from "@/pages/NotFound";
 
-export const AnimatedRoutes = () => {
+const ClickCapture = ({ children }: { children: React.ReactNode }) => {
+  const { captureOrigin } = useTransitionOrigin();
+
+  useEffect(() => {
+    // Capture click position on any anchor/button/interactive click
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("a, button, [role='button'], [data-nav]")) {
+        captureOrigin(e);
+      }
+    };
+    window.addEventListener("click", handler, true);
+    return () => window.removeEventListener("click", handler, true);
+  }, [captureOrigin]);
+
+  return <>{children}</>;
+};
+
+const RoutesInner = () => {
   const location = useLocation();
 
   return (
@@ -63,7 +82,6 @@ export const AnimatedRoutes = () => {
         <Route path="/messages" element={<PageTransition><Messages /></PageTransition>} />
         <Route path="/messages/:id" element={<PageTransition><ChatThread /></PageTransition>} />
         <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
-        
         <Route path="/balance" element={<PageTransition><Balance /></PageTransition>} />
         <Route path="/moderator" element={<PageTransition><Moderator /></PageTransition>} />
         <Route path="/moderator/request" element={<PageTransition><ModeratorRequest /></PageTransition>} />
@@ -73,5 +91,15 @@ export const AnimatedRoutes = () => {
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>
+  );
+};
+
+export const AnimatedRoutes = () => {
+  return (
+    <TransitionProvider>
+      <ClickCapture>
+        <RoutesInner />
+      </ClickCapture>
+    </TransitionProvider>
   );
 };
