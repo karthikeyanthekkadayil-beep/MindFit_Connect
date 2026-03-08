@@ -185,7 +185,7 @@ const Dashboard = () => {
                 <motion.button
                   onClick={() => navigate(action.path)}
                   className={cn(
-                    "relative flex flex-col items-center justify-center w-20 h-20 rounded-2xl overflow-hidden",
+                    "relative flex flex-col items-center justify-center w-20 h-20 rounded-2xl overflow-visible",
                     action.color
                   )}
                   whileHover={{
@@ -200,6 +200,11 @@ const Dashboard = () => {
                     transition: { type: "spring", stiffness: 600, damping: 15 },
                   }}
                 >
+                  {/* Glow effect */}
+                  <span
+                    className="pointer-events-none absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-12 h-3 rounded-full blur-md opacity-60"
+                    style={{ backgroundColor: action.glow }}
+                  />
                   <motion.div
                     whileHover={{ rotate: [0, -12, 12, -6, 0], transition: { duration: 0.5 } }}
                   >
