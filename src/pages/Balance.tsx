@@ -549,6 +549,7 @@ const Balance = () => {
                 )}
               </CardContent>
             </Card>
+            </MotionFadeIn>
 
             {/* Quick Tips */}
             <Card>
