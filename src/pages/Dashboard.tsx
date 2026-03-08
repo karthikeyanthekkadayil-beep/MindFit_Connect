@@ -125,8 +125,8 @@ const Dashboard = () => {
       <main className="max-w-lg mx-auto px-4 -mt-3 space-y-5">
         {/* Stats Card */}
         <MotionScaleIn delay={0.15}>
-          <Card 
-            className="overflow-hidden border-0 shadow-lg card-press cursor-pointer"
+          <InteractiveCard 
+            className="overflow-hidden border-0 shadow-lg cursor-pointer"
             onClick={() => navigate('/rewards')}
           >
             <CardContent className="p-0">
