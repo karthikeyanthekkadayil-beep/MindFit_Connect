@@ -369,9 +369,22 @@ const Moderator = () => {
             {/* POSTS TAB */}
             {activeTab === "posts" && (
               <div className="space-y-3">
-                <h2 className="text-base font-semibold flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-primary" /> Recent Posts
-                </h2>
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <h2 className="text-base font-semibold flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4 text-primary" /> Recent Posts
+                  </h2>
+                  {permissions.canDeleteContent && (
+                    <BulkPostActions
+                      selectedIds={selectedPostIds}
+                      onToggle={(id) => setSelectedPostIds(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; })}
+                      onSelectAll={() => setSelectedPostIds(new Set(posts.slice(0, 15).map(p => p.id)))}
+                      onClearAll={() => setSelectedPostIds(new Set())}
+                      totalCount={posts.slice(0, 15).length}
+                      onDeleted={(ids) => { setPosts(prev => prev.filter(p => !ids.includes(p.id))); setSelectedPostIds(new Set()); }}
+                      requireNotes={permissions.requireNotes}
+                    />
+                  )}
+                </div>
                 {posts.length === 0 ? (
                   <Card><CardContent className="py-12 text-center text-muted-foreground text-sm">No posts to review</CardContent></Card>
                 ) : (
