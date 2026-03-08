@@ -435,6 +435,13 @@ export default function ChatThread() {
         </div>
       </div>
 
+      {/* Pinned Messages Bar */}
+      <PinnedMessagesBar
+        conversationId={id!}
+        currentUserId={currentUserId}
+        onMessageClick={scrollToMessage}
+      />
+
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-20 relative">
         {isSearchOpen && messages && (
@@ -442,12 +449,16 @@ export default function ChatThread() {
             messages={messages}
             onResultSelect={(messageId) => {
               scrollToMessage(messageId);
-              // Track the current search query for highlighting
               const input = document.querySelector('input[placeholder="Search messages..."]') as HTMLInputElement;
               if (input) setSearchQuery(input.value);
             }}
             onClose={handleSearchClose}
           />
+        )}
+
+        {/* Chat Polls */}
+        {conversation?.type === "group" && (
+          <ChatPollInline conversationId={id!} currentUserId={currentUserId} />
         )}
         
         {messages && messages.length > 0 ? (
