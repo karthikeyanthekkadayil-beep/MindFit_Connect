@@ -391,8 +391,15 @@ const Moderator = () => {
                   posts.slice(0, 15).map(post => (
                     <Card key={post.id} className="overflow-hidden">
                       <div className="p-4">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex-1 min-w-0">
+                         <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-start gap-3 flex-1 min-w-0">
+                            {permissions.canDeleteContent && (
+                              <BulkCheckbox
+                                checked={selectedPostIds.has(post.id)}
+                                onToggle={() => setSelectedPostIds(prev => { const n = new Set(prev); n.has(post.id) ? n.delete(post.id) : n.add(post.id); return n; })}
+                              />
+                            )}
+                            <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap mb-1">
                               <span className="font-semibold text-sm">{post.author_name}</span>
                               <Badge variant="secondary" className="text-[10px]">{post.community_name}</Badge>
