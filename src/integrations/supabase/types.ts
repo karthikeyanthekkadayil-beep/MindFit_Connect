@@ -1017,6 +1017,7 @@ export type Database = {
       problem_reports: {
         Row: {
           admin_response: string | null
+          attachment_urls: string[] | null
           category: string
           created_at: string
           description: string
@@ -1031,6 +1032,7 @@ export type Database = {
         }
         Insert: {
           admin_response?: string | null
+          attachment_urls?: string[] | null
           category?: string
           created_at?: string
           description: string
@@ -1045,6 +1047,7 @@ export type Database = {
         }
         Update: {
           admin_response?: string | null
+          attachment_urls?: string[] | null
           category?: string
           created_at?: string
           description?: string
