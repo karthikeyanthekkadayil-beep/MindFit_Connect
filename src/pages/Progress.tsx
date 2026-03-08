@@ -205,48 +205,54 @@ const Progress = () => {
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
         {/* Weekly Summary Cards */}
         <MotionList className="grid grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center justify-between mb-1">
-                <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-              </div>
-              <div className="text-base sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
-              <p className="text-[9px] sm:text-xs text-muted-foreground">Fitness</p>
-            </CardContent>
-          </Card>
-
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center justify-between mb-1">
-                <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-              </div>
-              <div className="text-base sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-[10px] sm:text-sm">m</span></div>
-              <p className="text-[9px] sm:text-xs text-muted-foreground">Meditate</p>
-            </CardContent>
-          </Card>
-
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center justify-between mb-1">
-                <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-              </div>
-              <div className="text-base sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
-              <p className="text-[9px] sm:text-xs text-muted-foreground">Nutrition</p>
-            </CardContent>
-          </Card>
-
-          <Card className="active:scale-[0.98] transition-transform">
-            <CardContent className="p-2.5 sm:p-4">
-              <div className="flex items-center justify-between mb-1">
-                <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-              </div>
-              <div className="text-base sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
-              <p className="text-[9px] sm:text-xs text-muted-foreground">Social</p>
-            </CardContent>
-          </Card>
-        </div>
+          <MotionItem>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center justify-between mb-1">
+                  <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                </div>
+                <div className="text-base sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
+                <p className="text-[9px] sm:text-xs text-muted-foreground">Fitness</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center justify-between mb-1">
+                  <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                </div>
+                <div className="text-base sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-[10px] sm:text-sm">m</span></div>
+                <p className="text-[9px] sm:text-xs text-muted-foreground">Meditate</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center justify-between mb-1">
+                  <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                </div>
+                <div className="text-base sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
+                <p className="text-[9px] sm:text-xs text-muted-foreground">Nutrition</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+          <MotionItem>
+            <Card className="active:scale-[0.98] transition-transform">
+              <CardContent className="p-2.5 sm:p-4">
+                <div className="flex items-center justify-between mb-1">
+                  <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                </div>
+                <div className="text-base sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
+                <p className="text-[9px] sm:text-xs text-muted-foreground">Social</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+        </MotionList>
 
         {/* Detailed Charts */}
+        <MotionFadeIn delay={0.3}>
         <Tabs defaultValue="fitness" className="w-full">
           <TabsList className="grid w-full grid-cols-4 h-9 sm:h-10">
             <TabsTrigger value="fitness" className="text-[10px] sm:text-sm px-1 sm:px-3">Fitness</TabsTrigger>
