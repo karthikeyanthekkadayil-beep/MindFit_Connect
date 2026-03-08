@@ -571,6 +571,11 @@ const Moderator = () => {
               <ReportsTab moderatorId={session.user.id} onActionTaken={() => loadModeratorData()} />
             )}
 
+            {/* ANALYTICS TAB */}
+            {activeTab === "analytics" && session && (
+              <AnalyticsTab moderatorId={session.user.id} />
+            )}
+
             {/* HISTORY TAB */}
             {activeTab === "history" && session && (
               <HistoryTab moderatorId={session.user.id} />
