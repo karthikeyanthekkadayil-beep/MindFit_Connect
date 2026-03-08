@@ -471,6 +471,7 @@ const Moderator = () => {
                                 moderatorId={session.user.id}
                               />
                             )}
+                            {permissions.canDeleteContent && (
                             <Dialog>
                               <DialogTrigger asChild>
                                 <Button
@@ -493,7 +494,7 @@ const Moderator = () => {
                                   <p className="line-clamp-3">{selectedPost?.content}</p>
                                 </div>
                                 <Textarea
-                                  placeholder="Reason for deletion (optional)"
+                                  placeholder={permissions.requireNotes ? "Reason for deletion (required)" : "Reason for deletion (optional)"}
                                   value={deleteReason}
                                   onChange={(e) => setDeleteReason(e.target.value)}
                                   className="text-sm"
@@ -505,6 +506,7 @@ const Moderator = () => {
                                   <Button 
                                     variant="destructive" 
                                     size="sm"
+                                    disabled={permissions.requireNotes && !deleteReason.trim()}
                                     onClick={() => selectedPost && handleDeletePost(selectedPost.id)}
                                   >
                                     Delete Post
@@ -512,6 +514,7 @@ const Moderator = () => {
                                 </DialogFooter>
                               </DialogContent>
                             </Dialog>
+                            )}
                           </div>
                         </div>
                       </div>
