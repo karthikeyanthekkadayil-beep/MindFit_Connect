@@ -98,6 +98,7 @@ const RoutesInner = () => {
 export const AnimatedRoutes = () => {
   return (
     <TransitionProvider>
+      <ScrollToTop />
       <ClickCapture>
         <RoutesInner />
       </ClickCapture>
