@@ -10,6 +10,8 @@ import { ArrowLeft, Users, UserPlus, UserMinus, Calendar, MapPin, Clock, Plus } 
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
+import { AnimatedPage } from "@/components/motion/AnimatedPage";
+import { MotionFadeIn } from "@/components/motion/MotionWrappers";
 import { CreatePostDialog } from "@/components/CreatePostDialog";
 import { CommunityFeed } from "@/components/CommunityFeed";
 
@@ -183,6 +185,7 @@ export default function CommunityDetail() {
   }
 
   return (
+    <AnimatedPage>
     <div className="min-h-screen bg-background pb-20">
       <div className="relative">
         {community.image_url && (
@@ -369,5 +372,6 @@ export default function CommunityDetail() {
         </Tabs>
       </div>
     </div>
+    </AnimatedPage>
   );
 }

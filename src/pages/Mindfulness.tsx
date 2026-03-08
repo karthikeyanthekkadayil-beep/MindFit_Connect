@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, InteractiveCard, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -381,9 +381,10 @@ const Mindfulness = () => {
           </TabsList>
 
           <TabsContent value="browse" className="space-y-2 sm:space-y-3">
-            <div className="grid gap-2 sm:gap-3 grid-cols-2 lg:grid-cols-3">
+            <MotionList className="grid gap-2 sm:gap-3 grid-cols-2 lg:grid-cols-3" delay={0.1}>
               {meditationPrograms.map((program) => (
-                <Card key={program.id} className="hover:shadow-lg transition-all">
+                <MotionItem key={program.id}>
+                <InteractiveCard className="h-full">
                   <CardHeader className="p-2.5 sm:p-4 pb-1.5 sm:pb-2">
                     <div className="flex justify-between items-start gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
                       <CardTitle className="text-xs sm:text-base font-semibold line-clamp-1">{program.title}</CardTitle>
@@ -428,15 +429,17 @@ const Mindfulness = () => {
                       Start
                     </Button>
                   </CardContent>
-                </Card>
+                </InteractiveCard>
+                </MotionItem>
               ))}
-            </div>
+            </MotionList>
           </TabsContent>
 
           <TabsContent value="breathing" className="space-y-2 sm:space-y-3">
-            <div className="grid gap-2 sm:gap-3 grid-cols-2 lg:grid-cols-3">
+            <MotionList className="grid gap-2 sm:gap-3 grid-cols-2 lg:grid-cols-3" delay={0.1}>
               {breathingExercises.map((exercise) => (
-                <Card key={exercise.id} className="hover:shadow-lg transition-all">
+                <MotionItem key={exercise.id}>
+                <InteractiveCard className="h-full">
                   <CardHeader className="p-2.5 sm:p-4 pb-1.5 sm:pb-2">
                     <div className="flex justify-between items-start gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
                       <CardTitle className="text-xs sm:text-base font-semibold line-clamp-1">{exercise.name}</CardTitle>
@@ -481,9 +484,10 @@ const Mindfulness = () => {
                       Start
                     </Button>
                   </CardContent>
-                </Card>
+                </InteractiveCard>
+                </MotionItem>
               ))}
-            </div>
+            </MotionList>
           </TabsContent>
         </Tabs>
       </div>

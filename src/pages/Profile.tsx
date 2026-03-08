@@ -382,6 +382,7 @@ const Profile = () => {
 
           {/* Personal Info Tab */}
           <TabsContent value="personal">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6">
                 <CardTitle className="text-sm sm:text-lg">Personal Information</CardTitle>
@@ -476,10 +477,12 @@ const Profile = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           {/* Health Profile Tab */}
           <TabsContent value="health">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6">
                 <CardTitle className="text-sm sm:text-lg">Health Profile</CardTitle>
@@ -563,10 +566,12 @@ const Profile = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           {/* Settings Tab */}
           <TabsContent value="settings">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6">
                 <CardTitle className="text-sm sm:text-lg">Account Settings</CardTitle>
@@ -596,6 +601,7 @@ const Profile = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
         </Tabs>
       </div>

@@ -122,6 +122,7 @@ const ReportProblem = () => {
           </TabsList>
 
           <TabsContent value="new" className="mt-4">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-4">
                 <CardTitle className="text-base">Submit a Report</CardTitle>
@@ -177,6 +178,7 @@ const ReportProblem = () => {
                 </form>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           <TabsContent value="history" className="mt-4 space-y-3">

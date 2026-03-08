@@ -8,6 +8,8 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { Loader2, ArrowLeft, Play, Heart, Clock, Dumbbell } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
+import { AnimatedPage } from "@/components/motion/AnimatedPage";
+import { MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
 
 interface WorkoutWithExercises {
   id: string;
@@ -177,6 +179,7 @@ const WorkoutDetail = () => {
   };
 
   return (
+    <AnimatedPage>
     <div className="min-h-screen bg-background pb-20">
       <div className="container max-w-4xl mx-auto p-4 space-y-6">
         {/* Header */}
@@ -282,6 +285,7 @@ const WorkoutDetail = () => {
 
       <BottomNav />
     </div>
+    </AnimatedPage>
   );
 };
 
