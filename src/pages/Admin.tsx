@@ -345,6 +345,10 @@ const Admin = () => {
             <CommunityManagementTab />
           </TabsContent>
 
+          <TabsContent value="groups" className="space-y-4">
+            <GroupManagementTab />
+          </TabsContent>
+
           <TabsContent value="events" className="space-y-4">
             <EventManagementTab />
           </TabsContent>
