@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Users, UserPlus, UserMinus, Calendar, MapPin, Clock, Plus } from "lucide-react";
+import { ArrowLeft, Users, UserPlus, UserMinus, Calendar, MapPin, Clock, Plus, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
@@ -14,6 +14,8 @@ import { AnimatedPage } from "@/components/motion/AnimatedPage";
 import { MotionFadeIn } from "@/components/motion/MotionWrappers";
 import { CreatePostDialog } from "@/components/CreatePostDialog";
 import { CommunityFeed } from "@/components/CommunityFeed";
+import { CreatePollDialog } from "@/components/CreatePollDialog";
+import { CommunityPolls } from "@/components/CommunityPolls";
 
 export default function CommunityDetail() {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +23,7 @@ export default function CommunityDetail() {
   const queryClient = useQueryClient();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [showCreatePost, setShowCreatePost] = useState(false);
+  const [showCreatePoll, setShowCreatePoll] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -252,8 +255,9 @@ export default function CommunityDetail() {
         </div>
 
         <Tabs defaultValue="feed" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="feed">Feed</TabsTrigger>
+            <TabsTrigger value="polls">Polls</TabsTrigger>
             <TabsTrigger value="members">Members</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
           </TabsList>
@@ -278,6 +282,31 @@ export default function CommunityDetail() {
             ) : (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">Join this community to see and create posts</p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="polls" className="space-y-4">
+            {isMember ? (
+              <>
+                <Button
+                  onClick={() => setShowCreatePoll(true)}
+                  className="w-full gap-2"
+                  variant="secondary"
+                >
+                  <BarChart3 className="h-4 w-4" />
+                  Create Poll
+                </Button>
+                <CommunityPolls communityId={id!} />
+                <CreatePollDialog
+                  open={showCreatePoll}
+                  onOpenChange={setShowCreatePoll}
+                  communityId={id!}
+                />
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">Join this community to see and create polls</p>
               </div>
             )}
           </TabsContent>
