@@ -182,16 +182,18 @@ const Dashboard = () => {
           <MotionList className="scroll-x -mx-4 px-4" delay={0.35}>
             {quickActions.map((action) => (
               <MotionItem key={action.path}>
-                <button
+                <motion.button
                   onClick={() => navigate(action.path)}
                   className={cn(
-                    "flex flex-col items-center justify-center w-20 h-20 rounded-2xl press-effect",
+                    "flex flex-col items-center justify-center w-20 h-20 rounded-2xl",
                     action.color
                   )}
+                  whileHover={{ scale: 1.1, y: -4, transition: { type: "spring", stiffness: 400, damping: 20 } }}
+                  whileTap={{ scale: 0.9, transition: { type: "spring", stiffness: 500, damping: 25 } }}
                 >
                   <action.icon className="h-6 w-6 mb-1" />
                   <span className="text-xs font-medium">{action.title}</span>
-                </button>
+                </motion.button>
               </MotionItem>
             ))}
           </MotionList>
