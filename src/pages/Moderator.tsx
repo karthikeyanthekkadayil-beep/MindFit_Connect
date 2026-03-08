@@ -69,13 +69,14 @@ interface ModPermissions {
   maxWarningsPerDay: number;
 }
 
-type ModTab = "posts" | "events" | "communities" | "reports" | "history" | "balance";
+type ModTab = "posts" | "events" | "communities" | "reports" | "history" | "balance" | "analytics";
 
 const TAB_CONFIG: { value: ModTab; label: string; icon: React.ReactNode; permKey?: keyof ModPermissions }[] = [
   { value: "posts", label: "Posts", icon: <MessageSquare className="h-5 w-5" /> },
   { value: "events", label: "Events", icon: <Calendar className="h-5 w-5" /> },
   { value: "communities", label: "Groups", icon: <Users className="h-5 w-5" /> },
   { value: "reports", label: "Reports", icon: <Flag className="h-5 w-5" />, permKey: "canReviewReports" },
+  { value: "analytics", label: "Analytics", icon: <TrendingUp className="h-5 w-5" /> },
   { value: "history", label: "History", icon: <History className="h-5 w-5" /> },
   { value: "balance", label: "Balance", icon: <Scale className="h-5 w-5" /> },
 ];
