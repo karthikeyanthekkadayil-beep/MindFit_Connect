@@ -42,7 +42,7 @@ const Admin = () => {
       
       if (!session) {
         toast.error("Please log in to access this page");
-        navigate("/admin/login");
+        navigate("/auth");
         return;
       }
 
