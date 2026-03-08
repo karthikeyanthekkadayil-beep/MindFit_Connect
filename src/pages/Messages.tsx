@@ -12,7 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { NewConversationDialog } from "@/components/NewConversationDialog";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
-import { MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { MotionFadeIn, MotionScaleIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
+import { InteractiveCard } from "@/components/ui/card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -188,94 +189,99 @@ export default function Messages() {
           </Button>
         </MotionFadeIn>
 
-        <div className="relative mb-4 sm:mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search conversations..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 h-10 sm:h-11"
-          />
-        </div>
+        <MotionFadeIn delay={0.1}>
+          <div className="relative mb-4 sm:mb-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search conversations..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-10 sm:h-11"
+            />
+          </div>
+        </MotionFadeIn>
 
         {isLoading ? (
           <div className="text-center py-6 sm:py-8 text-muted-foreground text-xs sm:text-sm">Loading conversations...</div>
         ) : conversations && conversations.length > 0 ? (
-          <div className="space-y-2">
+          <MotionList className="space-y-2" delay={0.15}>
             {conversations.map((conversation) => {
               const unreadCount = getUnreadCount(conversation);
               
               return (
-                <Card
-                  key={conversation.id}
-                  className="p-3 sm:p-4 cursor-pointer hover:bg-accent/50 transition-colors active:scale-[0.99] group"
-                  onClick={() => navigate(`/messages/${conversation.id}`)}
-                >
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10 sm:h-12 sm:w-12 shrink-0">
-                      <AvatarImage src={getConversationAvatar(conversation)} />
-                      <AvatarFallback>
-                        {conversation.type === "direct"
-                          ? getConversationTitle(conversation)[0]
-                          : "G"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-0.5 sm:mb-1 gap-2">
-                        <h3 className="font-semibold text-foreground truncate text-sm sm:text-base">
-                          {getConversationTitle(conversation)}
-                        </h3>
-                        {conversation.latestMessage && (
-                          <span className="text-[10px] sm:text-xs text-muted-foreground shrink-0">
-                            {formatDistanceToNow(new Date(conversation.latestMessage.created_at), {
-                              addSuffix: true,
-                            })}
-                          </span>
+                <MotionItem key={conversation.id}>
+                  <InteractiveCard
+                    className="p-3 sm:p-4 cursor-pointer hover:bg-accent/50 transition-colors group border-0 shadow-sm"
+                    onClick={() => navigate(`/messages/${conversation.id}`)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-10 w-10 sm:h-12 sm:w-12 shrink-0">
+                        <AvatarImage src={getConversationAvatar(conversation)} />
+                        <AvatarFallback>
+                          {conversation.type === "direct"
+                            ? getConversationTitle(conversation)[0]
+                            : "G"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-0.5 sm:mb-1 gap-2">
+                          <h3 className="font-semibold text-foreground truncate text-sm sm:text-base">
+                            {getConversationTitle(conversation)}
+                          </h3>
+                          {conversation.latestMessage && (
+                            <span className="text-[10px] sm:text-xs text-muted-foreground shrink-0">
+                              {formatDistanceToNow(new Date(conversation.latestMessage.created_at), {
+                                addSuffix: true,
+                              })}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-xs sm:text-sm text-muted-foreground truncate">
+                            {conversation.latestMessage?.content || "No messages yet"}
+                          </p>
+                          {unreadCount > 0 && (
+                            <Badge variant="default" className="ml-2 shrink-0 text-[10px] sm:text-xs">
+                              {unreadCount}
+                            </Badge>
+                          )}
+                        </div>
+                        {conversation.community && (
+                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
+                            {conversation.community.name}
+                          </p>
                         )}
                       </div>
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="text-xs sm:text-sm text-muted-foreground truncate">
-                          {conversation.latestMessage?.content || "No messages yet"}
-                        </p>
-                        {unreadCount > 0 && (
-                          <Badge variant="default" className="ml-2 shrink-0 text-[10px] sm:text-xs">
-                            {unreadCount}
-                          </Badge>
-                        )}
-                      </div>
-                      {conversation.community && (
-                        <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
-                          {conversation.community.name}
-                        </p>
-                      )}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setChatToDelete(conversation.id);
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setChatToDelete(conversation.id);
-                      }}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </Card>
+                  </InteractiveCard>
+                </MotionItem>
               );
             })}
-          </div>
+          </MotionList>
         ) : (
-          <div className="text-center py-8 sm:py-12">
-            <MessageCircle className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-base sm:text-lg font-semibold mb-2">No conversations yet</h3>
-            <p className="text-muted-foreground mb-4 text-sm">
-              Start a conversation to connect with others
-            </p>
-            <Button onClick={() => setIsNewConversationOpen(true)} className="h-10">
-              New Conversation
-            </Button>
-          </div>
+          <MotionScaleIn delay={0.2}>
+            <div className="text-center py-8 sm:py-12">
+              <MessageCircle className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-base sm:text-lg font-semibold mb-2">No conversations yet</h3>
+              <p className="text-muted-foreground mb-4 text-sm">
+                Start a conversation to connect with others
+              </p>
+              <Button onClick={() => setIsNewConversationOpen(true)} className="h-10">
+                New Conversation
+              </Button>
+            </div>
+          </MotionScaleIn>
         )}
 
         <NewConversationDialog
