@@ -114,13 +114,13 @@ const Auth = () => {
       {/* Header */}
       <div className="flex-1 flex flex-col items-center justify-center px-5 py-8">
         {/* Logo/Brand */}
-        <div className="mb-8 text-center animate-in-up">
+        <MotionScaleIn className="mb-8 text-center">
           <img src={logo} alt="MindFit Connect logo" className="w-20 h-20 mx-auto mb-4" />
           <h1 className="text-2xl font-heading font-bold">MindFit Connect</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Your wellness journey starts here
           </p>
-        </div>
+        </MotionScaleIn>
 
         {/* Auth Card */}
         <Card className="w-full max-w-sm border-0 shadow-xl animate-in-up delay-1">
