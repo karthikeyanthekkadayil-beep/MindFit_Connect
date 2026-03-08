@@ -767,6 +767,8 @@ const Moderator = () => {
             </Card>
           </TabsContent>
         </Tabs>
+          );
+        })()}
 
         {/* Moderation Guidelines */}
         <Card>
