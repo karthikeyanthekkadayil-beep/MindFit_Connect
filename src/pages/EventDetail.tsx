@@ -167,6 +167,7 @@ export default function EventDetail() {
   const userIsGoing = userRsvp?.status === "going";
 
   return (
+    <AnimatedPage>
     <div className="min-h-screen bg-background pb-20">
       <div className="relative">
         {event.image_url && (
