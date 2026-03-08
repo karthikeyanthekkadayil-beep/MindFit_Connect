@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, Clock, MapPin, Users, UserPlus, UserMinus } from "lucide-react";
+import { ReportContentDialog } from "@/components/ReportContentDialog";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
@@ -262,6 +263,9 @@ export default function EventDetail() {
           >
             View Community
           </Button>
+          {currentUserId && currentUserId !== event.creator_id && (
+            <ReportContentDialog contentType="event" contentId={event.id} />
+          )}
         </div>
 
         <Card>
