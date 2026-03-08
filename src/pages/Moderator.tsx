@@ -256,7 +256,7 @@ const Moderator = () => {
   const visibleTabs = TAB_CONFIG.filter(t => !t.permKey || permissions[t.permKey]);
 
   return (
-    <div className="min-h-screen bg-background pb-36">
+    <div className="min-h-screen bg-background pb-24">
       {/* Compact Mobile Header */}
       <header className="sticky top-0 z-50 bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-lg safe-area-top">
         <div className="flex items-center justify-between px-4 py-3">
@@ -388,7 +388,7 @@ const Moderator = () => {
                         </div>
 
                         {/* Action bar */}
-                        <div className="flex items-center gap-2 mt-3 pt-3 border-t flex-wrap">
+                        <div className="flex items-center gap-1.5 mt-3 pt-3 border-t overflow-x-auto scrollbar-hide">
                           <Button size="sm" variant="ghost" className="h-10 text-xs gap-1.5" onClick={() => navigate(`/communities/${post.community_id}`)}>
                             <Eye className="h-4 w-4" /> View
                           </Button>
