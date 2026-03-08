@@ -207,7 +207,7 @@ const Progress = () => {
         {/* Weekly Summary Cards */}
         <MotionList className="grid grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
           <MotionItem>
-            <Card className="active:scale-[0.98] transition-transform">
+            <InteractiveCard className="border-0 shadow-sm">
               <CardContent className="p-2.5 sm:p-4">
                 <div className="flex items-center justify-between mb-1">
                   <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
@@ -215,10 +215,10 @@ const Progress = () => {
                 <div className="text-base sm:text-2xl font-bold">{weeklyStats.fitnessCompletion}%</div>
                 <p className="text-[9px] sm:text-xs text-muted-foreground">Fitness</p>
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionItem>
           <MotionItem>
-            <Card className="active:scale-[0.98] transition-transform">
+            <InteractiveCard className="border-0 shadow-sm">
               <CardContent className="p-2.5 sm:p-4">
                 <div className="flex items-center justify-between mb-1">
                   <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
@@ -226,10 +226,10 @@ const Progress = () => {
                 <div className="text-base sm:text-2xl font-bold">{weeklyStats.meditationMinutes}<span className="text-[10px] sm:text-sm">m</span></div>
                 <p className="text-[9px] sm:text-xs text-muted-foreground">Meditate</p>
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionItem>
           <MotionItem>
-            <Card className="active:scale-[0.98] transition-transform">
+            <InteractiveCard className="border-0 shadow-sm">
               <CardContent className="p-2.5 sm:p-4">
                 <div className="flex items-center justify-between mb-1">
                   <Apple className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
@@ -237,10 +237,10 @@ const Progress = () => {
                 <div className="text-base sm:text-2xl font-bold">{weeklyStats.nutritionAdherence}%</div>
                 <p className="text-[9px] sm:text-xs text-muted-foreground">Nutrition</p>
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionItem>
           <MotionItem>
-            <Card className="active:scale-[0.98] transition-transform">
+            <InteractiveCard className="border-0 shadow-sm">
               <CardContent className="p-2.5 sm:p-4">
                 <div className="flex items-center justify-between mb-1">
                   <Users className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
@@ -248,7 +248,7 @@ const Progress = () => {
                 <div className="text-base sm:text-2xl font-bold">{weeklyStats.communityEngagement}</div>
                 <p className="text-[9px] sm:text-xs text-muted-foreground">Social</p>
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionItem>
         </MotionList>
 
