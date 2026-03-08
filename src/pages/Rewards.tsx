@@ -111,7 +111,7 @@ const Rewards = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20 overflow-x-hidden">
+    <div className="min-h-screen bg-background pb-20 overflow-x-hidden overflow-y-auto">
       <MotionHeader className="bg-gradient-hero text-white p-4 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
