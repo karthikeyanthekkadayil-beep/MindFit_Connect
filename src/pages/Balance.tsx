@@ -16,7 +16,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { PieChart, Pie, Cell, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from "recharts";
 import { format, subDays } from "date-fns";
 import { toast } from "sonner";
-import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { MotionHeader, MotionFadeIn, MotionScaleIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
 
 interface WellnessScore {
   category: string;
@@ -280,6 +280,7 @@ const Balance = () => {
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
         {/* Overall Balance Score */}
+        <MotionScaleIn delay={0.1}>
         <Card className="bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 border-primary/20">
           <CardContent className="p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
@@ -304,6 +305,7 @@ const Balance = () => {
             </div>
           </CardContent>
         </Card>
+        </MotionScaleIn>
 
         <Tabs defaultValue="dashboard" className="w-full">
           <TabsList className="grid w-full grid-cols-5 h-auto">
@@ -317,9 +319,10 @@ const Balance = () => {
           {/* Wellness Dashboard */}
           <TabsContent value="dashboard" className="space-y-4 mt-4">
             {/* Category Scores */}
-            <div className="grid grid-cols-2 gap-2 sm:gap-4">
+            <MotionList className="grid grid-cols-2 gap-2 sm:gap-4" delay={0.1}>
               {wellnessScores.map((item) => (
-                <Card key={item.category}>
+                <MotionItem key={item.category}>
+                <Card>
                   <CardContent className="p-3 sm:p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <item.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
@@ -329,10 +332,12 @@ const Balance = () => {
                     <Progress value={item.score} className="h-2" />
                   </CardContent>
                 </Card>
+                </MotionItem>
               ))}
-            </div>
+            </MotionList>
 
             {/* Radar Chart */}
+            <MotionFadeIn delay={0.2}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg">Balance Overview</CardTitle>
@@ -351,8 +356,10 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
 
             {/* Activity Distribution */}
+            <MotionFadeIn delay={0.3}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg">Time Distribution</CardTitle>
@@ -384,6 +391,7 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           {/* Mental Wellness Tab */}
@@ -399,6 +407,7 @@ const Balance = () => {
             )}
 
             {/* Quick Mental Wellness Actions */}
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
@@ -455,8 +464,10 @@ const Balance = () => {
                 </Button>
               </CardContent>
             </Card>
+            </MotionFadeIn>
 
             {/* Mental Wellness Tips */}
+            <MotionFadeIn delay={0.2}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
@@ -485,10 +496,12 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           {/* Activity Balance Insights */}
           <TabsContent value="insights" className="space-y-3 mt-4">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
@@ -536,8 +549,10 @@ const Balance = () => {
                 )}
               </CardContent>
             </Card>
+            </MotionFadeIn>
 
             {/* Quick Tips */}
+            <MotionFadeIn delay={0.2}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg">Balance Tips</CardTitle>
@@ -561,10 +576,12 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           {/* Work-Life Balance */}
           <TabsContent value="worklife" className="space-y-4 mt-4">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <div className="flex items-center gap-2">
@@ -627,8 +644,10 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
 
             {/* Reminders Section */}
+            <MotionFadeIn delay={0.2}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
@@ -660,10 +679,12 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           {/* Physical Balance Exercises */}
           <TabsContent value="exercises" className="space-y-3 mt-4">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg">Physical Balance Training</CardTitle>
@@ -734,6 +755,7 @@ const Balance = () => {
                 ))}
               </CardContent>
             </Card>
+            </MotionFadeIn>
 
             <Button 
               className="w-full" 
