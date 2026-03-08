@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus } from "lucide-react";
+import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus, Shield } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import { useCamera, base64ToBlob } from "@/hooks/useCamera";
 import { Capacitor } from "@capacitor/core";
@@ -513,6 +513,14 @@ const Profile = () => {
                   <div>
                     <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Email</h3>
                     <p className="text-[10px] sm:text-sm text-muted-foreground break-all">{profile.email}</p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Moderation</h3>
+                    <Button variant="outline" onClick={() => navigate("/moderator/request")} className="w-full sm:w-auto h-8 sm:h-10 text-xs sm:text-sm">
+                      <Shield className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      Request Moderator Access
+                    </Button>
                   </div>
 
                   <div>
