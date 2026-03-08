@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [greeting, setGreeting] = useState("Welcome");
   const [isAdmin, setIsAdmin] = useState(false);
   const [hasElevatedRole, setHasElevatedRole] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -58,6 +59,7 @@ const Dashboard = () => {
             const roles = data?.map(r => r.role) || [];
             setIsAdmin(roles.includes("admin"));
             setHasElevatedRole(roles.includes("admin") || roles.includes("moderator"));
+            setIsLoading(false);
           });
       }
     });
@@ -92,6 +94,17 @@ const Dashboard = () => {
     { title: "My Goals", description: "Set and track targets", icon: Target, path: "/goals" },
     { title: "Report a Problem", description: "Submit issues or feedback", icon: AlertCircle, path: "/report-problem" },
   ];
+
+  if (isLoading || !session) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <img src={logo} alt="MindFit Connect" className="w-12 h-12 rounded-xl animate-pulse" />
+          <p className="text-sm text-muted-foreground">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background pb-20">
