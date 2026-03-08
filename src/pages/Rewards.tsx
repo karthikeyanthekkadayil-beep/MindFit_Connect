@@ -137,39 +137,58 @@ const Rewards = () => {
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-            <CardContent className="p-3 sm:p-4 text-center">
-              <Star className="h-6 w-6 sm:h-8 sm:w-8 text-primary mx-auto mb-2" />
-              <p className="text-xl sm:text-3xl font-bold text-primary">{stats?.total_points || 0}</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Total Points</p>
-            </CardContent>
-          </Card>
+        <MotionList className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
+          <MotionItem>
+            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <motion.div whileHover={{ rotate: [0, -15, 15, -8, 0], scale: 1.2, transition: { duration: 0.5 } }} whileTap={{ scale: 0.85 }}>
+                  <Star className="h-6 w-6 sm:h-8 sm:w-8 text-primary mx-auto mb-2" />
+                </motion.div>
+                <p className="text-xl sm:text-3xl font-bold text-primary">{stats?.total_points || 0}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Total Points</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
 
-          <Card className="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border-amber-500/20">
-            <CardContent className="p-3 sm:p-4 text-center">
-              <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-amber-500 mx-auto mb-2" />
-              <p className="text-xl sm:text-3xl font-bold text-amber-500">Level {stats?.current_level || 1}</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Current Level</p>
-            </CardContent>
-          </Card>
+          <MotionItem>
+            <Card className="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border-amber-500/20">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <motion.div whileHover={{ y: -4, rotate: 12, scale: 1.2, transition: { type: "spring", stiffness: 300 } }} whileTap={{ scale: 0.85, rotate: -12 }}>
+                  <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-amber-500 mx-auto mb-2" />
+                </motion.div>
+                <p className="text-xl sm:text-3xl font-bold text-amber-500">Level {stats?.current_level || 1}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Current Level</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
 
-          <Card className="bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
-            <CardContent className="p-3 sm:p-4 text-center">
-              <Flame className="h-6 w-6 sm:h-8 sm:w-8 text-secondary mx-auto mb-2" />
-              <p className="text-xl sm:text-3xl font-bold text-secondary">{stats?.current_streak || 0}</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Day Streak</p>
-            </CardContent>
-          </Card>
+          <MotionItem>
+            <Card className="bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <motion.div
+                  whileHover={{ scale: [1, 1.3, 1.1, 1.25, 1.15], transition: { duration: 0.6 } }}
+                  whileTap={{ scale: 0.85 }}
+                >
+                  <Flame className="h-6 w-6 sm:h-8 sm:w-8 text-secondary mx-auto mb-2" />
+                </motion.div>
+                <p className="text-xl sm:text-3xl font-bold text-secondary">{stats?.current_streak || 0}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Day Streak</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
 
-          <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
-            <CardContent className="p-3 sm:p-4 text-center">
-              <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-accent mx-auto mb-2" />
-              <p className="text-xl sm:text-3xl font-bold text-accent">{earnedAchievements.length}</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Achievements</p>
-            </CardContent>
-          </Card>
-        </div>
+          <MotionItem>
+            <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <motion.div whileHover={{ rotate: [0, 20, -20, 10, 0], transition: { duration: 0.5 } }} whileTap={{ scale: 0.85, y: 2 }}>
+                  <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-accent mx-auto mb-2" />
+                </motion.div>
+                <p className="text-xl sm:text-3xl font-bold text-accent">{earnedAchievements.length}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Achievements</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+        </MotionList>
 
         {/* Level Progress */}
         <Card>
