@@ -229,7 +229,7 @@ const Rewards = () => {
                       </Badge>
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="p-3 sm:p-6 pt-0">
+                  <CardContent className="p-3 sm:p-6 pt-0 overflow-hidden">
                     <MotionList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3" delay={0.15 + catIndex * 0.1}>
                     {categoryAchievements.map((achievement) => {
                       const isEarned = earnedIds.includes(achievement.id);
