@@ -10,6 +10,8 @@ import { ReportContentDialog } from "@/components/ReportContentDialog";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
+import { AnimatedPage } from "@/components/motion/AnimatedPage";
+import { MotionFadeIn, MotionSection } from "@/components/motion/MotionWrappers";
 
 export default function EventDetail() {
   const { id } = useParams<{ id: string }>();
