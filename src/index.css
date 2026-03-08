@@ -272,8 +272,54 @@
   }
   
   /* Glass effect for overlays */
-  .glass {
+  .glass-overlay {
     @apply bg-background/80 backdrop-blur-lg;
+  }
+
+  /* Glass theme global styles */
+  .glass body,
+  .glass .min-h-screen {
+    background: linear-gradient(135deg, hsl(210 40% 92%), hsl(230 30% 88%), hsl(200 35% 90%)) !important;
+  }
+
+  .glass [data-slot="card"],
+  .glass .rounded-lg.bg-card,
+  .glass [class*="CardContent"],
+  .glass div[class*="border"][class*="rounded"] {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: hsla(0, 0%, 100%, 0.55) !important;
+    border: 1px solid hsla(0, 0%, 100%, 0.4) !important;
+    box-shadow: 0 4px 30px hsla(0, 0%, 0%, 0.06);
+  }
+
+  .glass header {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  .glass nav,
+  .glass .fixed.bottom-0 {
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    background: hsla(0, 0%, 100%, 0.6) !important;
+    border-top: 1px solid hsla(0, 0%, 100%, 0.5) !important;
+  }
+
+  .glass [role="tablist"] {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: hsla(0, 0%, 100%, 0.4) !important;
+  }
+
+  .glass input,
+  .glass textarea,
+  .glass select,
+  .glass [role="combobox"] {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: hsla(0, 0%, 100%, 0.4) !important;
+    border: 1px solid hsla(0, 0%, 100%, 0.5) !important;
   }
   
   /* Subtle entrance animation */
