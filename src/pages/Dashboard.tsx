@@ -75,10 +75,10 @@ const Dashboard = () => {
   };
 
   const quickActions = [
-    { title: "Planner", icon: Calendar, path: "/planner", color: "bg-primary/10 text-primary", hoverBg: "hsl(var(--primary) / 0.2)", rotate: -8 },
-    { title: "Workouts", icon: Dumbbell, path: "/workouts", color: "bg-secondary/10 text-secondary", hoverBg: "hsl(var(--secondary) / 0.2)", rotate: 8 },
-    { title: "Mindfulness", icon: Brain, path: "/mindfulness", color: "bg-accent/10 text-accent", hoverBg: "hsl(var(--accent) / 0.2)", rotate: -6 },
-    { title: "Nutrition", icon: Utensils, path: "/nutrition", color: "bg-primary/10 text-primary", hoverBg: "hsl(var(--primary) / 0.2)", rotate: 6 },
+    { title: "Planner", icon: Calendar, path: "/planner", color: "bg-primary/10 text-primary", hoverBg: "hsl(var(--primary) / 0.2)", rotate: -8, glow: "hsl(var(--primary) / 0.35)" },
+    { title: "Workouts", icon: Dumbbell, path: "/workouts", color: "bg-secondary/10 text-secondary", hoverBg: "hsl(var(--secondary) / 0.2)", rotate: 8, glow: "hsl(var(--secondary) / 0.35)" },
+    { title: "Mindfulness", icon: Brain, path: "/mindfulness", color: "bg-accent/10 text-accent", hoverBg: "hsl(var(--accent) / 0.2)", rotate: -6, glow: "hsl(var(--accent) / 0.35)" },
+    { title: "Nutrition", icon: Utensils, path: "/nutrition", color: "bg-primary/10 text-primary", hoverBg: "hsl(var(--primary) / 0.2)", rotate: 6, glow: "hsl(var(--primary) / 0.35)" },
   ];
 
   const dashboardItems = [
