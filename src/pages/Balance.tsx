@@ -337,6 +337,7 @@ const Balance = () => {
             </MotionList>
 
             {/* Radar Chart */}
+            <MotionFadeIn delay={0.2}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg">Balance Overview</CardTitle>
@@ -355,6 +356,7 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
 
             {/* Activity Distribution */}
             <Card>
