@@ -552,6 +552,7 @@ const Balance = () => {
             </MotionFadeIn>
 
             {/* Quick Tips */}
+            <MotionFadeIn delay={0.2}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg">Balance Tips</CardTitle>
