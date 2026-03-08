@@ -222,7 +222,7 @@ const WorkoutLibrary = () => {
                         <Badge variant="outline" className="text-[9px] sm:text-xs px-1 sm:px-2 py-0">{workout.category}</Badge>
                       </div>
                     </CardContent>
-                  </Card>
+                  </InteractiveCard>
                 ))}
               </div>
             )}
