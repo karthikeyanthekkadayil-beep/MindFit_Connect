@@ -11,6 +11,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { Heart, MessageCircle, Target, TrendingUp, Send } from "lucide-react";
 import { toast } from "sonner";
 import { format, differenceInDays } from "date-fns";
+import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
 
 interface SharedGoal {
   id: string;
