@@ -181,10 +181,7 @@ const Dashboard = () => {
                 onClick={() => navigate(action.path)}
                 className={cn(
                   "flex flex-col items-center justify-center w-20 h-20 rounded-2xl press-effect",
-                  index === 0 && "bg-primary/10 text-primary",
-                  index === 1 && "bg-secondary/10 text-secondary",
-                  index === 2 && "bg-accent/10 text-accent-foreground",
-                  index === 3 && "bg-muted text-primary"
+                  action.color
                 )}
               >
                 <action.icon className="h-6 w-6 mb-1" />
