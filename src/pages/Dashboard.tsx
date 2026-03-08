@@ -11,7 +11,7 @@ import { useGamification } from "@/hooks/useGamification";
 import { 
   Calendar, Users, MessageSquare, Dumbbell, Utensils, Brain, 
   TrendingUp, Target, LogOut, Trophy, Flame, Star, Crown, ChevronRight,
-  Sparkles
+  Sparkles, Shield
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
