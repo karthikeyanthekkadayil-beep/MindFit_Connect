@@ -305,7 +305,7 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
                     <div>
                       <p className="text-sm font-medium">{user.name}</p>
                       <p className="text-[10px] text-muted-foreground">
-                        {user.reports} reports · {user.warnings} warnings
+                        {user.count} reports · {user.warnings} warnings
                       </p>
                     </div>
                   </div>
