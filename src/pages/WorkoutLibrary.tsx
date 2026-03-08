@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, InteractiveCard, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -190,9 +190,9 @@ const WorkoutLibrary = () => {
             ) : (
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                 {filteredWorkouts.map((workout) => (
-                  <Card 
+                  <InteractiveCard 
                     key={workout.id} 
-                    className="cursor-pointer hover:shadow-lg transition-shadow active:scale-[0.98]"
+                    className="cursor-pointer"
                     onClick={() => navigate(`/workouts/${workout.id}`)}
                   >
                     <CardHeader className="p-2 sm:p-4 pb-1 sm:pb-2">
@@ -222,7 +222,7 @@ const WorkoutLibrary = () => {
                         <Badge variant="outline" className="text-[9px] sm:text-xs px-1 sm:px-2 py-0">{workout.category}</Badge>
                       </div>
                     </CardContent>
-                  </Card>
+                  </InteractiveCard>
                 ))}
               </div>
             )}

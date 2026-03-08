@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, InteractiveCard, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Search, Calendar, MapPin, Users, Clock } from "lucide-react";
@@ -104,8 +104,8 @@ export default function Events() {
   ];
 
   const EventCard = ({ event }: { event: any }) => (
-    <Card
-      className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
+    <InteractiveCard
+      className="cursor-pointer"
       onClick={() => navigate(`/events/${event.id}`)}
     >
       {event.image_url && (
@@ -152,7 +152,7 @@ export default function Events() {
       <CardFooter className="p-2.5 pt-0 sm:p-4 sm:pt-0">
         <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 sm:px-2">{event.community?.name}</Badge>
       </CardFooter>
-    </Card>
+    </InteractiveCard>
   );
 
   return (

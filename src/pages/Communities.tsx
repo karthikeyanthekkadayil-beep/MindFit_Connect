@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, InteractiveCard, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Search, Users } from "lucide-react";
@@ -80,8 +80,8 @@ export default function Communities() {
   ];
 
   const CommunityCard = ({ community }: { community: any }) => (
-    <Card
-      className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
+    <InteractiveCard
+      className="cursor-pointer"
       onClick={() => navigate(`/communities/${community.id}`)}
     >
       {community.image_url && (
@@ -108,7 +108,7 @@ export default function Communities() {
         <Users className="h-3 w-3 sm:h-4 sm:w-4" />
         <span>{community.member_count || 0} members</span>
       </CardFooter>
-    </Card>
+    </InteractiveCard>
   );
 
   return (

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, InteractiveCard, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
@@ -125,8 +125,8 @@ const Dashboard = () => {
       <main className="max-w-lg mx-auto px-4 -mt-3 space-y-5">
         {/* Stats Card */}
         <MotionScaleIn delay={0.15}>
-          <Card 
-            className="overflow-hidden border-0 shadow-lg card-press cursor-pointer"
+          <InteractiveCard 
+            className="overflow-hidden border-0 shadow-lg cursor-pointer"
             onClick={() => navigate('/rewards')}
           >
             <CardContent className="p-0">
@@ -171,7 +171,7 @@ const Dashboard = () => {
                 </>
               )}
             </CardContent>
-          </Card>
+          </InteractiveCard>
         </MotionScaleIn>
 
         {/* Quick Actions */}
@@ -205,8 +205,8 @@ const Dashboard = () => {
           <MotionList className="space-y-2" delay={0.45}>
             {dashboardItems.map((item) => (
               <MotionItem key={item.path}>
-                <Card 
-                  className="border-0 shadow-sm card-press cursor-pointer"
+                <InteractiveCard 
+                  className="border-0 shadow-sm cursor-pointer"
                   onClick={() => navigate(item.path)}
                 >
                   <CardContent className="p-4 flex items-center gap-4">
@@ -219,7 +219,7 @@ const Dashboard = () => {
                     </div>
                     <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                   </CardContent>
-                </Card>
+                </InteractiveCard>
               </MotionItem>
             ))}
           </MotionList>
@@ -228,8 +228,8 @@ const Dashboard = () => {
         {/* Admin Dashboard Card */}
         {isAdmin && (
           <MotionFadeIn delay={0.6}>
-            <Card 
-              className="border-0 shadow-sm card-press cursor-pointer bg-gradient-to-r from-destructive/10 to-primary/10"
+            <InteractiveCard 
+              className="border-0 shadow-sm cursor-pointer bg-gradient-to-r from-destructive/10 to-primary/10"
               onClick={() => navigate("/admin")}
             >
               <CardContent className="p-4 flex items-center gap-4">
@@ -242,15 +242,15 @@ const Dashboard = () => {
                 </div>
                 <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionFadeIn>
         )}
 
         {/* Moderator Panel Card */}
         {hasElevatedRole && (
           <MotionFadeIn delay={0.65}>
-            <Card 
-              className="border-0 shadow-sm card-press cursor-pointer bg-gradient-to-r from-primary/10 to-secondary/10"
+            <InteractiveCard 
+              className="border-0 shadow-sm cursor-pointer bg-gradient-to-r from-primary/10 to-secondary/10"
               onClick={() => navigate("/moderator")}
             >
               <CardContent className="p-4 flex items-center gap-4">
@@ -263,7 +263,7 @@ const Dashboard = () => {
                 </div>
                 <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
               </CardContent>
-            </Card>
+            </InteractiveCard>
           </MotionFadeIn>
         )}
 
