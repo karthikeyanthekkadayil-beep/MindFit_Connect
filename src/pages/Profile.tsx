@@ -361,6 +361,7 @@ const Profile = () => {
             </div>
           </CardContent>
         </Card>
+        </MotionScaleIn>
 
         {/* Profile Tabs */}
         <Tabs defaultValue="personal" className="w-full">
