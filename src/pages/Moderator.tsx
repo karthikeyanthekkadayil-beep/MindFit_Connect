@@ -94,6 +94,7 @@ const Moderator = () => {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [deleteReason, setDeleteReason] = useState("");
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
+  const [selectedPostIds, setSelectedPostIds] = useState<Set<string>>(new Set());
   const [postComments, setPostComments] = useState<Record<string, PostComment[]>>({});
   const [loadingComments, setLoadingComments] = useState<string | null>(null);
   const [balanceData, setBalanceData] = useState({
