@@ -14,6 +14,7 @@ import { ModeratorRequestsTab } from "@/components/admin/ModeratorRequestsTab";
 import { CommunityManagementTab } from "@/components/admin/CommunityManagementTab";
 import { EventManagementTab } from "@/components/admin/EventManagementTab";
 import { PlatformSettingsTab } from "@/components/admin/PlatformSettingsTab";
+import { ModeratorManagementTab } from "@/components/admin/ModeratorManagementTab";
 import { BottomNav } from "@/components/BottomNav";
 
 interface UserProfile {
@@ -246,14 +247,22 @@ const Admin = () => {
 
         {/* Admin Tabs */}
         <Tabs defaultValue="users" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-5 h-auto">
+          <TabsList className="grid w-full grid-cols-6 h-auto">
             <TabsTrigger value="users" className="text-xs sm:text-sm py-2">Users</TabsTrigger>
-            <TabsTrigger value="mod-requests" className="text-xs sm:text-sm py-2">
-              <UserCheck className="h-3 w-3 sm:hidden" />
-              <span className="hidden sm:inline">Mod Requests</span>
+            <TabsTrigger value="moderators" className="text-xs sm:text-sm py-2">
+              <Shield className="h-3 w-3 sm:hidden" />
+              <span className="hidden sm:inline">Moderators</span>
               <span className="sm:hidden">Mods</span>
             </TabsTrigger>
-            <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">Communities</TabsTrigger>
+            <TabsTrigger value="mod-requests" className="text-xs sm:text-sm py-2">
+              <UserCheck className="h-3 w-3 sm:hidden" />
+              <span className="hidden sm:inline">Requests</span>
+              <span className="sm:hidden">Reqs</span>
+            </TabsTrigger>
+            <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">
+              <span className="hidden sm:inline">Communities</span>
+              <span className="sm:hidden">Groups</span>
+            </TabsTrigger>
             <TabsTrigger value="events" className="text-xs sm:text-sm py-2">Events</TabsTrigger>
             <TabsTrigger value="settings" className="text-xs sm:text-sm py-2">Settings</TabsTrigger>
           </TabsList>
@@ -307,6 +316,10 @@ const Admin = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="moderators" className="space-y-4">
+            <ModeratorManagementTab />
           </TabsContent>
 
           <TabsContent value="mod-requests" className="space-y-4">
