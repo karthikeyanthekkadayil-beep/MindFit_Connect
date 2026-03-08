@@ -16,6 +16,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { PieChart, Pie, Cell, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from "recharts";
 import { format, subDays } from "date-fns";
 import { toast } from "sonner";
+import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
 
 interface WellnessScore {
   category: string;
