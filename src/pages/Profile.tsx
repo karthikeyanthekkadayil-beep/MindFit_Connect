@@ -516,6 +516,14 @@ const Profile = () => {
                   </div>
 
                   <div>
+                    <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Moderation</h3>
+                    <Button variant="outline" onClick={() => navigate("/moderator/request")} className="w-full sm:w-auto h-8 sm:h-10 text-xs sm:text-sm">
+                      <Shield className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      Request Moderator Access
+                    </Button>
+                  </div>
+
+                  <div>
                     <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Account Actions</h3>
                     <Button variant="destructive" onClick={handleLogout} className="w-full sm:w-auto h-8 sm:h-10 text-xs sm:text-sm">
                       <LogOut className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
