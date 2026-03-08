@@ -283,6 +283,14 @@ export default function ChatThread() {
 
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
   const [chatDeleteOpen, setChatDeleteOpen] = useState(false);
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
+
+  const EDIT_TIME_LIMIT_MS = 15 * 60 * 1000; // 15 minutes
+
+  const canEditMessage = (createdAt: string) => {
+    return Date.now() - new Date(createdAt).getTime() < EDIT_TIME_LIMIT_MS;
+  };
 
   const deleteMessageMutation = useMutation({
     mutationFn: async (messageId: string) => {
