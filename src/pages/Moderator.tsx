@@ -408,8 +408,9 @@ const Moderator = () => {
                             <p className="text-[11px] text-muted-foreground mt-2">
                               {format(new Date(post.created_at), "MMM d, yyyy · h:mm a")}
                             </p>
+                            </div>
                           </div>
-                        </div>
+                         </div>
 
                         {/* Action bar */}
                         <div className="flex items-center gap-1.5 mt-3 pt-3 border-t overflow-x-auto scrollbar-hide">
