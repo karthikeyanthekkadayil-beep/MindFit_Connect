@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { MotionHeader, MotionFadeIn } from "@/components/motion/MotionWrappers";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
-import { ArrowLeft, Send, Loader2, Clock, CheckCircle, MessageCircle, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Send, Loader2, Clock, CheckCircle, MessageCircle, AlertTriangle, Paperclip, X, Image as ImageIcon } from "lucide-react";
 import { format } from "date-fns";
 
 interface ProblemReport {
@@ -25,6 +25,7 @@ interface ProblemReport {
   admin_response: string | null;
   responded_at: string | null;
   created_at: string;
+  attachment_urls: string[] | null;
 }
 
 const CATEGORIES = [
@@ -41,18 +42,31 @@ const statusConfig: Record<string, { label: string; variant: "default" | "second
   resolved: { label: "Resolved", variant: "outline", icon: CheckCircle },
 };
 
+const MAX_FILES = 5;
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 const ReportProblem = () => {
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("general");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reports, setReports] = useState<ProblemReport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
 
   useEffect(() => {
     fetchReports();
   }, []);
+
+  // Generate previews when files change
+  useEffect(() => {
+    const urls = selectedFiles.map(file => URL.createObjectURL(file));
+    setPreviews(urls);
+    return () => urls.forEach(url => URL.revokeObjectURL(url));
+  }, [selectedFiles]);
 
   const fetchReports = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -64,8 +78,55 @@ const ReportProblem = () => {
       .eq("user_id", session.user.id)
       .order("created_at", { ascending: false });
 
-    if (!error && data) setReports(data);
+    if (!error && data) setReports(data as ProblemReport[]);
     setIsLoading(false);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const remaining = MAX_FILES - selectedFiles.length;
+    if (remaining <= 0) {
+      toast.error(`Maximum ${MAX_FILES} files allowed`);
+      return;
+    }
+
+    const validFiles = files.slice(0, remaining).filter(file => {
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error(`${file.name} is too large (max 5MB)`);
+        return false;
+      }
+      if (!file.type.startsWith("image/") && !file.type.startsWith("application/pdf")) {
+        toast.error(`${file.name}: Only images and PDFs are allowed`);
+        return false;
+      }
+      return true;
+    });
+
+    setSelectedFiles(prev => [...prev, ...validFiles]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const uploadFiles = async (userId: string, reportId: string): Promise<string[]> => {
+    const urls: string[] = [];
+    for (const file of selectedFiles) {
+      const ext = file.name.split(".").pop();
+      const path = `${userId}/${reportId}/${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("report-attachments")
+        .upload(path, file, { contentType: file.type });
+
+      if (!error) {
+        const { data: urlData } = supabase.storage
+          .from("report-attachments")
+          .getPublicUrl(path);
+        urls.push(urlData.publicUrl);
+      }
+    }
+    return urls;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -79,22 +140,37 @@ const ReportProblem = () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) { navigate("/auth"); return; }
 
-    const { error } = await supabase.from("problem_reports").insert({
+    // Insert report first to get the ID
+    const { data: reportData, error } = await supabase.from("problem_reports").insert({
       user_id: session.user.id,
       subject: subject.trim().slice(0, 200),
       description: description.trim().slice(0, 2000),
       category,
-    });
+    }).select("id").single();
 
-    if (error) {
+    if (error || !reportData) {
       toast.error("Failed to submit report");
-    } else {
-      toast.success("Report submitted successfully!");
-      setSubject("");
-      setDescription("");
-      setCategory("general");
-      fetchReports();
+      setIsSubmitting(false);
+      return;
     }
+
+    // Upload files if any
+    if (selectedFiles.length > 0) {
+      const urls = await uploadFiles(session.user.id, reportData.id);
+      if (urls.length > 0) {
+        await supabase
+          .from("problem_reports")
+          .update({ attachment_urls: urls } as any)
+          .eq("id", reportData.id);
+      }
+    }
+
+    toast.success("Report submitted successfully!");
+    setSubject("");
+    setDescription("");
+    setCategory("general");
+    setSelectedFiles([]);
+    fetchReports();
     setIsSubmitting(false);
   };
 
@@ -126,7 +202,7 @@ const ReportProblem = () => {
             <Card>
               <CardHeader className="p-4">
                 <CardTitle className="text-base">Submit a Report</CardTitle>
-                <CardDescription className="text-xs">Describe the issue and we'll get back to you</CardDescription>
+                <CardDescription className="text-xs">Describe the issue and attach screenshots if needed</CardDescription>
               </CardHeader>
               <CardContent className="p-4 pt-0">
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -171,6 +247,62 @@ const ReportProblem = () => {
                     <p className="text-xs text-muted-foreground text-right">{description.length}/2000</p>
                   </div>
 
+                  {/* File Upload */}
+                  <div className="space-y-2">
+                    <Label className="text-sm">Attachments</Label>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*,application/pdf"
+                      multiple
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="w-full gap-2"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={selectedFiles.length >= MAX_FILES}
+                    >
+                      <Paperclip className="h-4 w-4" />
+                      {selectedFiles.length >= MAX_FILES
+                        ? `Max ${MAX_FILES} files`
+                        : `Attach files (${selectedFiles.length}/${MAX_FILES})`}
+                    </Button>
+                    <p className="text-xs text-muted-foreground">Images or PDFs, max 5MB each</p>
+
+                    {/* File Previews */}
+                    {selectedFiles.length > 0 && (
+                      <div className="grid grid-cols-3 gap-2 mt-2">
+                        {selectedFiles.map((file, index) => (
+                          <div key={index} className="relative group rounded-lg overflow-hidden border border-border bg-muted/30">
+                            {file.type.startsWith("image/") ? (
+                              <img
+                                src={previews[index]}
+                                alt={file.name}
+                                className="w-full h-20 object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-20 flex flex-col items-center justify-center gap-1 p-2">
+                                <Paperclip className="h-5 w-5 text-muted-foreground" />
+                                <span className="text-[9px] text-muted-foreground truncate w-full text-center">{file.name}</span>
+                              </div>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => removeFile(index)}
+                              className="absolute top-1 right-1 bg-background/80 backdrop-blur-sm rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <X className="h-3.5 w-3.5 text-destructive" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                     Submit Report
@@ -194,6 +326,7 @@ const ReportProblem = () => {
               reports.map(report => {
                 const config = statusConfig[report.status] || statusConfig.open;
                 const StatusIcon = config.icon;
+                const hasAttachments = report.attachment_urls && report.attachment_urls.length > 0;
                 return (
                   <Card key={report.id}>
                     <CardContent className="p-4 space-y-3">
@@ -210,7 +343,32 @@ const ReportProblem = () => {
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground line-clamp-2">{report.description}</p>
-                      <Badge variant="outline" className="text-xs">{CATEGORIES.find(c => c.value === report.category)?.label || report.category}</Badge>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Badge variant="outline" className="text-xs">{CATEGORIES.find(c => c.value === report.category)?.label || report.category}</Badge>
+                        {hasAttachments && (
+                          <Badge variant="outline" className="text-xs gap-1">
+                            <ImageIcon className="h-3 w-3" />
+                            {report.attachment_urls!.length} file{report.attachment_urls!.length > 1 ? "s" : ""}
+                          </Badge>
+                        )}
+                      </div>
+
+                      {/* Attachment thumbnails */}
+                      {hasAttachments && (
+                        <div className="flex gap-2 overflow-x-auto">
+                          {report.attachment_urls!.map((url, i) => (
+                            <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="shrink-0">
+                              {url.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+                                <img src={url} alt={`Attachment ${i + 1}`} className="h-16 w-16 rounded-lg object-cover border border-border" />
+                              ) : (
+                                <div className="h-16 w-16 rounded-lg border border-border flex items-center justify-center bg-muted/30">
+                                  <Paperclip className="h-5 w-5 text-muted-foreground" />
+                                </div>
+                              )}
+                            </a>
+                          ))}
+                        </div>
+                      )}
 
                       {report.admin_response && (
                         <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 mt-2">
