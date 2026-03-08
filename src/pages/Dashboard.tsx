@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [greeting, setGreeting] = useState("Welcome");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -44,6 +45,17 @@ const Dashboard = () => {
       
       if (!session) {
         navigate("/auth");
+      } else {
+        // Check admin role
+        supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id)
+          .eq("role", "admin")
+          .single()
+          .then(({ data }) => {
+            setIsAdmin(!!data);
+          });
       }
     });
 
@@ -208,6 +220,27 @@ const Dashboard = () => {
             ))}
           </div>
         </section>
+
+        {/* Admin Dashboard Card - only for admins */}
+        {isAdmin && (
+          <section className="animate-in-up delay-3">
+            <Card 
+              className="border-0 shadow-sm card-press cursor-pointer bg-gradient-to-r from-destructive/10 to-primary/10"
+              onClick={() => navigate("/admin")}
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-destructive/20 flex items-center justify-center">
+                  <Shield className="h-5 w-5 text-destructive" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-sm">Admin Dashboard</h3>
+                  <p className="text-xs text-muted-foreground">Manage users, content & platform settings</p>
+                </div>
+                <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+              </CardContent>
+            </Card>
+          </section>
+        )}
 
         {/* Become a Moderator Card */}
         <section className="animate-in-up delay-3">
