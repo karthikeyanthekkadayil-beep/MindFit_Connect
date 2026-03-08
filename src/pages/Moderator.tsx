@@ -123,8 +123,31 @@ const Moderator = () => {
     }
 
     setIsModerator(true);
-    await loadModeratorData();
+    await Promise.all([loadModeratorData(), loadPermissions()]);
     setIsLoading(false);
+  };
+
+  const loadPermissions = async () => {
+    try {
+      const { data } = await (supabase as any)
+        .from("platform_settings")
+        .select("key, value")
+        .eq("category", "moderator");
+
+      if (data) {
+        const settingsMap = new Map(data.map((s: any) => [s.key, s.value]));
+        setPermissions({
+          canReviewReports: settingsMap.get("mod_can_review_reports") !== false,
+          canIssueWarnings: settingsMap.get("mod_can_issue_warnings") !== false,
+          canDeleteContent: settingsMap.get("mod_can_delete_content") !== false,
+          canBanUsers: settingsMap.get("mod_can_ban_users") === true,
+          requireNotes: settingsMap.get("mod_require_notes") !== false,
+          maxWarningsPerDay: Number(settingsMap.get("mod_max_warnings_per_day")) || 10,
+        });
+      }
+    } catch (err) {
+      console.error("Failed to load mod permissions:", err);
+    }
   };
 
   const loadModeratorData = async () => {
