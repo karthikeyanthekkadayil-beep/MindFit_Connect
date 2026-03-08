@@ -407,6 +407,7 @@ const Balance = () => {
             )}
 
             {/* Quick Mental Wellness Actions */}
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg flex items-center gap-2">
