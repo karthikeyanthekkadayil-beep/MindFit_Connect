@@ -14,7 +14,8 @@ import {
   TrendingUp, Gift, Sparkles, Heart, Brain, Users, Dumbbell,
   Calendar, Smile, ArrowRight, Lock
 } from "lucide-react";
-import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { MotionHeader, MotionFadeIn, MotionScaleIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { motion } from "framer-motion";
 
 const ICON_MAP: Record<string, React.ElementType> = {
   trophy: Trophy,
