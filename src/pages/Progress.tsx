@@ -185,7 +185,7 @@ const Progress = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
+      <MotionHeader className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           <div className="min-w-0">
             <h1 className="text-xl sm:text-3xl font-heading font-bold">Progress</h1>
@@ -200,11 +200,11 @@ const Progress = () => {
             Goals
           </Button>
         </div>
-      </header>
+      </MotionHeader>
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
         {/* Weekly Summary Cards */}
-        <div className="grid grid-cols-4 gap-2 sm:gap-4">
+        <MotionList className="grid grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
           <Card className="active:scale-[0.98] transition-transform">
             <CardContent className="p-2.5 sm:p-4">
               <div className="flex items-center justify-between mb-1">
