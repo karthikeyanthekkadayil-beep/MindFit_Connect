@@ -249,29 +249,33 @@ const Admin = () => {
 
         {/* Admin Tabs */}
         <Tabs defaultValue="users" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-7 h-auto">
+          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8 h-auto gap-1">
             <TabsTrigger value="users" className="text-xs sm:text-sm py-2">Users</TabsTrigger>
             <TabsTrigger value="moderators" className="text-xs sm:text-sm py-2">
-              <Shield className="h-3 w-3 sm:hidden" />
               <span className="hidden sm:inline">Moderators</span>
               <span className="sm:hidden">Mods</span>
             </TabsTrigger>
             <TabsTrigger value="mod-requests" className="text-xs sm:text-sm py-2">
-              <UserCheck className="h-3 w-3 sm:hidden" />
               <span className="hidden sm:inline">Requests</span>
               <span className="sm:hidden">Reqs</span>
             </TabsTrigger>
             <TabsTrigger value="problems" className="text-xs sm:text-sm py-2">
-              <AlertCircle className="h-3 w-3 sm:hidden" />
               <span className="hidden sm:inline">Problems</span>
               <span className="sm:hidden">Prob</span>
             </TabsTrigger>
             <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">
               <span className="hidden sm:inline">Communities</span>
-              <span className="sm:hidden">Groups</span>
+              <span className="sm:hidden">Comm</span>
+            </TabsTrigger>
+            <TabsTrigger value="groups" className="text-xs sm:text-sm py-2">
+              <span className="hidden sm:inline">Groups</span>
+              <span className="sm:hidden">Grps</span>
             </TabsTrigger>
             <TabsTrigger value="events" className="text-xs sm:text-sm py-2">Events</TabsTrigger>
-            <TabsTrigger value="settings" className="text-xs sm:text-sm py-2">Settings</TabsTrigger>
+            <TabsTrigger value="settings" className="text-xs sm:text-sm py-2">
+              <span className="hidden sm:inline">Settings</span>
+              <span className="sm:hidden">Set</span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="users" className="space-y-4">
