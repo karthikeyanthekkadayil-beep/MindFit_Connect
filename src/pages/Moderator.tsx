@@ -256,7 +256,7 @@ const Moderator = () => {
   const visibleTabs = TAB_CONFIG.filter(t => !t.permKey || permissions[t.permKey]);
 
   return (
-    <div className="min-h-screen bg-background pb-36">
+    <div className="min-h-screen bg-background pb-24">
       {/* Compact Mobile Header */}
       <header className="sticky top-0 z-50 bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-lg safe-area-top">
         <div className="flex items-center justify-between px-4 py-3">
