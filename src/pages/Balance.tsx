@@ -581,6 +581,7 @@ const Balance = () => {
 
           {/* Work-Life Balance */}
           <TabsContent value="worklife" className="space-y-4 mt-4">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <div className="flex items-center gap-2">
