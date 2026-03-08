@@ -359,6 +359,7 @@ const Balance = () => {
             </MotionFadeIn>
 
             {/* Activity Distribution */}
+            <MotionFadeIn delay={0.3}>
             <Card>
               <CardHeader className="p-3 sm:p-6 pb-2">
                 <CardTitle className="text-sm sm:text-lg">Time Distribution</CardTitle>
@@ -390,6 +391,7 @@ const Balance = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
 
           {/* Mental Wellness Tab */}
