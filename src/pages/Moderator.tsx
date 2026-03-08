@@ -410,6 +410,13 @@ const Moderator = () => {
                             >
                               <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
+                            {session && (
+                              <WarnUserDialog
+                                userId={post.user_id}
+                                userName={post.author_name || "Unknown"}
+                                moderatorId={session.user.id}
+                              />
+                            )}
                             <Dialog>
                               <DialogTrigger asChild>
                                 <Button
