@@ -175,18 +175,18 @@ const DailyPlanner = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <header className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
+      <MotionHeader className="bg-gradient-hero text-white p-3 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-xl sm:text-3xl font-heading font-bold">Daily Planner</h1>
           <p className="text-white/90 mt-0.5 sm:mt-1 text-xs sm:text-base">
             {format(selectedDate, "EEE, MMM d, yyyy")}
           </p>
         </div>
-      </header>
+      </MotionHeader>
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
         {/* Stats Cards */}
-        <div className="grid grid-cols-4 gap-2 sm:gap-4">
+        <MotionList className="grid grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
           <Card className="active:scale-[0.98] transition-transform">
             <CardContent className="p-2.5 sm:p-4">
               <div className="text-base sm:text-2xl font-bold">{stats.completed}/{stats.total}</div>
