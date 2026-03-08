@@ -98,6 +98,20 @@ export default function CommunityDetail() {
     enabled: !!id && !!currentUserId,
   });
 
+  const { data: communityConversation } = useQuery({
+    queryKey: ["community-conversation", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("conversations")
+        .select("id")
+        .eq("community_id", id!)
+        .single();
+      if (error) return null;
+      return data;
+    },
+    enabled: !!id && !!isMember,
+  });
+
   const { data: communityEvents } = useQuery({
     queryKey: ["community-events", id],
     queryFn: async () => {
