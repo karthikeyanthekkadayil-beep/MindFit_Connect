@@ -12,7 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus, Shield } from "lucide-react";
+import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus, Shield, Sun, Moon, Monitor } from "lucide-react";
+import { useTheme } from "next-themes";
 import { BottomNav } from "@/components/BottomNav";
 import { useCamera, base64ToBlob } from "@/hooks/useCamera";
 import { Capacitor } from "@capacitor/core";
@@ -34,6 +35,31 @@ interface Profile {
   notification_preferences: any;
   privacy_settings: any;
 }
+
+const ThemeSwitcher = () => {
+  const { theme, setTheme } = useTheme();
+  const options = [
+    { value: "light", label: "Light", icon: Sun },
+    { value: "dark", label: "Dark", icon: Moon },
+    { value: "system", label: "System", icon: Monitor },
+  ];
+  return (
+    <div className="flex gap-2">
+      {options.map(({ value, label, icon: Icon }) => (
+        <Button
+          key={value}
+          variant={theme === value ? "default" : "outline"}
+          size="sm"
+          onClick={() => setTheme(value)}
+          className="flex-1 h-9 sm:h-10 text-xs sm:text-sm gap-1.5"
+        >
+          <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          {label}
+        </Button>
+      ))}
+    </div>
+  );
+};
 
 const ModeratorSection = ({ navigate }: { navigate: (path: string) => void }) => {
   const [isMod, setIsMod] = useState(false);
@@ -545,6 +571,11 @@ const Profile = () => {
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4 p-3 pt-0 sm:p-6 sm:pt-0">
                 <div className="space-y-3 sm:space-y-4">
+                  <div>
+                    <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Theme</h3>
+                    <ThemeSwitcher />
+                  </div>
+
                   <div>
                     <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Email</h3>
                     <p className="text-[10px] sm:text-sm text-muted-foreground break-all">{profile.email}</p>
