@@ -247,15 +247,27 @@ export default function CommunityDetail() {
             </div>
           </div>
           {isMember ? (
-            <Button
-              variant="outline"
-              onClick={() => leaveMutation.mutate()}
-              disabled={leaveMutation.isPending}
-              className="gap-2"
-            >
-              <UserMinus className="h-4 w-4" />
-              Leave
-            </Button>
+            <div className="flex gap-2">
+              {communityConversation && (
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(`/messages/${communityConversation.id}`)}
+                  className="gap-2"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  Chat
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                onClick={() => leaveMutation.mutate()}
+                disabled={leaveMutation.isPending}
+                className="gap-2"
+              >
+                <UserMinus className="h-4 w-4" />
+                Leave
+              </Button>
+            </div>
           ) : (
             <Button
               onClick={() => joinMutation.mutate()}
