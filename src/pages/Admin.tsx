@@ -58,7 +58,7 @@ const Admin = () => {
 
       if (roleError || !roleData) {
         toast.error("Access denied. Admin privileges required.");
-        navigate("/admin/login");
+        navigate("/auth");
         return;
       }
 
