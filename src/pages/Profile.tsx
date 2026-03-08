@@ -571,6 +571,7 @@ const Profile = () => {
 
           {/* Settings Tab */}
           <TabsContent value="settings">
+            <MotionFadeIn delay={0.1}>
             <Card>
               <CardHeader className="p-3 sm:p-6">
                 <CardTitle className="text-sm sm:text-lg">Account Settings</CardTitle>
