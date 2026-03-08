@@ -98,7 +98,7 @@ const Dashboard = () => {
           <div className="flex items-start justify-between">
             <div className="animate-in-up">
               <p className="text-white/80 text-sm font-medium">{greeting} 👋</p>
-              <h1 className="text-2xl font-heading font-bold mt-0.5">MindFit Connect</h1>
+              <h1 className="text-2xl font-heading font-bold mt-0.5 text-primary-foreground drop-shadow-md">MindFit Connect</h1>
             </div>
             <Button 
               onClick={handleLogout} 
