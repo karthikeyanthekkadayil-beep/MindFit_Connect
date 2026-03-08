@@ -601,6 +601,7 @@ const Profile = () => {
                 </div>
               </CardContent>
             </Card>
+            </MotionFadeIn>
           </TabsContent>
         </Tabs>
       </div>
