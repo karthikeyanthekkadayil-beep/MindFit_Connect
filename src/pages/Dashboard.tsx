@@ -205,8 +205,8 @@ const Dashboard = () => {
           <MotionList className="space-y-2" delay={0.45}>
             {dashboardItems.map((item) => (
               <MotionItem key={item.path}>
-                <Card 
-                  className="border-0 shadow-sm card-press cursor-pointer"
+                <InteractiveCard 
+                  className="border-0 shadow-sm cursor-pointer"
                   onClick={() => navigate(item.path)}
                 >
                   <CardContent className="p-4 flex items-center gap-4">
