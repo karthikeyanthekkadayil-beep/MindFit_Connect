@@ -51,6 +51,15 @@ interface Community {
   creator_id: string;
 }
 
+interface ModPermissions {
+  canReviewReports: boolean;
+  canIssueWarnings: boolean;
+  canDeleteContent: boolean;
+  canBanUsers: boolean;
+  requireNotes: boolean;
+  maxWarningsPerDay: number;
+}
+
 const Moderator = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
@@ -76,6 +85,14 @@ const Moderator = () => {
     balanceScore: 0,
   });
   const [activityWeekData, setActivityWeekData] = useState<{ day: string; actions: number }[]>([]);
+  const [permissions, setPermissions] = useState<ModPermissions>({
+    canReviewReports: true,
+    canIssueWarnings: true,
+    canDeleteContent: true,
+    canBanUsers: false,
+    requireNotes: true,
+    maxWarningsPerDay: 10,
+  });
 
   useEffect(() => {
     checkModeratorAccess();
@@ -106,8 +123,31 @@ const Moderator = () => {
     }
 
     setIsModerator(true);
-    await loadModeratorData();
+    await Promise.all([loadModeratorData(), loadPermissions()]);
     setIsLoading(false);
+  };
+
+  const loadPermissions = async () => {
+    try {
+      const { data } = await (supabase as any)
+        .from("platform_settings")
+        .select("key, value")
+        .eq("category", "moderator");
+
+      if (data) {
+        const settingsMap = new Map(data.map((s: any) => [s.key, s.value]));
+        setPermissions({
+          canReviewReports: settingsMap.get("mod_can_review_reports") !== false,
+          canIssueWarnings: settingsMap.get("mod_can_issue_warnings") !== false,
+          canDeleteContent: settingsMap.get("mod_can_delete_content") !== false,
+          canBanUsers: settingsMap.get("mod_can_ban_users") === true,
+          requireNotes: settingsMap.get("mod_require_notes") !== false,
+          maxWarningsPerDay: Number(settingsMap.get("mod_max_warnings_per_day")) || 10,
+        });
+      }
+    } catch (err) {
+      console.error("Failed to load mod permissions:", err);
+    }
   };
 
   const loadModeratorData = async () => {
@@ -370,15 +410,23 @@ const Moderator = () => {
         </div>
 
         {/* Moderator Tabs */}
+        {(() => {
+          const visibleTabs = [
+            { value: "posts", label: "Posts", show: true },
+            { value: "events", label: "Events", show: true },
+            { value: "communities", label: "Communities", show: true },
+            { value: "reports", label: "Reports", show: permissions.canReviewReports },
+            { value: "history", label: "History", show: true },
+            { value: "balance", label: "Balance", show: true },
+          ].filter(t => t.show);
+          const colCount = visibleTabs.length;
+          return (
         <Tabs defaultValue="posts" className="space-y-4">
           <div className="overflow-x-auto">
-            <TabsList className="inline-flex w-auto min-w-full sm:grid sm:grid-cols-6 h-auto">
-              <TabsTrigger value="posts" className="text-xs sm:text-sm py-2">Posts</TabsTrigger>
-              <TabsTrigger value="events" className="text-xs sm:text-sm py-2">Events</TabsTrigger>
-              <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">Communities</TabsTrigger>
-              <TabsTrigger value="reports" className="text-xs sm:text-sm py-2">Reports</TabsTrigger>
-              <TabsTrigger value="history" className="text-xs sm:text-sm py-2">History</TabsTrigger>
-              <TabsTrigger value="balance" className="text-xs sm:text-sm py-2">Balance</TabsTrigger>
+            <TabsList className={`inline-flex w-auto min-w-full sm:grid h-auto`} style={{ gridTemplateColumns: `repeat(${colCount}, minmax(0, 1fr))` }}>
+              {visibleTabs.map(tab => (
+                <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm py-2">{tab.label}</TabsTrigger>
+              ))}
             </TabsList>
           </div>
 
@@ -416,13 +464,14 @@ const Moderator = () => {
                             >
                               <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
-                            {session && (
+                            {session && permissions.canIssueWarnings && (
                               <WarnUserDialog
                                 userId={post.user_id}
                                 userName={post.author_name || "Unknown"}
                                 moderatorId={session.user.id}
                               />
                             )}
+                            {permissions.canDeleteContent && (
                             <Dialog>
                               <DialogTrigger asChild>
                                 <Button
@@ -445,7 +494,7 @@ const Moderator = () => {
                                   <p className="line-clamp-3">{selectedPost?.content}</p>
                                 </div>
                                 <Textarea
-                                  placeholder="Reason for deletion (optional)"
+                                  placeholder={permissions.requireNotes ? "Reason for deletion (required)" : "Reason for deletion (optional)"}
                                   value={deleteReason}
                                   onChange={(e) => setDeleteReason(e.target.value)}
                                   className="text-sm"
@@ -457,6 +506,7 @@ const Moderator = () => {
                                   <Button 
                                     variant="destructive" 
                                     size="sm"
+                                    disabled={permissions.requireNotes && !deleteReason.trim()}
                                     onClick={() => selectedPost && handleDeletePost(selectedPost.id)}
                                   >
                                     Delete Post
@@ -464,6 +514,7 @@ const Moderator = () => {
                                 </DialogFooter>
                               </DialogContent>
                             </Dialog>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -505,6 +556,7 @@ const Moderator = () => {
                             >
                               <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
+                            {permissions.canDeleteContent && (
                             <Button
                               size="sm"
                               variant="ghost"
@@ -513,6 +565,7 @@ const Moderator = () => {
                             >
                               <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -569,12 +622,14 @@ const Moderator = () => {
             </Card>
           </TabsContent>
 
-          {/* Reports Tab */}
+          {/* Reports Tab - only if permission granted */}
+          {permissions.canReviewReports && (
           <TabsContent value="reports" className="space-y-4">
             {session && (
               <ReportsTab moderatorId={session.user.id} onActionTaken={() => loadModeratorData()} />
             )}
           </TabsContent>
+          )}
 
           {/* History Tab */}
           <TabsContent value="history" className="space-y-4">
@@ -719,6 +774,8 @@ const Moderator = () => {
             </Card>
           </TabsContent>
         </Tabs>
+          );
+        })()}
 
         {/* Moderation Guidelines */}
         <Card>
