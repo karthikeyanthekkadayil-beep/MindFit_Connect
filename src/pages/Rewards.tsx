@@ -355,16 +355,28 @@ const Rewards = () => {
               </CardHeader>
               <CardContent className="p-3 sm:p-6 pt-0">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-4 rounded-lg bg-secondary/10">
-                    <Flame className="h-8 w-8 text-secondary mx-auto mb-2" />
+                  <motion.div 
+                    className="text-center p-4 rounded-lg bg-secondary/10"
+                    whileHover={{ scale: 1.05, y: -3, transition: { type: "spring", stiffness: 400 } }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <motion.div whileHover={{ scale: [1, 1.3, 1.1, 1.25, 1.15], transition: { duration: 0.6 } }}>
+                      <Flame className="h-8 w-8 text-secondary mx-auto mb-2" />
+                    </motion.div>
                     <p className="text-2xl sm:text-3xl font-bold text-secondary">{stats?.current_streak || 0}</p>
                     <p className="text-xs text-muted-foreground">Current Streak</p>
-                  </div>
-                  <div className="text-center p-4 rounded-lg bg-amber-500/10">
-                    <Crown className="h-8 w-8 text-amber-500 mx-auto mb-2" />
+                  </motion.div>
+                  <motion.div 
+                    className="text-center p-4 rounded-lg bg-amber-500/10"
+                    whileHover={{ scale: 1.05, y: -3, transition: { type: "spring", stiffness: 400 } }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <motion.div whileHover={{ y: -4, rotate: 12, transition: { type: "spring", stiffness: 300 } }}>
+                      <Crown className="h-8 w-8 text-amber-500 mx-auto mb-2" />
+                    </motion.div>
                     <p className="text-2xl sm:text-3xl font-bold text-amber-500">{stats?.longest_streak || 0}</p>
                     <p className="text-xs text-muted-foreground">Best Streak</p>
-                  </div>
+                  </motion.div>
                 </div>
                 <p className="text-xs text-muted-foreground text-center mt-4">
                   Complete any activity daily to maintain your streak!
