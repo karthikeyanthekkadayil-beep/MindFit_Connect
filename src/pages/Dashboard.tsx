@@ -95,6 +95,17 @@ const Dashboard = () => {
     { title: "Report a Problem", description: "Submit issues or feedback", icon: AlertCircle, path: "/report-problem" },
   ];
 
+  if (isLoading || !session) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <img src={logo} alt="MindFit Connect" className="w-12 h-12 rounded-xl animate-pulse" />
+          <p className="text-sm text-muted-foreground">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
