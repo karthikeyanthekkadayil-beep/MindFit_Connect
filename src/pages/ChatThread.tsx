@@ -50,6 +50,7 @@ export default function ChatThread() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
+  const [showPollDialog, setShowPollDialog] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
