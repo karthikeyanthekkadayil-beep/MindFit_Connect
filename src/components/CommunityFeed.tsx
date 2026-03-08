@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Heart, MessageCircle, ThumbsUp, Trophy, Zap, Send, Trash2 } from "lucide-react";
+import { ReportContentDialog } from "@/components/ReportContentDialog";
 import { formatDistanceToNow } from "date-fns";
 
 interface CommunityFeedProps {
