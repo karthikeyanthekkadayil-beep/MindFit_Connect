@@ -13,6 +13,7 @@ import { EventsMap } from "@/components/EventsMap";
 import { BottomNav } from "@/components/BottomNav";
 import { format } from "date-fns";
 import { EventCardSkeleton } from "@/components/skeletons";
+import { useUserRole } from "@/hooks/useUserRole";
 
 export default function Events() {
   const navigate = useNavigate();

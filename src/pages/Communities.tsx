@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { CreateCommunityDialog } from "@/components/CreateCommunityDialog";
 import { BottomNav } from "@/components/BottomNav";
 import { CommunityCardSkeleton } from "@/components/skeletons";
+import { useUserRole } from "@/hooks/useUserRole";
 
 export default function Communities() {
   const navigate = useNavigate();
