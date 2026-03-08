@@ -9,7 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Loader2, Trophy, Medal, Crown, Flame, Star, Users, Globe, TrendingUp } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
-import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { MotionHeader, MotionFadeIn, MotionScaleIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { motion } from "framer-motion";
 
 interface LeaderboardEntry {
   user_id: string;
@@ -160,77 +161,88 @@ const Leaderboard = () => {
   };
 
   const LeaderboardList = ({ entries, showCommunityBadge = false }: { entries: LeaderboardEntry[], showCommunityBadge?: boolean }) => (
-    <div className="space-y-2">
+    <MotionList className="space-y-2" delay={0.1}>
       {entries.length === 0 ? (
-        <div className="text-center py-8 text-muted-foreground">
-          <Users className="h-12 w-12 mx-auto mb-2 opacity-50" />
-          <p>No users found</p>
-        </div>
+        <MotionItem>
+          <div className="text-center py-8 text-muted-foreground">
+            <Users className="h-12 w-12 mx-auto mb-2 opacity-50" />
+            <p>No users found</p>
+          </div>
+        </MotionItem>
       ) : (
         entries.map((entry) => {
           const isCurrentUser = entry.user_id === userId;
           return (
-            <Card 
-              key={entry.user_id} 
-              className={`transition-all ${getRankBgClass(entry.rank, isCurrentUser)} ${isCurrentUser ? 'ring-2 ring-primary' : ''}`}
-            >
-              <CardContent className="p-3 sm:p-4">
-                <div className="flex items-center gap-3">
-                  {/* Rank */}
-                  <div className="w-8 flex justify-center">
-                    {getRankIcon(entry.rank)}
-                  </div>
+            <MotionItem key={entry.user_id}>
+              <motion.div
+                whileHover={{ x: 4, transition: { type: "spring", stiffness: 400 } }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Card 
+                  className={`transition-all ${getRankBgClass(entry.rank, isCurrentUser)} ${isCurrentUser ? 'ring-2 ring-primary' : ''}`}
+                >
+                  <CardContent className="p-3 sm:p-4">
+                    <div className="flex items-center gap-3">
+                      {/* Rank */}
+                      <motion.div 
+                        className="w-8 flex justify-center"
+                        whileHover={entry.rank <= 3 ? { scale: 1.3, rotate: [0, -10, 10, 0], transition: { duration: 0.4 } } : {}}
+                      >
+                        {getRankIcon(entry.rank)}
+                      </motion.div>
 
-                  {/* Avatar */}
-                  <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
-                    <AvatarImage src={entry.avatar_url || undefined} />
-                    <AvatarFallback className="bg-primary/10 text-primary">
-                      {entry.full_name?.charAt(0)?.toUpperCase() || '?'}
-                    </AvatarFallback>
-                  </Avatar>
+                      {/* Avatar */}
+                      <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
+                        <AvatarImage src={entry.avatar_url || undefined} />
+                        <AvatarFallback className="bg-primary/10 text-primary">
+                          {entry.full_name?.charAt(0)?.toUpperCase() || '?'}
+                        </AvatarFallback>
+                      </Avatar>
 
-                  {/* User Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="font-semibold truncate text-sm sm:text-base">
-                        {entry.full_name || 'Anonymous User'}
-                      </p>
-                      {isCurrentUser && (
-                        <Badge variant="secondary" className="text-xs">You</Badge>
-                      )}
+                      {/* User Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold truncate text-sm sm:text-base">
+                            {entry.full_name || 'Anonymous User'}
+                          </p>
+                          {isCurrentUser && (
+                            <Badge variant="secondary" className="text-xs">You</Badge>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 sm:gap-4 text-xs text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Star className="h-3 w-3" />
+                            Level {entry.current_level}
+                          </span>
+                          {entry.current_streak > 0 && (
+                            <span className="flex items-center gap-1">
+                              <Flame className="h-3 w-3 text-orange-500" />
+                              {entry.current_streak}d
+                            </span>
+                          )}
+                          <span className="hidden sm:flex items-center gap-1">
+                            <Trophy className="h-3 w-3" />
+                            {entry.achievement_count}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Points */}
+                      <div className="text-right">
+                        <p className="font-bold text-primary text-lg sm:text-xl">
+                          {entry.total_points.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground">points</p>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 sm:gap-4 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Star className="h-3 w-3" />
-                        Level {entry.current_level}
-                      </span>
-                      {entry.current_streak > 0 && (
-                        <span className="flex items-center gap-1">
-                          <Flame className="h-3 w-3 text-orange-500" />
-                          {entry.current_streak}d
-                        </span>
-                      )}
-                      <span className="hidden sm:flex items-center gap-1">
-                        <Trophy className="h-3 w-3" />
-                        {entry.achievement_count}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Points */}
-                  <div className="text-right">
-                    <p className="font-bold text-primary text-lg sm:text-xl">
-                      {entry.total_points.toLocaleString()}
-                    </p>
-                    <p className="text-xs text-muted-foreground">points</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </MotionItem>
           );
         })
       )}
-    </div>
+    </MotionList>
   );
 
   if (loading) {
@@ -256,27 +268,33 @@ const Leaderboard = () => {
 
         {/* User's Current Rank Card */}
         {userRank && userRank.global_rank > 0 && (
-          <Card className="mb-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="bg-primary/20 p-3 rounded-full">
-                    <TrendingUp className="h-6 w-6 text-primary" />
+          <MotionScaleIn delay={0.15}>
+            <Card className="mb-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <motion.div 
+                      className="bg-primary/20 p-3 rounded-full"
+                      whileHover={{ rotate: [0, -15, 15, 0], scale: 1.15, transition: { duration: 0.4 } }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <TrendingUp className="h-6 w-6 text-primary" />
+                    </motion.div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Your Global Rank</p>
+                      <p className="text-2xl font-bold text-primary">
+                        #{userRank.global_rank}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Your Global Rank</p>
-                    <p className="text-2xl font-bold text-primary">
-                      #{userRank.global_rank}
-                    </p>
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground">Out of</p>
+                    <p className="text-lg font-semibold">{userRank.total_users} users</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Out of</p>
-                  <p className="text-lg font-semibold">{userRank.total_users} users</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </MotionScaleIn>
         )}
 
         {/* Tabs */}

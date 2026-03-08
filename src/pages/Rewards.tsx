@@ -14,7 +14,8 @@ import {
   TrendingUp, Gift, Sparkles, Heart, Brain, Users, Dumbbell,
   Calendar, Smile, ArrowRight, Lock
 } from "lucide-react";
-import { MotionHeader, MotionFadeIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { MotionHeader, MotionFadeIn, MotionScaleIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
+import { motion } from "framer-motion";
 
 const ICON_MAP: Record<string, React.ElementType> = {
   trophy: Trophy,
@@ -136,39 +137,58 @@ const Rewards = () => {
 
       <main className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-            <CardContent className="p-3 sm:p-4 text-center">
-              <Star className="h-6 w-6 sm:h-8 sm:w-8 text-primary mx-auto mb-2" />
-              <p className="text-xl sm:text-3xl font-bold text-primary">{stats?.total_points || 0}</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Total Points</p>
-            </CardContent>
-          </Card>
+        <MotionList className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4" delay={0.1}>
+          <MotionItem>
+            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <motion.div whileHover={{ rotate: [0, -15, 15, -8, 0], scale: 1.2, transition: { duration: 0.5 } }} whileTap={{ scale: 0.85 }}>
+                  <Star className="h-6 w-6 sm:h-8 sm:w-8 text-primary mx-auto mb-2" />
+                </motion.div>
+                <p className="text-xl sm:text-3xl font-bold text-primary">{stats?.total_points || 0}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Total Points</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
 
-          <Card className="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border-amber-500/20">
-            <CardContent className="p-3 sm:p-4 text-center">
-              <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-amber-500 mx-auto mb-2" />
-              <p className="text-xl sm:text-3xl font-bold text-amber-500">Level {stats?.current_level || 1}</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Current Level</p>
-            </CardContent>
-          </Card>
+          <MotionItem>
+            <Card className="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border-amber-500/20">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <motion.div whileHover={{ y: -4, rotate: 12, scale: 1.2, transition: { type: "spring", stiffness: 300 } }} whileTap={{ scale: 0.85, rotate: -12 }}>
+                  <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-amber-500 mx-auto mb-2" />
+                </motion.div>
+                <p className="text-xl sm:text-3xl font-bold text-amber-500">Level {stats?.current_level || 1}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Current Level</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
 
-          <Card className="bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
-            <CardContent className="p-3 sm:p-4 text-center">
-              <Flame className="h-6 w-6 sm:h-8 sm:w-8 text-secondary mx-auto mb-2" />
-              <p className="text-xl sm:text-3xl font-bold text-secondary">{stats?.current_streak || 0}</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Day Streak</p>
-            </CardContent>
-          </Card>
+          <MotionItem>
+            <Card className="bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <motion.div
+                  whileHover={{ scale: [1, 1.3, 1.1, 1.25, 1.15], transition: { duration: 0.6 } }}
+                  whileTap={{ scale: 0.85 }}
+                >
+                  <Flame className="h-6 w-6 sm:h-8 sm:w-8 text-secondary mx-auto mb-2" />
+                </motion.div>
+                <p className="text-xl sm:text-3xl font-bold text-secondary">{stats?.current_streak || 0}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Day Streak</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
 
-          <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
-            <CardContent className="p-3 sm:p-4 text-center">
-              <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-accent mx-auto mb-2" />
-              <p className="text-xl sm:text-3xl font-bold text-accent">{earnedAchievements.length}</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Achievements</p>
-            </CardContent>
-          </Card>
-        </div>
+          <MotionItem>
+            <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <motion.div whileHover={{ rotate: [0, 20, -20, 10, 0], transition: { duration: 0.5 } }} whileTap={{ scale: 0.85, y: 2 }}>
+                  <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-accent mx-auto mb-2" />
+                </motion.div>
+                <p className="text-xl sm:text-3xl font-bold text-accent">{earnedAchievements.length}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Achievements</p>
+              </CardContent>
+            </Card>
+          </MotionItem>
+        </MotionList>
 
         {/* Level Progress */}
         <Card>
@@ -217,23 +237,28 @@ const Rewards = () => {
                       const earnedData = earnedAchievements.find(ea => ea.achievement_id === achievement.id);
 
                       return (
-                        <div
+                        <motion.div
                           key={achievement.id}
                           className={`relative p-3 sm:p-4 rounded-xl border-2 transition-all ${
                             isEarned
                               ? colorClass
                               : 'bg-muted/30 border-muted text-muted-foreground opacity-60'
                           }`}
+                          whileHover={isEarned ? { scale: 1.05, y: -4, transition: { type: "spring", stiffness: 400, damping: 20 } } : {}}
+                          whileTap={isEarned ? { scale: 0.95 } : {}}
                         >
                           {!isEarned && (
                             <Lock className="absolute top-2 right-2 h-3 w-3 sm:h-4 sm:w-4" />
                           )}
                           <div className="flex flex-col items-center text-center">
-                            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-2 ${
-                              isEarned ? 'bg-background/50' : 'bg-muted/50'
-                            }`}>
+                            <motion.div
+                              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-2 ${
+                                isEarned ? 'bg-background/50' : 'bg-muted/50'
+                              }`}
+                              whileHover={isEarned ? { rotate: [0, -12, 12, -6, 0], transition: { duration: 0.5 } } : {}}
+                            >
                               <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" />
-                            </div>
+                            </motion.div>
                             <h4 className="font-semibold text-[10px] sm:text-xs line-clamp-1">{achievement.name}</h4>
                             <p className="text-[8px] sm:text-[10px] mt-1 line-clamp-2 opacity-80">
                               {achievement.description}
@@ -248,7 +273,7 @@ const Rewards = () => {
                               </p>
                             )}
                           </div>
-                        </div>
+                        </motion.div>
                       );
                     })}
                   </div>
@@ -330,16 +355,28 @@ const Rewards = () => {
               </CardHeader>
               <CardContent className="p-3 sm:p-6 pt-0">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-4 rounded-lg bg-secondary/10">
-                    <Flame className="h-8 w-8 text-secondary mx-auto mb-2" />
+                  <motion.div 
+                    className="text-center p-4 rounded-lg bg-secondary/10"
+                    whileHover={{ scale: 1.05, y: -3, transition: { type: "spring", stiffness: 400 } }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <motion.div whileHover={{ scale: [1, 1.3, 1.1, 1.25, 1.15], transition: { duration: 0.6 } }}>
+                      <Flame className="h-8 w-8 text-secondary mx-auto mb-2" />
+                    </motion.div>
                     <p className="text-2xl sm:text-3xl font-bold text-secondary">{stats?.current_streak || 0}</p>
                     <p className="text-xs text-muted-foreground">Current Streak</p>
-                  </div>
-                  <div className="text-center p-4 rounded-lg bg-amber-500/10">
-                    <Crown className="h-8 w-8 text-amber-500 mx-auto mb-2" />
+                  </motion.div>
+                  <motion.div 
+                    className="text-center p-4 rounded-lg bg-amber-500/10"
+                    whileHover={{ scale: 1.05, y: -3, transition: { type: "spring", stiffness: 400 } }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <motion.div whileHover={{ y: -4, rotate: 12, transition: { type: "spring", stiffness: 300 } }}>
+                      <Crown className="h-8 w-8 text-amber-500 mx-auto mb-2" />
+                    </motion.div>
                     <p className="text-2xl sm:text-3xl font-bold text-amber-500">{stats?.longest_streak || 0}</p>
                     <p className="text-xs text-muted-foreground">Best Streak</p>
-                  </div>
+                  </motion.div>
                 </div>
                 <p className="text-xs text-muted-foreground text-center mt-4">
                   Complete any activity daily to maintain your streak!
@@ -368,18 +405,23 @@ const Rewards = () => {
                   ].map((reward, index) => {
                     const canAfford = (stats?.total_points || 0) >= reward.points;
                     return (
-                      <div
+                      <motion.div
                         key={index}
                         className={`flex items-center justify-between p-4 rounded-xl border ${
                           canAfford ? 'border-primary/30 bg-primary/5' : 'border-muted bg-muted/30 opacity-60'
                         }`}
+                        whileHover={canAfford ? { scale: 1.02, x: 4, transition: { type: "spring", stiffness: 400 } } : {}}
+                        whileTap={canAfford ? { scale: 0.98 } : {}}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center ${
-                            canAfford ? 'bg-primary/10' : 'bg-muted/50'
-                          }`}>
+                          <motion.div 
+                            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center ${
+                              canAfford ? 'bg-primary/10' : 'bg-muted/50'
+                            }`}
+                            whileHover={canAfford ? { rotate: [0, -10, 10, 0], transition: { duration: 0.4 } } : {}}
+                          >
                             <reward.icon className={`h-5 w-5 sm:h-6 sm:w-6 ${canAfford ? 'text-primary' : 'text-muted-foreground'}`} />
-                          </div>
+                          </motion.div>
                           <div>
                             <p className="font-semibold text-sm sm:text-base">{reward.name}</p>
                             <div className="flex items-center gap-1">
@@ -396,7 +438,7 @@ const Rewards = () => {
                         >
                           {canAfford ? 'Redeem' : 'Locked'}
                         </Button>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
@@ -410,22 +452,29 @@ const Rewards = () => {
               </CardHeader>
               <CardContent className="p-3 sm:p-6 pt-0 space-y-2">
                 {[
-                  { action: 'Complete a workout', points: 50, icon: Dumbbell },
-                  { action: 'Finish a meditation session', points: 30, icon: Brain },
-                  { action: 'Log your mood', points: 10, icon: Smile },
-                  { action: 'Attend an event', points: 40, icon: Calendar },
+                  { action: 'Complete a workout', points: '50-100', icon: Dumbbell },
+                  { action: 'Finish a meditation session', points: '25-70', icon: Brain },
+                  { action: 'Log your mood', points: '10', icon: Smile },
+                  { action: 'Attend an event', points: '40', icon: Calendar },
                   { action: 'Maintain daily streak', points: '5-50', icon: Flame },
                   { action: 'Unlock achievements', points: 'Varies', icon: Trophy },
                 ].map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
+                  <motion.div 
+                    key={index} 
+                    className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50"
+                    whileHover={{ x: 6, transition: { type: "spring", stiffness: 400 } }}
+                    whileTap={{ scale: 0.97 }}
+                  >
                     <div className="flex items-center gap-3">
-                      <item.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                      <motion.div whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.4 } }}>
+                        <item.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                      </motion.div>
                       <span className="text-xs sm:text-sm">{item.action}</span>
                     </div>
                     <Badge variant="secondary" className="text-xs">
                       +{item.points}
                     </Badge>
-                  </div>
+                  </motion.div>
                 ))}
               </CardContent>
             </Card>
