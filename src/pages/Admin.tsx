@@ -9,12 +9,13 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Shield, Users, Calendar, MessageSquare, TrendingUp, ArrowLeft, UserCheck } from "lucide-react";
+import { Shield, Users, Calendar, MessageSquare, TrendingUp, ArrowLeft, UserCheck, AlertCircle } from "lucide-react";
 import { ModeratorRequestsTab } from "@/components/admin/ModeratorRequestsTab";
 import { CommunityManagementTab } from "@/components/admin/CommunityManagementTab";
 import { EventManagementTab } from "@/components/admin/EventManagementTab";
 import { PlatformSettingsTab } from "@/components/admin/PlatformSettingsTab";
 import { ModeratorManagementTab } from "@/components/admin/ModeratorManagementTab";
+import { ProblemReportsTab } from "@/components/admin/ProblemReportsTab";
 import { BottomNav } from "@/components/BottomNav";
 
 interface UserProfile {
@@ -247,7 +248,7 @@ const Admin = () => {
 
         {/* Admin Tabs */}
         <Tabs defaultValue="users" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-6 h-auto">
+          <TabsList className="grid w-full grid-cols-7 h-auto">
             <TabsTrigger value="users" className="text-xs sm:text-sm py-2">Users</TabsTrigger>
             <TabsTrigger value="moderators" className="text-xs sm:text-sm py-2">
               <Shield className="h-3 w-3 sm:hidden" />
@@ -258,6 +259,11 @@ const Admin = () => {
               <UserCheck className="h-3 w-3 sm:hidden" />
               <span className="hidden sm:inline">Requests</span>
               <span className="sm:hidden">Reqs</span>
+            </TabsTrigger>
+            <TabsTrigger value="problems" className="text-xs sm:text-sm py-2">
+              <AlertCircle className="h-3 w-3 sm:hidden" />
+              <span className="hidden sm:inline">Problems</span>
+              <span className="sm:hidden">Prob</span>
             </TabsTrigger>
             <TabsTrigger value="communities" className="text-xs sm:text-sm py-2">
               <span className="hidden sm:inline">Communities</span>
@@ -324,6 +330,10 @@ const Admin = () => {
 
           <TabsContent value="mod-requests" className="space-y-4">
             <ModeratorRequestsTab />
+          </TabsContent>
+
+          <TabsContent value="problems" className="space-y-4">
+            <ProblemReportsTab />
           </TabsContent>
 
           <TabsContent value="communities" className="space-y-4">
