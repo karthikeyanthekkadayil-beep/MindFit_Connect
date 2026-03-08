@@ -249,8 +249,8 @@ const Dashboard = () => {
         {/* Moderator Panel Card */}
         {hasElevatedRole && (
           <MotionFadeIn delay={0.65}>
-            <Card 
-              className="border-0 shadow-sm card-press cursor-pointer bg-gradient-to-r from-primary/10 to-secondary/10"
+            <InteractiveCard 
+              className="border-0 shadow-sm cursor-pointer bg-gradient-to-r from-primary/10 to-secondary/10"
               onClick={() => navigate("/moderator")}
             >
               <CardContent className="p-4 flex items-center gap-4">
