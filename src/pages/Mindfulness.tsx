@@ -429,9 +429,10 @@ const Mindfulness = () => {
                       Start
                     </Button>
                   </CardContent>
-                </Card>
+                </InteractiveCard>
+                </MotionItem>
               ))}
-            </div>
+            </MotionList>
           </TabsContent>
 
           <TabsContent value="breathing" className="space-y-2 sm:space-y-3">
