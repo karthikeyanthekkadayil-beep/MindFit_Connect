@@ -371,7 +371,7 @@ const DailyPlanner = () => {
               )}
             </CardContent>
           </Card>
-        </div>
+        </MotionFadeIn>
       </main>
 
       <BottomNav />
