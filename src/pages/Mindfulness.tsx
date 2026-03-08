@@ -484,9 +484,10 @@ const Mindfulness = () => {
                       Start
                     </Button>
                   </CardContent>
-                </Card>
+                </InteractiveCard>
+                </MotionItem>
               ))}
-            </div>
+            </MotionList>
           </TabsContent>
         </Tabs>
       </div>
