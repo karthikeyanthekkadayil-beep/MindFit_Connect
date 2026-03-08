@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Send, Users, Search, Trash2, MoreVertical, BarChart3, Pin } from "lucide-react";
+import { ArrowLeft, Send, Users, Search, Trash2, MoreVertical, BarChart3, Pin, Pencil, X, Check, Ban } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -283,12 +283,21 @@ export default function ChatThread() {
 
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
   const [chatDeleteOpen, setChatDeleteOpen] = useState(false);
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
+
+  const EDIT_TIME_LIMIT_MS = 15 * 60 * 1000; // 15 minutes
+
+  const canEditMessage = (createdAt: string) => {
+    return Date.now() - new Date(createdAt).getTime() < EDIT_TIME_LIMIT_MS;
+  };
 
   const deleteMessageMutation = useMutation({
     mutationFn: async (messageId: string) => {
+      // Soft delete: mark as deleted instead of removing
       const { error } = await supabase
         .from("messages")
-        .delete()
+        .update({ is_deleted: true, content: "", attachment_url: null, attachment_type: null, attachment_name: null } as any)
         .eq("id", messageId)
         .eq("sender_id", currentUserId!);
       if (error) throw error;
@@ -299,6 +308,23 @@ export default function ChatThread() {
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
     onError: () => toast.error("Failed to delete message"),
+  });
+
+  const editMessageMutation = useMutation({
+    mutationFn: async ({ messageId, content }: { messageId: string; content: string }) => {
+      const { error } = await supabase
+        .from("messages")
+        .update({ content, edited_at: new Date().toISOString() } as any)
+        .eq("id", messageId)
+        .eq("sender_id", currentUserId!);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      setEditingMessageId(null);
+      setEditContent("");
+      queryClient.invalidateQueries({ queryKey: ["messages", id] });
+    },
+    onError: () => toast.error("Failed to edit message"),
   });
 
   const deleteChatMutation = useMutation({
@@ -484,6 +510,10 @@ export default function ChatThread() {
               messages[index - 1].sender_id !== msg.sender_id;
             const isHighlighted = highlightedMessageId === msg.id;
 
+            const isDeleted = (msg as any).is_deleted;
+            const editedAt = (msg as any).edited_at;
+            const isEditing = editingMessageId === msg.id;
+
             return (
               <div
                 key={msg.id}
@@ -512,49 +542,114 @@ export default function ChatThread() {
                       {msg.sender?.full_name}
                     </span>
                   )}
-                  <div
-                    className={`rounded-2xl px-4 py-2 max-w-md ${
-                      isCurrentUser
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted"
-                    }`}
-                  >
-                    {msg.attachment_url && msg.attachment_type === "voice" && msg.attachment_name && (
-                      <VoiceMessagePlayer
-                        url={msg.attachment_url}
-                        name={msg.attachment_name}
-                        isOwnMessage={isCurrentUser}
-                      />
-                    )}
-                    {msg.attachment_url && msg.attachment_type && msg.attachment_type !== "voice" && msg.attachment_name && (
-                      <MessageAttachmentPreview
-                        url={msg.attachment_url}
-                        type={msg.attachment_type}
-                        name={msg.attachment_name}
-                        isOwnMessage={isCurrentUser}
-                      />
-                    )}
-                    {msg.content && (
-                      <p className="text-sm break-words">
-                        {searchQuery ? (
-                          <HighlightedText text={msg.content} highlight={searchQuery} />
-                        ) : (
-                          msg.content
-                        )}
+                  {isDeleted ? (
+                    <div className={`rounded-2xl px-4 py-2 max-w-md border border-dashed border-muted-foreground/30 ${
+                      isCurrentUser ? "bg-muted/30" : "bg-muted/30"
+                    }`}>
+                      <p className="text-sm text-muted-foreground italic flex items-center gap-1.5">
+                        <Ban className="h-3.5 w-3.5" />
+                        This message was deleted
                       </p>
-                    )}
-                  </div>
+                    </div>
+                  ) : isEditing ? (
+                    <div className="flex items-center gap-2 max-w-md w-full">
+                      <Input
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        className="flex-1 h-9 text-sm"
+                        autoFocus
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (editContent.trim()) {
+                              editMessageMutation.mutate({ messageId: msg.id, content: editContent.trim() });
+                            }
+                          }
+                          if (e.key === "Escape") {
+                            setEditingMessageId(null);
+                            setEditContent("");
+                          }
+                        }}
+                      />
+                      <button
+                        onClick={() => {
+                          if (editContent.trim()) {
+                            editMessageMutation.mutate({ messageId: msg.id, content: editContent.trim() });
+                          }
+                        }}
+                        className="text-primary hover:text-primary/80"
+                      >
+                        <Check className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => { setEditingMessageId(null); setEditContent(""); }}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      className={`rounded-2xl px-4 py-2 max-w-md ${
+                        isCurrentUser
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted"
+                      }`}
+                    >
+                      {msg.attachment_url && msg.attachment_type === "voice" && msg.attachment_name && (
+                        <VoiceMessagePlayer
+                          url={msg.attachment_url}
+                          name={msg.attachment_name}
+                          isOwnMessage={isCurrentUser}
+                        />
+                      )}
+                      {msg.attachment_url && msg.attachment_type && msg.attachment_type !== "voice" && msg.attachment_name && (
+                        <MessageAttachmentPreview
+                          url={msg.attachment_url}
+                          type={msg.attachment_type}
+                          name={msg.attachment_name}
+                          isOwnMessage={isCurrentUser}
+                        />
+                      )}
+                      {msg.content && (
+                        <p className="text-sm break-words">
+                          {searchQuery ? (
+                            <HighlightedText text={msg.content} highlight={searchQuery} />
+                          ) : (
+                            msg.content
+                          )}
+                        </p>
+                      )}
+                    </div>
+                  )}
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-muted-foreground">
                       {format(new Date(msg.created_at), "p")}
                     </span>
-                    <PinMessageButton
-                      messageId={msg.id}
-                      conversationId={id!}
-                      currentUserId={currentUserId}
-                      isPinned={pinnedMessageIds?.has(msg.id) || false}
-                    />
-                    {isCurrentUser && (
+                    {editedAt && !isDeleted && (
+                      <span className="text-[10px] text-muted-foreground italic">edited</span>
+                    )}
+                    {!isDeleted && (
+                      <PinMessageButton
+                        messageId={msg.id}
+                        conversationId={id!}
+                        currentUserId={currentUserId}
+                        isPinned={pinnedMessageIds?.has(msg.id) || false}
+                      />
+                    )}
+                    {isCurrentUser && !isDeleted && canEditMessage(msg.created_at) && (
+                      <button
+                        onClick={() => {
+                          setEditingMessageId(msg.id);
+                          setEditContent(msg.content);
+                        }}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground"
+                        title="Edit message (within 15 min)"
+                      >
+                        <Pencil className="h-3 w-3" />
+                      </button>
+                    )}
+                    {isCurrentUser && !isDeleted && (
                       <button
                         onClick={() => setMessageToDelete(msg.id)}
                         className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
@@ -563,7 +658,7 @@ export default function ChatThread() {
                         <Trash2 className="h-3 w-3" />
                       </button>
                     )}
-                    {isCurrentUser && (
+                    {isCurrentUser && !isDeleted && (
                       <ReadReceiptIndicator
                         messageCreatedAt={msg.created_at}
                         isOwnMessage={isCurrentUser}
@@ -580,13 +675,15 @@ export default function ChatThread() {
                         conversationType={conversation?.type === "direct" ? "direct" : "group"}
                       />
                     )}
-                    <MessageReactions
-                      messageId={msg.id}
-                      conversationId={id!}
-                      currentUserId={currentUserId}
-                      reactions={msg.reactions || []}
-                      isOwnMessage={isCurrentUser}
-                    />
+                    {!isDeleted && (
+                      <MessageReactions
+                        messageId={msg.id}
+                        conversationId={id!}
+                        currentUserId={currentUserId}
+                        reactions={msg.reactions || []}
+                        isOwnMessage={isCurrentUser}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
