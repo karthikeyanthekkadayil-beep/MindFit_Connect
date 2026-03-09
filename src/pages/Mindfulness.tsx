@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { useGamification } from "@/hooks/useGamification";
 import { StatsCardSkeleton, MeditationCardSkeleton } from "@/components/skeletons";
 import { MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
+import PersonalizedMindfulness from "@/components/PersonalizedMindfulness";
 
 interface MeditationProgram {
   id: string;
@@ -367,6 +368,18 @@ const Mindfulness = () => {
             </Card>
           </MotionItem>
         </MotionList>
+
+        {/* AI-Powered Personalized Recommendations */}
+        <PersonalizedMindfulness
+          onSelectMeditation={(programId) => {
+            const program = meditationPrograms.find(p => p.id === programId);
+            if (program) startMeditationSession(program);
+          }}
+          onSelectBreathing={(exerciseId) => {
+            const exercise = breathingExercises.find(e => e.id === exerciseId);
+            if (exercise) setSelectedExercise(exercise);
+          }}
+        />
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-2 sm:space-y-4">
           <TabsList className="grid w-full grid-cols-2 h-9 sm:h-10">
