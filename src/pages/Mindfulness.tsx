@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { useGamification } from "@/hooks/useGamification";
 import { StatsCardSkeleton, MeditationCardSkeleton } from "@/components/skeletons";
 import { MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
+import PersonalizedMindfulness from "@/components/PersonalizedMindfulness";
 
 interface MeditationProgram {
   id: string;
