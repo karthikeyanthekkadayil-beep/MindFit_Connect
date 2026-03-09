@@ -369,6 +369,18 @@ const Mindfulness = () => {
           </MotionItem>
         </MotionList>
 
+        {/* AI-Powered Personalized Recommendations */}
+        <PersonalizedMindfulness
+          onSelectMeditation={(programId) => {
+            const program = meditationPrograms.find(p => p.id === programId);
+            if (program) startMeditationSession(program);
+          }}
+          onSelectBreathing={(exerciseId) => {
+            const exercise = breathingExercises.find(e => e.id === exerciseId);
+            if (exercise) setSelectedExercise(exercise);
+          }}
+        />
+
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-2 sm:space-y-4">
           <TabsList className="grid w-full grid-cols-2 h-9 sm:h-10">
             <TabsTrigger value="browse" className="text-xs sm:text-sm gap-1 sm:gap-2">

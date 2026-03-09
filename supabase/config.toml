@@ -1,1 +1,4 @@
 project_id = "qkxjhtmnxtmpctqlkdrt"
+
+[functions.generate-mindfulness-recommendations]
+verify_jwt = true
