@@ -58,13 +58,29 @@ export const BottomNav = () => {
                 whileTap={{ scale: 0.85, transition: { type: "spring", stiffness: 500, damping: 25 } }}
                 transition={{ delay: 0.4 + index * 0.05, type: "spring", stiffness: 300, damping: 20 }}
               >
-                {/* Active pill background */}
+                {/* Active liquid glass pill */}
                 {isActive && (
                   <motion.span
-                    className="absolute inset-1 rounded-xl bg-primary/10"
+                    className="absolute inset-1 rounded-xl overflow-hidden"
                     layoutId="activeTab"
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
+                    style={{
+                      background: 'linear-gradient(180deg, hsla(0,0%,100%,0.18) 0%, hsla(230,40%,50%,0.08) 50%, hsla(0,0%,100%,0.04) 100%)',
+                      border: '1px solid hsla(0,0%,100%,0.15)',
+                      borderTopColor: 'hsla(0,0%,100%,0.3)',
+                      boxShadow: '0 1px 0 0 hsla(0,0%,100%,0.2) inset, 0 8px 24px hsla(230,60%,10%,0.15)',
+                      backdropFilter: 'blur(20px) saturate(180%)',
+                      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                    }}
+                  >
+                    {/* Specular bubble highlight */}
+                    <span
+                      className="absolute inset-x-0 top-0 h-1/2 pointer-events-none"
+                      style={{
+                        background: 'radial-gradient(ellipse 80% 60% at 50% 0%, hsla(0,0%,100%,0.2) 0%, transparent 70%)',
+                      }}
+                    />
+                  </motion.span>
                 )}
 
                 <motion.div
