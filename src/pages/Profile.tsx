@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus, Shield, Sun, Moon, Monitor, Smartphone } from "lucide-react";
+import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus, Shield, Sun, Moon, Monitor, Smartphone, Droplets } from "lucide-react";
 import { useTheme } from "next-themes";
 import { BottomNav } from "@/components/BottomNav";
 import { useCamera, base64ToBlob } from "@/hooks/useCamera";
@@ -43,6 +43,7 @@ const ThemeSwitcher = () => {
     { value: "light", label: "Light", icon: Sun },
     { value: "dark", label: "Dark", icon: Moon },
     { value: "glass", label: "Glass", icon: Smartphone },
+    { value: "liquid-glass", label: "Liquid", icon: Droplets },
     { value: "system", label: "System", icon: Monitor },
   ];
   return (
