@@ -43,6 +43,7 @@ const ThemeSwitcher = () => {
     { value: "light", label: "Light", icon: Sun },
     { value: "dark", label: "Dark", icon: Moon },
     { value: "glass", label: "Glass", icon: Smartphone },
+    { value: "liquid-glass", label: "Liquid", icon: Droplets },
     { value: "system", label: "System", icon: Monitor },
   ];
   return (
