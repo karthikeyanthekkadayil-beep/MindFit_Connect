@@ -343,8 +343,8 @@
       0 2px 8px hsla(0, 0%, 0%, 0.04);
   }
 
-  /* Glass buttons */
-  .glass button {
+  /* Glass buttons (exclude nav tabs) */
+  .glass button:not([data-nav-tab]) {
     backdrop-filter: blur(16px) saturate(130%);
     -webkit-backdrop-filter: blur(16px) saturate(130%);
   }
