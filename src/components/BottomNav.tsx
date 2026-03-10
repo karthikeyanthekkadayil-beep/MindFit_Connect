@@ -46,6 +46,7 @@ export const BottomNav = () => {
             const isActive = activeTab === tab.id;
             return (
               <motion.button
+                data-nav-tab
                 key={tab.id}
                 onClick={() => handleTabClick(tab.path)}
                 className={cn(

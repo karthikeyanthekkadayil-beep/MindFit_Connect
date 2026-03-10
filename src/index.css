@@ -349,7 +349,7 @@
     -webkit-backdrop-filter: blur(16px) saturate(130%);
   }
 
-  .glass button:not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]) {
+  .glass button:not([data-nav-tab]):not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]) {
     background: linear-gradient(
       135deg,
       hsla(0, 0%, 100%, 0.4) 0%,
