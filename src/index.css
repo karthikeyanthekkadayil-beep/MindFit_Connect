@@ -468,14 +468,14 @@
       0 6px 24px hsla(270, 50%, 30%, 0.15);
   }
 
-  /* Liquid glass buttons */
-  .liquid-glass button {
+  /* Liquid glass buttons (exclude nav tabs) */
+  .liquid-glass button:not([data-nav-tab]) {
     backdrop-filter: blur(30px) saturate(180%);
     -webkit-backdrop-filter: blur(30px) saturate(180%);
     transition: all 0.25s ease;
   }
 
-  .liquid-glass button:not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]) {
+  .liquid-glass button:not([data-nav-tab]):not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]) {
     background:
       radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.15) 0%, transparent 50%),
       linear-gradient(
@@ -490,7 +490,7 @@
       0 4px 20px hsla(230, 60%, 10%, 0.3);
   }
 
-  .liquid-glass button:not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]):hover {
+  .liquid-glass button:not([data-nav-tab]):not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]):hover {
     background:
       radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.22) 0%, transparent 50%),
       linear-gradient(
