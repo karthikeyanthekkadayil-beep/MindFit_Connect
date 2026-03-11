@@ -38,6 +38,10 @@
   </head>
 
   <body>
+    <script>
+      // Restore glass opacity before render to prevent flash
+      (function(){var o=localStorage.getItem("glass-opacity");if(o)document.documentElement.style.setProperty("--glass-opacity",o);})();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
