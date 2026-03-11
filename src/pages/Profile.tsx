@@ -632,6 +632,8 @@ const Profile = () => {
                     <ThemeSwitcher />
                   </div>
 
+                  <GlassOpacitySlider />
+
                   <div>
                     <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Email</h3>
                     <p className="text-[10px] sm:text-sm text-muted-foreground break-all">{profile.email}</p>
