@@ -436,12 +436,12 @@
   .liquid-glass body,
   .liquid-glass .min-h-screen {
     background:
-      radial-gradient(ellipse 80% 60% at 15% 25%, hsla(250, 80%, 45%, 0.5) 0%, transparent 55%),
-      radial-gradient(ellipse 70% 50% at 85% 20%, hsla(270, 70%, 50%, 0.4) 0%, transparent 50%),
-      radial-gradient(ellipse 90% 70% at 50% 80%, hsla(220, 90%, 35%, 0.5) 0%, transparent 55%),
-      radial-gradient(ellipse 60% 40% at 70% 60%, hsla(200, 80%, 50%, 0.2) 0%, transparent 45%),
-      radial-gradient(ellipse 50% 50% at 30% 70%, hsla(290, 60%, 40%, 0.3) 0%, transparent 50%),
-      hsl(235, 45%, 8%) !important;
+      radial-gradient(ellipse 80% 60% at 15% 25%, hsla(var(--mesh-blob-1), 0.5) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 50% at 85% 20%, hsla(var(--mesh-blob-2), 0.4) 0%, transparent 50%),
+      radial-gradient(ellipse 90% 70% at 50% 80%, hsla(var(--mesh-blob-3), 0.5) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 70% 60%, hsla(var(--mesh-blob-4), 0.2) 0%, transparent 45%),
+      radial-gradient(ellipse 50% 50% at 30% 70%, hsla(var(--mesh-blob-5), 0.3) 0%, transparent 50%),
+      hsl(var(--mesh-base)) !important;
     background-attachment: fixed !important;
   }
 
