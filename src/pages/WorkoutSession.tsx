@@ -92,7 +92,7 @@ const WorkoutSession = () => {
 
   // Main timer
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isRunning && !isResting) {
       interval = setInterval(() => {
         setElapsedTime(prev => prev + 1);
@@ -103,7 +103,7 @@ const WorkoutSession = () => {
 
   // Rest timer
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isResting && restTime > 0) {
       interval = setInterval(() => {
         setRestTime(prev => {

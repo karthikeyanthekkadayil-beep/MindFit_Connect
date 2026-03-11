@@ -75,7 +75,7 @@ const Mindfulness = () => {
   }, []);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (sessionActive) {
       interval = setInterval(() => {
         setSessionTime(prev => prev + 1);
