@@ -39,8 +39,14 @@
 
   <body>
     <script>
-      // Restore glass opacity before render to prevent flash
-      (function(){var o=localStorage.getItem("glass-opacity");if(o)document.documentElement.style.setProperty("--glass-opacity",o);})();
+      // Restore glass settings before render to prevent flash
+      (function(){
+        var d=document.documentElement.style;
+        var o=localStorage.getItem("glass-opacity");if(o)d.setProperty("--glass-opacity",o);
+        var c=localStorage.getItem("mesh-colors");
+        if(c){try{var m=JSON.parse(c);var k=["mesh-blob-1","mesh-blob-2","mesh-blob-3","mesh-blob-4","mesh-blob-5","mesh-base"];
+        k.forEach(function(key){if(m[key])d.setProperty("--"+key,m[key]);});}catch(e){}}
+      })();
     </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
