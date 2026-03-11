@@ -163,6 +163,14 @@
     /* Glass opacity multiplier (0-1), controlled by slider */
     --glass-opacity: 1;
     
+    /* Mesh gradient blob colors — customizable via picker */
+    --mesh-blob-1: 250, 80%, 45%;
+    --mesh-blob-2: 270, 70%, 50%;
+    --mesh-blob-3: 220, 90%, 35%;
+    --mesh-blob-4: 200, 80%, 50%;
+    --mesh-blob-5: 290, 60%, 40%;
+    --mesh-base: 235, 45%, 8%;
+    
     --card: 230 40% 30% / calc(0.15 * var(--glass-opacity));
     --card-foreground: 0 0% 100%;
     
