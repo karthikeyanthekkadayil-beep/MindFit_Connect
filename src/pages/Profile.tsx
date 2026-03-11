@@ -111,6 +111,254 @@ const GlassOpacitySlider = () => {
   );
 };
 
+type MeshColors = {
+  "mesh-blob-1": string;
+  "mesh-blob-2": string;
+  "mesh-blob-3": string;
+  "mesh-blob-4": string;
+  "mesh-blob-5": string;
+  "mesh-base": string;
+};
+
+const DEFAULT_MESH: MeshColors = {
+  "mesh-blob-1": "250, 80%, 45%",
+  "mesh-blob-2": "270, 70%, 50%",
+  "mesh-blob-3": "220, 90%, 35%",
+  "mesh-blob-4": "200, 80%, 50%",
+  "mesh-blob-5": "290, 60%, 40%",
+  "mesh-base": "235, 45%, 8%",
+};
+
+const PRESETS: { name: string; colors: MeshColors }[] = [
+  {
+    name: "Default",
+    colors: DEFAULT_MESH,
+  },
+  {
+    name: "Ocean",
+    colors: {
+      "mesh-blob-1": "200, 85%, 45%",
+      "mesh-blob-2": "180, 70%, 40%",
+      "mesh-blob-3": "210, 90%, 35%",
+      "mesh-blob-4": "190, 80%, 50%",
+      "mesh-blob-5": "170, 60%, 35%",
+      "mesh-base": "210, 50%, 6%",
+    },
+  },
+  {
+    name: "Sunset",
+    colors: {
+      "mesh-blob-1": "350, 80%, 50%",
+      "mesh-blob-2": "20, 90%, 50%",
+      "mesh-blob-3": "330, 70%, 40%",
+      "mesh-blob-4": "40, 85%, 50%",
+      "mesh-blob-5": "10, 75%, 45%",
+      "mesh-base": "350, 40%, 7%",
+    },
+  },
+  {
+    name: "Aurora",
+    colors: {
+      "mesh-blob-1": "140, 80%, 40%",
+      "mesh-blob-2": "170, 70%, 45%",
+      "mesh-blob-3": "120, 60%, 35%",
+      "mesh-blob-4": "280, 60%, 50%",
+      "mesh-blob-5": "200, 70%, 40%",
+      "mesh-base": "160, 45%, 6%",
+    },
+  },
+  {
+    name: "Midnight",
+    colors: {
+      "mesh-blob-1": "240, 60%, 30%",
+      "mesh-blob-2": "260, 50%, 25%",
+      "mesh-blob-3": "220, 70%, 20%",
+      "mesh-blob-4": "250, 40%, 30%",
+      "mesh-blob-5": "230, 50%, 25%",
+      "mesh-base": "240, 50%, 4%",
+    },
+  },
+  {
+    name: "Rose Gold",
+    colors: {
+      "mesh-blob-1": "340, 70%, 50%",
+      "mesh-blob-2": "320, 50%, 45%",
+      "mesh-blob-3": "350, 60%, 40%",
+      "mesh-blob-4": "30, 60%, 50%",
+      "mesh-blob-5": "310, 40%, 40%",
+      "mesh-base": "340, 30%, 7%",
+    },
+  },
+];
+
+// Convert hex to HSL string
+function hexToHsl(hex: string): string {
+  hex = hex.replace("#", "");
+  const r = parseInt(hex.substring(0, 2), 16) / 255;
+  const g = parseInt(hex.substring(2, 4), 16) / 255;
+  const b = parseInt(hex.substring(4, 6), 16) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+  return `${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%`;
+}
+
+// Convert HSL string to approximate hex
+function hslToHex(hsl: string): string {
+  const parts = hsl.split(",").map(s => parseFloat(s.trim()));
+  const h = parts[0] / 360, s = parts[1] / 100, l = parts[2] / 100;
+  let r: number, g: number, b: number;
+  if (s === 0) { r = g = b = l; } else {
+    const hue2rgb = (p: number, q: number, t: number) => {
+      if (t < 0) t += 1; if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1/3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1/3);
+  }
+  const toHex = (x: number) => Math.round(x * 255).toString(16).padStart(2, "0");
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+const applyMeshColors = (colors: MeshColors) => {
+  const style = document.documentElement.style;
+  Object.entries(colors).forEach(([key, val]) => {
+    style.setProperty(`--${key}`, val);
+  });
+};
+
+const MeshColorPicker = () => {
+  const { theme } = useTheme();
+  const [colors, setColors] = useState<MeshColors>(() => {
+    const saved = localStorage.getItem("mesh-colors");
+    if (saved) { try { return JSON.parse(saved); } catch { /* ignore */ } }
+    return DEFAULT_MESH;
+  });
+  const [showCustom, setShowCustom] = useState(false);
+
+  useEffect(() => {
+    applyMeshColors(colors);
+  }, [colors]);
+
+  const updateColor = (key: keyof MeshColors, hex: string) => {
+    const hsl = hexToHsl(hex);
+    const next = { ...colors, [key]: hsl };
+    setColors(next);
+    localStorage.setItem("mesh-colors", JSON.stringify(next));
+    applyMeshColors(next);
+  };
+
+  const applyPreset = (preset: MeshColors) => {
+    setColors(preset);
+    localStorage.setItem("mesh-colors", JSON.stringify(preset));
+    applyMeshColors(preset);
+  };
+
+  const resetColors = () => {
+    applyPreset(DEFAULT_MESH);
+    setShowCustom(false);
+  };
+
+  if (theme !== "liquid-glass") return null;
+
+  const blobLabels: { key: keyof MeshColors; label: string }[] = [
+    { key: "mesh-blob-1", label: "Blob 1" },
+    { key: "mesh-blob-2", label: "Blob 2" },
+    { key: "mesh-blob-3", label: "Blob 3" },
+    { key: "mesh-blob-4", label: "Blob 4" },
+    { key: "mesh-blob-5", label: "Blob 5" },
+    { key: "mesh-base", label: "Base" },
+  ];
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+        <h3 className="font-medium text-xs sm:text-base flex items-center gap-1.5">
+          <Palette className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          Background Colors
+        </h3>
+        <Button variant="ghost" size="sm" onClick={resetColors} className="h-6 sm:h-7 text-[10px] sm:text-xs px-2 gap-1">
+          <RotateCcw className="h-3 w-3" />
+          Reset
+        </Button>
+      </div>
+
+      {/* Presets */}
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mb-3">
+        {PRESETS.map((preset) => {
+          const isActive = JSON.stringify(preset.colors) === JSON.stringify(colors);
+          return (
+            <button
+              key={preset.name}
+              onClick={() => applyPreset(preset.colors)}
+              className={`relative rounded-xl p-0.5 overflow-hidden transition-all duration-200 ${isActive ? "ring-2 ring-primary ring-offset-1 ring-offset-background" : "ring-1 ring-white/10 hover:ring-white/20"}`}
+            >
+              {/* Mini mesh preview */}
+              <div
+                className="h-8 sm:h-10 rounded-lg"
+                style={{
+                  background: `
+                    radial-gradient(ellipse 80% 60% at 20% 30%, hsla(${preset.colors["mesh-blob-1"]}, 0.6) 0%, transparent 55%),
+                    radial-gradient(ellipse 70% 50% at 80% 20%, hsla(${preset.colors["mesh-blob-2"]}, 0.5) 0%, transparent 50%),
+                    radial-gradient(ellipse 90% 70% at 50% 80%, hsla(${preset.colors["mesh-blob-3"]}, 0.5) 0%, transparent 55%),
+                    hsl(${preset.colors["mesh-base"]})
+                  `,
+                }}
+              />
+              <span className="block text-center text-[9px] sm:text-[10px] mt-0.5 pb-0.5 text-muted-foreground font-medium">
+                {preset.name}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Custom toggle */}
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => setShowCustom(!showCustom)}
+        className="w-full h-7 sm:h-8 text-[10px] sm:text-xs mb-2"
+      >
+        {showCustom ? "Hide Custom Colors" : "Customize Colors"}
+      </Button>
+
+      {showCustom && (
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-2">
+          {blobLabels.map(({ key, label }) => (
+            <div key={key} className="flex flex-col items-center gap-1">
+              <label
+                className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-full cursor-pointer overflow-hidden ring-1 ring-white/15 hover:ring-white/30 transition-all"
+                style={{ background: `hsl(${colors[key]})` }}
+              >
+                <input
+                  type="color"
+                  value={hslToHex(colors[key])}
+                  onChange={(e) => updateColor(key, e.target.value)}
+                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                />
+              </label>
+              <span className="text-[9px] sm:text-[10px] text-muted-foreground">{label}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
 const ModeratorSection = ({ navigate }: { navigate: (path: string) => void }) => {
   const [isMod, setIsMod] = useState(false);
   const [checked, setChecked] = useState(false);
