@@ -103,7 +103,7 @@ const WorkoutSession = () => {
 
   // Rest timer
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isResting && restTime > 0) {
       interval = setInterval(() => {
         setRestTime(prev => {

@@ -10,7 +10,7 @@ interface TypingUser {
 export function useTypingIndicator(conversationId: string, currentUserId: string | null, currentUserName: string | null) {
   const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
   const channelRef = useRef<RealtimeChannel | null>(null);
-  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!conversationId || !currentUserId) return;

@@ -25,7 +25,7 @@ export const BreathingExercise = ({ exercise, onComplete }: BreathingExercisePro
   const [phase, setPhase] = useState<Phase>('inhale');
   const [timeLeft, setTimeLeft] = useState(exercise.inhale_seconds);
   const [totalTime, setTotalTime] = useState(exercise.inhale_seconds);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const phaseSequence: Phase[] = ['inhale', 'hold', 'exhale', 'rest'].filter(p => {
     if (p === 'hold') return exercise.hold_seconds && exercise.hold_seconds > 0;
