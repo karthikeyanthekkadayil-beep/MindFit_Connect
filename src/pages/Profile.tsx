@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { toast } from "sonner";
 import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus, Shield, Sun, Moon, Monitor, Smartphone, Droplets } from "lucide-react";
 import { useTheme } from "next-themes";
+import { Slider } from "@/components/ui/slider";
 import { BottomNav } from "@/components/BottomNav";
 import { useCamera, base64ToBlob } from "@/hooks/useCamera";
 import { Capacitor } from "@capacitor/core";
@@ -60,6 +61,52 @@ const ThemeSwitcher = () => {
           {label}
         </Button>
       ))}
+    </div>
+  );
+};
+
+const GlassOpacitySlider = () => {
+  const { theme } = useTheme();
+  const [opacity, setOpacity] = useState(() => {
+    const saved = localStorage.getItem("glass-opacity");
+    return saved ? parseFloat(saved) : 1;
+  });
+
+  const applyOpacity = useCallback((value: number) => {
+    document.documentElement.style.setProperty("--glass-opacity", String(value));
+  }, []);
+
+  useEffect(() => {
+    applyOpacity(opacity);
+  }, [opacity, applyOpacity]);
+
+  const handleChange = (values: number[]) => {
+    const val = values[0];
+    setOpacity(val);
+    localStorage.setItem("glass-opacity", String(val));
+    applyOpacity(val);
+  };
+
+  if (theme !== "liquid-glass" && theme !== "glass") return null;
+
+  return (
+    <div>
+      <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Glass Opacity</h3>
+      <div className="flex items-center gap-3">
+        <span className="text-[10px] sm:text-xs text-muted-foreground w-6">Low</span>
+        <Slider
+          value={[opacity]}
+          onValueChange={handleChange}
+          min={0.2}
+          max={1.5}
+          step={0.05}
+          className="flex-1"
+        />
+        <span className="text-[10px] sm:text-xs text-muted-foreground w-7">High</span>
+      </div>
+      <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+        {Math.round(opacity * 100)}%
+      </p>
     </div>
   );
 };
@@ -584,6 +631,8 @@ const Profile = () => {
                     <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Theme</h3>
                     <ThemeSwitcher />
                   </div>
+
+                  <GlassOpacitySlider />
 
                   <div>
                     <h3 className="font-medium mb-1.5 sm:mb-2 text-xs sm:text-base">Email</h3>

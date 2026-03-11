@@ -117,6 +117,7 @@
   }
 
   .glass {
+    --glass-opacity: 1;
     --background: 0 0% 93%;
     --foreground: 220 30% 18%;
     
@@ -159,10 +160,13 @@
     --background: 235 45% 10%;
     --foreground: 0 0% 100%;
     
-    --card: 230 40% 30% / 0.15;
+    /* Glass opacity multiplier (0-1), controlled by slider */
+    --glass-opacity: 1;
+    
+    --card: 230 40% 30% / calc(0.15 * var(--glass-opacity));
     --card-foreground: 0 0% 100%;
     
-    --popover: 230 40% 25% / 0.3;
+    --popover: 230 40% 25% / calc(0.3 * var(--glass-opacity));
     --popover-foreground: 0 0% 100%;
     
     --primary: 230 80% 65%;
@@ -174,23 +178,23 @@
     --accent: 200 80% 65%;
     --accent-foreground: 0 0% 100%;
     
-    --muted: 230 30% 25% / 0.25;
+    --muted: 230 30% 25% / calc(0.25 * var(--glass-opacity));
     --muted-foreground: 220 20% 75%;
     
-    --border: 0 0% 100% / 0.08;
-    --input: 230 30% 30% / 0.2;
+    --border: 0 0% 100% / calc(0.08 * var(--glass-opacity));
+    --input: 230 30% 30% / calc(0.2 * var(--glass-opacity));
     --ring: 230 80% 65%;
     
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --sidebar-background: 230 40% 20% / 0.2;
+    --sidebar-background: 230 40% 20% / calc(0.2 * var(--glass-opacity));
     --sidebar-foreground: 0 0% 95%;
     --sidebar-primary: 230 80% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 230 30% 30% / 0.2;
+    --sidebar-accent: 230 30% 30% / calc(0.2 * var(--glass-opacity));
     --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 0 0% 100% / 0.05;
+    --sidebar-border: 0 0% 100% / calc(0.05 * var(--glass-opacity));
     --sidebar-ring: 230 80% 65%;
   }
 }
