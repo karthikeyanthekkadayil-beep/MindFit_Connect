@@ -14,6 +14,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { toast } from "sonner";
 import { Loader2, User, Heart, Settings, LogOut, Camera, ImagePlus, Shield, Sun, Moon, Monitor, Smartphone, Droplets } from "lucide-react";
 import { useTheme } from "next-themes";
+import { Slider } from "@/components/ui/slider";
 import { BottomNav } from "@/components/BottomNav";
 import { useCamera, base64ToBlob } from "@/hooks/useCamera";
 import { Capacitor } from "@capacitor/core";
