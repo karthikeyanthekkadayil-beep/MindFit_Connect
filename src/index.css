@@ -117,6 +117,7 @@
   }
 
   .glass {
+    --glass-opacity: 1;
     --background: 0 0% 93%;
     --foreground: 220 30% 18%;
     
