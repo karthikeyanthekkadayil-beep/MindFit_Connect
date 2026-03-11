@@ -470,33 +470,33 @@
 
   /* Liquid glass buttons (exclude nav tabs) */
   .liquid-glass button:not([data-nav-tab]) {
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
     transition: all 0.25s ease;
   }
 
   .liquid-glass button:not([data-nav-tab]):not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]) {
     background:
-      radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.1) 0%, transparent 50%),
       linear-gradient(
         180deg,
-        hsla(0, 0%, 100%, 0.1) 0%,
-        hsla(230, 40%, 40%, 0.08) 100%
+        hsla(0, 0%, 100%, 0.06) 0%,
+        hsla(230, 40%, 40%, 0.05) 100%
       ) !important;
-    border: 1px solid hsla(0, 0%, 100%, 0.12) !important;
-    border-top-color: hsla(0, 0%, 100%, 0.22) !important;
+    border: 1px solid hsla(0, 0%, 100%, 0.08) !important;
+    border-top-color: hsla(0, 0%, 100%, 0.15) !important;
     box-shadow:
-      0 0.5px 0 0 hsla(0, 0%, 100%, 0.15) inset,
-      0 4px 20px hsla(230, 60%, 10%, 0.3);
+      0 0.5px 0 0 hsla(0, 0%, 100%, 0.1) inset,
+      0 3px 12px hsla(230, 60%, 10%, 0.2);
   }
 
   .liquid-glass button:not([data-nav-tab]):not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]):hover {
     background:
-      radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.22) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.14) 0%, transparent 50%),
       linear-gradient(
         180deg,
-        hsla(0, 0%, 100%, 0.14) 0%,
-        hsla(230, 40%, 40%, 0.1) 100%
+        hsla(0, 0%, 100%, 0.09) 0%,
+        hsla(230, 40%, 40%, 0.07) 100%
       ) !important;
     border-top-color: hsla(0, 0%, 100%, 0.35) !important;
     box-shadow:

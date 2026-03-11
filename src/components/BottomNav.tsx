@@ -77,10 +77,8 @@ export const BottomNav = () => {
                   </motion.span>
                 )}
 
-                <motion.div
+                <div
                   className="relative z-10 flex flex-col items-center justify-center"
-                  animate={isActive ? { scale: 1.08 } : { scale: 1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
                 >
                   <tab.icon
                     className={cn(
@@ -94,12 +92,12 @@ export const BottomNav = () => {
                   )}>
                     {tab.label}
                   </span>
-                </motion.div>
-              </motion.button>
+                </div>
+              </button>
             );
           })}
         </div>
-      </motion.nav>
+      </nav>
     </div>
   );
 };
