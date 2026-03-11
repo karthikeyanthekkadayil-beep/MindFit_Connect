@@ -358,6 +358,7 @@ const MeshColorPicker = () => {
       )}
     </div>
   );
+};
 
 const ModeratorSection = ({ navigate }: { navigate: (path: string) => void }) => {
   const [isMod, setIsMod] = useState(false);
