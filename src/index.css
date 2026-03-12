@@ -432,28 +432,27 @@
 
   /* ===== Liquid Glass Theme (iOS-inspired) ===== */
 
-  /* Deep dark animated blob background */
+  /* Deep dark animated blob background — GPU-optimized with transform only */
   .liquid-glass body,
   .liquid-glass .min-h-screen {
     background: hsl(var(--mesh-base)) !important;
-    position: relative;
+    overflow: hidden;
   }
 
   .liquid-glass body::before,
   .liquid-glass .min-h-screen::before {
     content: '';
     position: fixed;
-    inset: 0;
+    inset: -15%;
     z-index: 0;
     pointer-events: none;
+    will-change: transform;
     background:
-      radial-gradient(ellipse 80% 60% at 15% 25%, hsla(var(--mesh-blob-1), 0.5) 0%, transparent 55%),
-      radial-gradient(ellipse 70% 50% at 85% 20%, hsla(var(--mesh-blob-2), 0.4) 0%, transparent 50%),
-      radial-gradient(ellipse 90% 70% at 50% 80%, hsla(var(--mesh-blob-3), 0.5) 0%, transparent 55%),
-      radial-gradient(ellipse 60% 40% at 70% 60%, hsla(var(--mesh-blob-4), 0.2) 0%, transparent 45%),
-      radial-gradient(ellipse 50% 50% at 30% 70%, hsla(var(--mesh-blob-5), 0.3) 0%, transparent 50%);
-    background-size: 200% 200%;
-    animation: meshDrift 20s ease-in-out infinite alternate;
+      radial-gradient(ellipse 60% 50% at 20% 30%, hsla(var(--mesh-blob-1), 0.5) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 45% at 80% 25%, hsla(var(--mesh-blob-2), 0.4) 0%, transparent 50%),
+      radial-gradient(ellipse 65% 55% at 50% 75%, hsla(var(--mesh-blob-3), 0.45) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 35% at 70% 55%, hsla(var(--mesh-blob-4), 0.2) 0%, transparent 45%);
+    animation: meshDrift 30s ease-in-out infinite alternate;
   }
 
   .liquid-glass body > *,
@@ -463,33 +462,27 @@
   }
 
   @keyframes meshDrift {
-    0% {
-      background-position: 0% 0%;
-      filter: hue-rotate(0deg);
-    }
-    25% {
-      background-position: 60% 30%;
-    }
-    50% {
-      background-position: 100% 60%;
-      filter: hue-rotate(8deg);
-    }
-    75% {
-      background-position: 40% 80%;
-    }
-    100% {
-      background-position: 20% 40%;
-      filter: hue-rotate(-5deg);
+    0%   { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(4%, -3%) scale(1.02); }
+    66%  { transform: translate(-3%, 4%) scale(0.98); }
+    100% { transform: translate(2%, 2%) scale(1.01); }
+  }
+
+  /* Disable animation for users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .liquid-glass body::before,
+    .liquid-glass .min-h-screen::before {
+      animation: none;
     }
   }
 
-  /* Liquid glass cards — deep blur + specular bubble highlight */
+  /* Liquid glass cards — optimized blur */
   .liquid-glass [data-slot="card"],
   .liquid-glass .rounded-lg.bg-card,
   .liquid-glass .rounded-2xl,
   .liquid-glass div[class*="border"][class*="rounded"] {
-    backdrop-filter: blur(40px) saturate(160%) brightness(1.05);
-    -webkit-backdrop-filter: blur(40px) saturate(160%) brightness(1.05);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
     background:
       radial-gradient(ellipse 80% 50% at 50% 0%, hsla(0, 0%, 100%, 0.12) 0%, transparent 60%),
       linear-gradient(
@@ -506,7 +499,7 @@
       0 -0.5px 0 0 hsla(0, 0%, 100%, 0.03) inset,
       0 8px 32px hsla(230, 80%, 10%, 0.3),
       0 3px 12px hsla(230, 60%, 15%, 0.15);
-    transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+    transition: box-shadow 0.35s ease, border-color 0.35s ease;
   }
 
   .liquid-glass [data-slot="card"]:hover,
@@ -520,17 +513,16 @@
 
   /* Liquid glass buttons (exclude nav tabs) */
   .liquid-glass button:not([data-nav-tab]) {
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
     transition: all 0.25s ease;
   }
 
   .liquid-glass button:not([data-nav-tab]):not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]) {
     background:
-      radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.1) 0%, transparent 50%),
       linear-gradient(
         180deg,
-        hsla(0, 0%, 100%, 0.06) 0%,
+        hsla(0, 0%, 100%, 0.08) 0%,
         hsla(230, 40%, 40%, 0.05) 100%
       ) !important;
     border: 1px solid hsla(0, 0%, 100%, 0.08) !important;
@@ -542,10 +534,9 @@
 
   .liquid-glass button:not([data-nav-tab]):not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]):hover {
     background:
-      radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.14) 0%, transparent 50%),
       linear-gradient(
         180deg,
-        hsla(0, 0%, 100%, 0.09) 0%,
+        hsla(0, 0%, 100%, 0.12) 0%,
         hsla(230, 40%, 40%, 0.07) 100%
       ) !important;
     border-top-color: hsla(0, 0%, 100%, 0.35) !important;
@@ -566,10 +557,9 @@
   /* Liquid glass nav */
   .liquid-glass nav,
   .liquid-glass .fixed.bottom-0 {
-    backdrop-filter: blur(60px) saturate(220%) brightness(1.05);
-    -webkit-backdrop-filter: blur(60px) saturate(220%) brightness(1.05);
+    backdrop-filter: blur(30px) saturate(160%);
+    -webkit-backdrop-filter: blur(30px) saturate(160%);
     background:
-      radial-gradient(ellipse 120% 80% at 50% 0%, hsla(0, 0%, 100%, 0.12) 0%, transparent 50%),
       linear-gradient(
         180deg,
         hsla(0, 0%, 100%, 0.08),
@@ -583,19 +573,15 @@
 
   /* Liquid glass tabs */
   .liquid-glass [role="tablist"] {
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    background:
-      radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.08) 0%, transparent 50%),
-      hsla(230, 30%, 25%, 0.25) !important;
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    background: hsla(230, 30%, 25%, 0.3) !important;
     border: 1px solid hsla(0, 0%, 100%, 0.1) !important;
     border-top-color: hsla(0, 0%, 100%, 0.18) !important;
   }
 
   .liquid-glass [role="tab"][data-state="active"] {
-    background:
-      radial-gradient(ellipse 100% 70% at 50% 0%, hsla(0, 0%, 100%, 0.15) 0%, transparent 50%),
-      hsla(0, 0%, 100%, 0.08) !important;
+    background: hsla(0, 0%, 100%, 0.1) !important;
     border: 1px solid hsla(0, 0%, 100%, 0.12) !important;
     border-top-color: hsla(0, 0%, 100%, 0.25) !important;
     box-shadow:
@@ -608,11 +594,9 @@
   .liquid-glass textarea,
   .liquid-glass select,
   .liquid-glass [role="combobox"] {
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    background:
-      radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.08) 0%, transparent 50%),
-      hsla(230, 30%, 25%, 0.3) !important;
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    background: hsla(230, 30%, 25%, 0.35) !important;
     border: 1px solid hsla(0, 0%, 100%, 0.1) !important;
     border-top-color: hsla(0, 0%, 100%, 0.18) !important;
     box-shadow:
@@ -637,15 +621,44 @@
 
   /* Liquid glass badge/chip overrides */
   .liquid-glass .bg-muted {
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   /* Liquid glass scrollbar-area & sheets */
   .liquid-glass [data-radix-scroll-area-viewport],
   .liquid-glass [role="dialog"] {
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+
+  /* Mobile performance: reduce blur on small screens */
+  @media (max-width: 640px) {
+    .liquid-glass [data-slot="card"],
+    .liquid-glass .rounded-lg.bg-card,
+    .liquid-glass .rounded-2xl,
+    .liquid-glass div[class*="border"][class*="rounded"] {
+      backdrop-filter: blur(16px) saturate(120%);
+      -webkit-backdrop-filter: blur(16px) saturate(120%);
+    }
+    .liquid-glass button:not([data-nav-tab]) {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .liquid-glass nav,
+    .liquid-glass .fixed.bottom-0 {
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+    }
+    .liquid-glass [data-radix-scroll-area-viewport],
+    .liquid-glass [role="dialog"] {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .liquid-glass body::before,
+    .liquid-glass .min-h-screen::before {
+      animation-duration: 45s;
+    }
   }
 
 
