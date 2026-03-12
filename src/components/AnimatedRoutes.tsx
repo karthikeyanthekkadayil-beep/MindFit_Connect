@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { ScrollToTop } from "./ScrollToTop";
 import { PageTransition } from "./PageTransition";
 import { TransitionProvider, useTransitionOrigin } from "./TransitionContext";
+import { BottomNav } from "./BottomNav";
 
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
@@ -40,7 +41,6 @@ const ClickCapture = ({ children }: { children: React.ReactNode }) => {
   const { captureOrigin } = useTransitionOrigin();
 
   useEffect(() => {
-    // Capture click position on any anchor/button/interactive click
     const handler = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (target.closest("a, button, [role='button'], [data-nav]")) {
@@ -54,44 +54,53 @@ const ClickCapture = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// Routes that should NOT show the bottom nav
+const hideNavRoutes = ["/", "/auth", "/register/health", "/register/preferences"];
+
 const RoutesInner = () => {
   const location = useLocation();
+  const showNav = !hideNavRoutes.includes(location.pathname);
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><Index /></PageTransition>} />
-        <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
-        <Route path="/register/health" element={<PageTransition><HealthAssessment /></PageTransition>} />
-        <Route path="/register/preferences" element={<PageTransition><Preferences /></PageTransition>} />
-        <Route path="/dashboard" element={<PageTransition><Dashboard /></PageTransition>} />
-        <Route path="/planner" element={<PageTransition><DailyPlanner /></PageTransition>} />
-        <Route path="/profile" element={<PageTransition><Profile /></PageTransition>} />
-        <Route path="/workouts" element={<PageTransition><WorkoutLibrary /></PageTransition>} />
-        <Route path="/workouts/:id" element={<PageTransition><WorkoutDetail /></PageTransition>} />
-        <Route path="/workouts/:id/session" element={<PageTransition><WorkoutSession /></PageTransition>} />
-        <Route path="/workouts/builder" element={<PageTransition><WorkoutBuilder /></PageTransition>} />
-        <Route path="/nutrition" element={<PageTransition><Nutrition /></PageTransition>} />
-        <Route path="/mindfulness" element={<PageTransition><Mindfulness /></PageTransition>} />
-        <Route path="/progress" element={<PageTransition><Progress /></PageTransition>} />
-        <Route path="/goals" element={<PageTransition><Goals /></PageTransition>} />
-        <Route path="/goals/shared" element={<PageTransition><SharedGoals /></PageTransition>} />
-        <Route path="/communities" element={<PageTransition><Communities /></PageTransition>} />
-        <Route path="/communities/:id" element={<PageTransition><CommunityDetail /></PageTransition>} />
-        <Route path="/events" element={<PageTransition><Events /></PageTransition>} />
-        <Route path="/events/:id" element={<PageTransition><EventDetail /></PageTransition>} />
-        <Route path="/messages" element={<PageTransition><Messages /></PageTransition>} />
-        <Route path="/messages/:id" element={<PageTransition><ChatThread /></PageTransition>} />
-        <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
-        <Route path="/balance" element={<PageTransition><Balance /></PageTransition>} />
-        <Route path="/moderator" element={<PageTransition><Moderator /></PageTransition>} />
-        <Route path="/moderator/request" element={<PageTransition><ModeratorRequest /></PageTransition>} />
-        <Route path="/rewards" element={<PageTransition><Rewards /></PageTransition>} />
-        <Route path="/leaderboard" element={<PageTransition><Leaderboard /></PageTransition>} />
-        <Route path="/report-problem" element={<PageTransition><ReportProblem /></PageTransition>} />
-        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
-      </Routes>
-    </AnimatePresence>
+    <>
+      <div className={showNav ? "pb-24" : ""}>
+        <AnimatePresence mode="wait" initial={false}>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageTransition><Index /></PageTransition>} />
+            <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
+            <Route path="/register/health" element={<PageTransition><HealthAssessment /></PageTransition>} />
+            <Route path="/register/preferences" element={<PageTransition><Preferences /></PageTransition>} />
+            <Route path="/dashboard" element={<PageTransition><Dashboard /></PageTransition>} />
+            <Route path="/planner" element={<PageTransition><DailyPlanner /></PageTransition>} />
+            <Route path="/profile" element={<PageTransition><Profile /></PageTransition>} />
+            <Route path="/workouts" element={<PageTransition><WorkoutLibrary /></PageTransition>} />
+            <Route path="/workouts/:id" element={<PageTransition><WorkoutDetail /></PageTransition>} />
+            <Route path="/workouts/:id/session" element={<PageTransition><WorkoutSession /></PageTransition>} />
+            <Route path="/workouts/builder" element={<PageTransition><WorkoutBuilder /></PageTransition>} />
+            <Route path="/nutrition" element={<PageTransition><Nutrition /></PageTransition>} />
+            <Route path="/mindfulness" element={<PageTransition><Mindfulness /></PageTransition>} />
+            <Route path="/progress" element={<PageTransition><Progress /></PageTransition>} />
+            <Route path="/goals" element={<PageTransition><Goals /></PageTransition>} />
+            <Route path="/goals/shared" element={<PageTransition><SharedGoals /></PageTransition>} />
+            <Route path="/communities" element={<PageTransition><Communities /></PageTransition>} />
+            <Route path="/communities/:id" element={<PageTransition><CommunityDetail /></PageTransition>} />
+            <Route path="/events" element={<PageTransition><Events /></PageTransition>} />
+            <Route path="/events/:id" element={<PageTransition><EventDetail /></PageTransition>} />
+            <Route path="/messages" element={<PageTransition><Messages /></PageTransition>} />
+            <Route path="/messages/:id" element={<PageTransition><ChatThread /></PageTransition>} />
+            <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
+            <Route path="/balance" element={<PageTransition><Balance /></PageTransition>} />
+            <Route path="/moderator" element={<PageTransition><Moderator /></PageTransition>} />
+            <Route path="/moderator/request" element={<PageTransition><ModeratorRequest /></PageTransition>} />
+            <Route path="/rewards" element={<PageTransition><Rewards /></PageTransition>} />
+            <Route path="/leaderboard" element={<PageTransition><Leaderboard /></PageTransition>} />
+            <Route path="/report-problem" element={<PageTransition><ReportProblem /></PageTransition>} />
+            <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+          </Routes>
+        </AnimatePresence>
+      </div>
+      {showNav && <BottomNav />}
+    </>
   );
 };
 
