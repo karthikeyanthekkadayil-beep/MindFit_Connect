@@ -520,10 +520,9 @@
 
   .liquid-glass button:not([data-nav-tab]):not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]) {
     background:
-      radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.1) 0%, transparent 50%),
       linear-gradient(
         180deg,
-        hsla(0, 0%, 100%, 0.06) 0%,
+        hsla(0, 0%, 100%, 0.08) 0%,
         hsla(230, 40%, 40%, 0.05) 100%
       ) !important;
     border: 1px solid hsla(0, 0%, 100%, 0.08) !important;
