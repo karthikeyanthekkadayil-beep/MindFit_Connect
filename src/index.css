@@ -557,10 +557,9 @@
   /* Liquid glass nav */
   .liquid-glass nav,
   .liquid-glass .fixed.bottom-0 {
-    backdrop-filter: blur(60px) saturate(220%) brightness(1.05);
-    -webkit-backdrop-filter: blur(60px) saturate(220%) brightness(1.05);
+    backdrop-filter: blur(30px) saturate(160%);
+    -webkit-backdrop-filter: blur(30px) saturate(160%);
     background:
-      radial-gradient(ellipse 120% 80% at 50% 0%, hsla(0, 0%, 100%, 0.12) 0%, transparent 50%),
       linear-gradient(
         180deg,
         hsla(0, 0%, 100%, 0.08),
