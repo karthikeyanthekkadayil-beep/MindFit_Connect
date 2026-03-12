@@ -435,14 +435,52 @@
   /* Deep dark animated blob background */
   .liquid-glass body,
   .liquid-glass .min-h-screen {
+    background: hsl(var(--mesh-base)) !important;
+    position: relative;
+  }
+
+  .liquid-glass body::before,
+  .liquid-glass .min-h-screen::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
     background:
       radial-gradient(ellipse 80% 60% at 15% 25%, hsla(var(--mesh-blob-1), 0.5) 0%, transparent 55%),
       radial-gradient(ellipse 70% 50% at 85% 20%, hsla(var(--mesh-blob-2), 0.4) 0%, transparent 50%),
       radial-gradient(ellipse 90% 70% at 50% 80%, hsla(var(--mesh-blob-3), 0.5) 0%, transparent 55%),
       radial-gradient(ellipse 60% 40% at 70% 60%, hsla(var(--mesh-blob-4), 0.2) 0%, transparent 45%),
-      radial-gradient(ellipse 50% 50% at 30% 70%, hsla(var(--mesh-blob-5), 0.3) 0%, transparent 50%),
-      hsl(var(--mesh-base)) !important;
-    background-attachment: fixed !important;
+      radial-gradient(ellipse 50% 50% at 30% 70%, hsla(var(--mesh-blob-5), 0.3) 0%, transparent 50%);
+    background-size: 200% 200%;
+    animation: meshDrift 20s ease-in-out infinite alternate;
+  }
+
+  .liquid-glass body > *,
+  .liquid-glass .min-h-screen > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes meshDrift {
+    0% {
+      background-position: 0% 0%;
+      filter: hue-rotate(0deg);
+    }
+    25% {
+      background-position: 60% 30%;
+    }
+    50% {
+      background-position: 100% 60%;
+      filter: hue-rotate(8deg);
+    }
+    75% {
+      background-position: 40% 80%;
+    }
+    100% {
+      background-position: 20% 40%;
+      filter: hue-rotate(-5deg);
+    }
   }
 
   /* Liquid glass cards — deep blur + specular bubble highlight */
