@@ -534,10 +534,9 @@
 
   .liquid-glass button:not([data-nav-tab]):not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-destructive"]):hover {
     background:
-      radial-gradient(ellipse 100% 80% at 50% 0%, hsla(0, 0%, 100%, 0.14) 0%, transparent 50%),
       linear-gradient(
         180deg,
-        hsla(0, 0%, 100%, 0.09) 0%,
+        hsla(0, 0%, 100%, 0.12) 0%,
         hsla(230, 40%, 40%, 0.07) 100%
       ) !important;
     border-top-color: hsla(0, 0%, 100%, 0.35) !important;
