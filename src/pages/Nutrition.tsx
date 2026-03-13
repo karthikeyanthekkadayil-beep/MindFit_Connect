@@ -337,7 +337,6 @@ const Nutrition = () => {
             ))}
           </div>
         </div>
-        <BottomNav />
       </div>
     );
   }
