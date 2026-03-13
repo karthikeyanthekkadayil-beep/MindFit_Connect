@@ -286,7 +286,6 @@ const WorkoutLibrary = () => {
         </Tabs>
       </div>
 
-      <BottomNav />
     </div>
   );
 };

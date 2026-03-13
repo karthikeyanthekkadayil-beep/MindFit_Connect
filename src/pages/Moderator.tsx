@@ -699,7 +699,6 @@ const Moderator = () => {
         </Card>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

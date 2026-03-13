@@ -487,7 +487,6 @@ const Progress = () => {
         </MotionFadeIn>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

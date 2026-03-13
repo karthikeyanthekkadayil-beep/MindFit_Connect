@@ -218,7 +218,6 @@ export default function Communities() {
         <CreateCommunityDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} />
       </div>
 
-      <BottomNav />
     </div>
   );
 }

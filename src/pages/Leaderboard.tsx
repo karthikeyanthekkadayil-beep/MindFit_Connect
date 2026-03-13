@@ -397,7 +397,6 @@ const Leaderboard = () => {
           </CardContent>
         </Card>
       </div>
-      <BottomNav />
     </div>
   );
 };

@@ -485,7 +485,6 @@ const Rewards = () => {
         </Tabs>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

@@ -359,7 +359,6 @@ const Admin = () => {
         </Tabs>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

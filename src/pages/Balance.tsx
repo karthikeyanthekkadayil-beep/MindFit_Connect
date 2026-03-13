@@ -768,7 +768,6 @@ const Balance = () => {
         </Tabs>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

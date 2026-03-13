@@ -374,7 +374,6 @@ const DailyPlanner = () => {
         </MotionFadeIn>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

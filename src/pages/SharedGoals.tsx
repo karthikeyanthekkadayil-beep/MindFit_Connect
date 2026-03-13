@@ -334,7 +334,6 @@ const SharedGoals = () => {
         )}
       </main>
 
-      <BottomNav />
     </div>
   );
 };

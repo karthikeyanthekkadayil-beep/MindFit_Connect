@@ -503,7 +503,6 @@ const Mindfulness = () => {
           </TabsContent>
         </Tabs>
       </div>
-      <BottomNav />
     </div>
   );
 };

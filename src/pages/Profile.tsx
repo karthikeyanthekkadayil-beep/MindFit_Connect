@@ -907,7 +907,6 @@ const Profile = () => {
         </Tabs>
       </div>
 
-      <BottomNav />
     </div>
   );
 };

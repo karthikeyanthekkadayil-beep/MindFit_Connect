@@ -298,7 +298,6 @@ export default function Events() {
         <CreateEventDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} />
       </div>
 
-      <BottomNav />
     </div>
   );
 }

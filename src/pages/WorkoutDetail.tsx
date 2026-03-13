@@ -283,7 +283,6 @@ const WorkoutDetail = () => {
         </Card>
       </div>
 
-      <BottomNav />
     </div>
     </AnimatedPage>
   );

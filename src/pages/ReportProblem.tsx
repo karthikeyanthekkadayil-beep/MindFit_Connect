@@ -393,7 +393,6 @@ const ReportProblem = () => {
         </Tabs>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

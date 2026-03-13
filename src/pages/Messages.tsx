@@ -290,8 +290,6 @@ export default function Messages() {
         />
       </div>
 
-      <BottomNav />
-
       {/* Delete Chat Confirmation */}
       <AlertDialog open={!!chatToDelete} onOpenChange={(open) => !open && setChatToDelete(null)}>
         <AlertDialogContent>

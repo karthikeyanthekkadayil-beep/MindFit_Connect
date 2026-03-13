@@ -257,7 +257,6 @@ const ModeratorRequest = () => {
         )}
       </main>
 
-      <BottomNav />
     </div>
   );
 };

@@ -416,7 +416,6 @@ const WorkoutBuilder = () => {
         </DialogContent>
       </Dialog>
 
-      <BottomNav />
     </div>
     </AnimatedPage>
   );
