@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Loader2, ArrowLeft, Plus, X, Search, GripVertical } from "lucide-react";
-import { BottomNav } from "@/components/BottomNav";
+
 import { AnimatedPage } from "@/components/motion/AnimatedPage";
 import { MotionFadeIn } from "@/components/motion/MotionWrappers";
 
