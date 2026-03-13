@@ -251,7 +251,6 @@ const Mindfulness = () => {
             ))}
           </div>
         </div>
-        <BottomNav />
       </div>
     );
   }
