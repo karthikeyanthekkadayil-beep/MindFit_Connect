@@ -179,7 +179,6 @@ const Progress = () => {
           <ChartSkeleton height="200px" />
           <ChartSkeleton height="200px" />
         </main>
-        <BottomNav />
       </div>
     );
   }
