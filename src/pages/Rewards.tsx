@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { BottomNav } from "@/components/BottomNav";
+
 import { useGamification } from "@/hooks/useGamification";
 import { format, parseISO } from "date-fns";
 import { 
