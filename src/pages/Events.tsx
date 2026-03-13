@@ -10,7 +10,7 @@ import { Plus, Search, Calendar, MapPin, Users, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CreateEventDialog } from "@/components/CreateEventDialog";
 import { EventsMap } from "@/components/EventsMap";
-import { BottomNav } from "@/components/BottomNav";
+
 import { format } from "date-fns";
 import { EventCardSkeleton } from "@/components/skeletons";
 import { useUserRole } from "@/hooks/useUserRole";
