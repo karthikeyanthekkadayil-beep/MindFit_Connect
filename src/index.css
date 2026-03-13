@@ -433,14 +433,12 @@
   /* ===== Liquid Glass Theme (iOS-inspired) ===== */
 
   /* Deep dark animated blob background — GPU-optimized with transform only */
-  .liquid-glass body,
-  .liquid-glass .min-h-screen {
+  .liquid-glass body {
     background: hsl(var(--mesh-base)) !important;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
-  .liquid-glass body::before,
-  .liquid-glass .min-h-screen::before {
+  .liquid-glass body::before {
     content: '';
     position: fixed;
     inset: -15%;
@@ -455,8 +453,14 @@
     animation: meshDrift 30s ease-in-out infinite alternate;
   }
 
-  .liquid-glass body > *,
-  .liquid-glass .min-h-screen > * {
+  .liquid-glass body > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Ensure min-h-screen containers scroll normally */
+  .liquid-glass .min-h-screen {
+    background: transparent !important;
     position: relative;
     z-index: 1;
   }
