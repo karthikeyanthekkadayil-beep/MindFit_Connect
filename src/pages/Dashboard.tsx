@@ -135,7 +135,7 @@ const Dashboard = () => {
       </MotionHeader>
 
       {/* Main Content */}
-      <main className="max-w-lg mx-auto px-4 -mt-3 space-y-5">
+      <main className="max-w-lg mx-auto px-4 -mt-3 space-y-6 relative z-10">
         {/* Stats Card */}
         <MotionScaleIn delay={0.15}>
           <InteractiveCard 
