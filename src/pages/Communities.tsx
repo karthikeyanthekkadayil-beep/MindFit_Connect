@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Search, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CreateCommunityDialog } from "@/components/CreateCommunityDialog";
-import { BottomNav } from "@/components/BottomNav";
+
 import { CommunityCardSkeleton } from "@/components/skeletons";
 import { useUserRole } from "@/hooks/useUserRole";
 import { MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
