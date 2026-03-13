@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Search, MessageCircle, Trash2 } from "lucide-react";
-import { BottomNav } from "@/components/BottomNav";
+
 import { useNavigate } from "react-router-dom";
 import { NewConversationDialog } from "@/components/NewConversationDialog";
 import { formatDistanceToNow } from "date-fns";
@@ -289,8 +289,6 @@ export default function Messages() {
           onOpenChange={setIsNewConversationOpen}
         />
       </div>
-
-      <BottomNav />
 
       {/* Delete Chat Confirmation */}
       <AlertDialog open={!!chatToDelete} onOpenChange={(open) => !open && setChatToDelete(null)}>

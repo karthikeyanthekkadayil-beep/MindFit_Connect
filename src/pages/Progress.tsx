@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BottomNav } from "@/components/BottomNav";
+
 import { Activity, Brain, Apple, Users, TrendingUp, Target } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend } from "recharts";
@@ -179,7 +179,6 @@ const Progress = () => {
           <ChartSkeleton height="200px" />
           <ChartSkeleton height="200px" />
         </main>
-        <BottomNav />
       </div>
     );
   }
@@ -488,7 +487,6 @@ const Progress = () => {
         </MotionFadeIn>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

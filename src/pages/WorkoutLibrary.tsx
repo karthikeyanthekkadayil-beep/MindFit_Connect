@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Loader2, Search, Dumbbell, Heart, Plus } from "lucide-react";
-import { BottomNav } from "@/components/BottomNav";
+
 import PersonalizedWorkouts from "@/components/PersonalizedWorkouts";
 import { MotionFadeIn, MotionSection } from "@/components/motion/MotionWrappers";
 
@@ -286,7 +286,6 @@ const WorkoutLibrary = () => {
         </Tabs>
       </div>
 
-      <BottomNav />
     </div>
   );
 };

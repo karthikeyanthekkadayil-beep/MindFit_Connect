@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { BottomNav } from "@/components/BottomNav";
+
 import { MoodStressChart } from "@/components/MoodStressChart";
 import { 
   Scale, Activity, Brain, Apple, Users, TrendingUp, Briefcase, 
@@ -768,7 +768,6 @@ const Balance = () => {
         </Tabs>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

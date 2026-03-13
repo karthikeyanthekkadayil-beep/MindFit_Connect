@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, InteractiveCard, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { BottomNav } from "@/components/BottomNav";
+
 import { useGamification } from "@/hooks/useGamification";
 import { 
   Calendar, Users, MessageSquare, Dumbbell, Utensils, Brain, 
@@ -322,7 +322,6 @@ const Dashboard = () => {
 
       </main>
 
-      <BottomNav />
     </div>
   );
 };

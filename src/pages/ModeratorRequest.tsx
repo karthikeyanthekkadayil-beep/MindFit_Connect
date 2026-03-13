@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { ArrowLeft, Shield, Clock, CheckCircle2, XCircle, Send } from "lucide-react";
-import { BottomNav } from "@/components/BottomNav";
+
 
 interface ModeratorRequest {
   id: string;
@@ -257,7 +257,6 @@ const ModeratorRequest = () => {
         )}
       </main>
 
-      <BottomNav />
     </div>
   );
 };

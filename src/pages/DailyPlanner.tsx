@@ -21,7 +21,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import { BottomNav } from "@/components/BottomNav";
+
 import { AddActivityDialog } from "@/components/AddActivityDialog";
 import { StatsCardSkeleton, ActivityCardSkeleton } from "@/components/skeletons";
 import { MotionHeader, MotionFadeIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
@@ -374,7 +374,6 @@ const DailyPlanner = () => {
         </MotionFadeIn>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

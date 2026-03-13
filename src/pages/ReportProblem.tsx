@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { MotionHeader, MotionFadeIn } from "@/components/motion/MotionWrappers";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { BottomNav } from "@/components/BottomNav";
+
 import { ArrowLeft, Send, Loader2, Clock, CheckCircle, MessageCircle, AlertTriangle, Paperclip, X, Image as ImageIcon } from "lucide-react";
 import { format } from "date-fns";
 
@@ -393,7 +393,6 @@ const ReportProblem = () => {
         </Tabs>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

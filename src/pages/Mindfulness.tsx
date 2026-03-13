@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { Loader2, Play, Brain, Wind, Heart, Clock, TrendingUp, ArrowLeft } from "lucide-react";
 import { BreathingExercise } from "@/components/BreathingExercise";
-import { BottomNav } from "@/components/BottomNav";
+
 import { format } from "date-fns";
 import { useGamification } from "@/hooks/useGamification";
 import { StatsCardSkeleton, MeditationCardSkeleton } from "@/components/skeletons";
@@ -251,7 +251,6 @@ const Mindfulness = () => {
             ))}
           </div>
         </div>
-        <BottomNav />
       </div>
     );
   }
@@ -504,7 +503,6 @@ const Mindfulness = () => {
           </TabsContent>
         </Tabs>
       </div>
-      <BottomNav />
     </div>
   );
 };
