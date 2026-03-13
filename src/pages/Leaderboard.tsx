@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Loader2, Trophy, Medal, Crown, Flame, Star, Users, Globe, TrendingUp } from "lucide-react";
-import { BottomNav } from "@/components/BottomNav";
+
 import { MotionHeader, MotionFadeIn, MotionScaleIn, MotionList, MotionItem } from "@/components/motion/MotionWrappers";
 import { motion } from "framer-motion";
 
