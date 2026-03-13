@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Shield, Users, MessageSquare, Calendar, Flag, Trash2, Eye, ArrowLeft, AlertTriangle, CheckCircle, Scale, TrendingUp, Activity, Star, Clock, Target, History, ChevronDown, ChevronUp, Ban } from "lucide-react";
-import { BottomNav } from "@/components/BottomNav";
+
 import { format } from "date-fns";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { ReportsTab } from "@/components/moderator/ReportsTab";
