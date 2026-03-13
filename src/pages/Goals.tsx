@@ -289,7 +289,6 @@ const Goals = () => {
             ))}
           </div>
         </main>
-        <BottomNav />
       </div>
     );
   }
