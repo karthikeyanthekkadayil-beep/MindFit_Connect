@@ -10,20 +10,14 @@ const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
 >(({ className, ...props }, ref) => (
-  <motion.div
-    initial={{ opacity: 0, y: -8 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-  >
-    <TabsPrimitive.List
-      ref={ref}
-      className={cn(
-        "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-        className,
-      )}
-      {...props}
-    />
-  </motion.div>
+  <TabsPrimitive.List
+    ref={ref}
+    className={cn(
+      "inline-flex h-11 items-center justify-center rounded-2xl p-1 text-muted-foreground bg-card/60 backdrop-blur-2xl border border-border/30 shadow-md",
+      className,
+    )}
+    {...props}
+  />
 ));
 TabsList.displayName = TabsPrimitive.List.displayName;
 
