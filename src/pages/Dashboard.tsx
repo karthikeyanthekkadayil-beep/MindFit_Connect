@@ -136,8 +136,16 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="max-w-lg mx-auto px-4 -mt-3 space-y-6 relative z-10">
-        {/* Stats Card */}
-        <MotionScaleIn delay={0.15}>
+        {/* Stats Card - Subtle scale + fade */}
+        <motion.div
+          initial={{ opacity: 0, y: 16, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ 
+            duration: 0.5, 
+            delay: 0.15,
+            ease: [0.25, 0.46, 0.45, 0.94]
+          }}
+        >
           <InteractiveCard 
             className="overflow-hidden border-0 shadow-lg cursor-pointer"
             onClick={() => navigate('/rewards')}
@@ -160,9 +168,13 @@ const Dashboard = () => {
                       <motion.div
                         key={stat.label}
                         className="text-center py-4 px-2"
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.25 + i * 0.08, type: "spring", stiffness: 300, damping: 20 }}
+                        transition={{ 
+                          delay: 0.35 + i * 0.08, 
+                          duration: 0.4,
+                          ease: [0.25, 0.46, 0.45, 0.94]
+                        }}
                       >
                         <stat.icon className={cn("h-5 w-5 mx-auto mb-1", stat.color)} />
                         <p className="text-lg font-bold">{stat.value}</p>
@@ -171,7 +183,12 @@ const Dashboard = () => {
                     ))}
                   </div>
 
-                  <MotionFadeIn delay={0.5} className="px-4 pb-4 pt-2 bg-muted/30">
+                  <motion.div 
+                    className="px-4 pb-4 pt-2 bg-muted/30"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.7, duration: 0.4 }}
+                  >
                     <div className="flex justify-between text-xs mb-1.5">
                       <span className="font-medium flex items-center gap-1">
                         <Sparkles className="h-3 w-3 text-primary" />
@@ -180,21 +197,34 @@ const Dashboard = () => {
                       <span className="text-muted-foreground">{levelProgress.current} / {levelProgress.next} XP</span>
                     </div>
                     <Progress value={levelProgress.percentage} className="h-2" />
-                  </MotionFadeIn>
+                  </motion.div>
                 </>
               )}
             </CardContent>
           </InteractiveCard>
-        </MotionScaleIn>
+        </motion.div>
 
-        {/* Quick Actions */}
-        <MotionSection delay={0.3}>
+        {/* Quick Actions - Staggered fade up */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
             Quick Actions
           </h2>
-          <MotionList className="scroll-x -mx-4 px-4" delay={0.35}>
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
             {quickActions.map((action, i) => (
-              <MotionItem key={action.path}>
+              <motion.div
+                key={action.path}
+                initial={{ opacity: 0, y: 16, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  delay: 0.4 + i * 0.06,
+                  duration: 0.4,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+              >
                 <motion.button
                   onClick={() => navigate(action.path)}
                   className={cn(
@@ -202,51 +232,64 @@ const Dashboard = () => {
                     action.color
                   )}
                   whileHover={{
-                    scale: 1.12,
-                    y: -6,
-                    backgroundColor: action.hoverBg,
-                    transition: { type: "spring", stiffness: 400, damping: 18 },
+                    scale: 1.08,
+                    y: -4,
+                    transition: { type: "spring", stiffness: 400, damping: 20 },
                   }}
                   whileTap={{
-                    scale: 0.88,
-                    rotate: action.rotate,
-                    transition: { type: "spring", stiffness: 600, damping: 15 },
+                    scale: 0.94,
+                    transition: { type: "spring", stiffness: 500, damping: 25 },
                   }}
                 >
-                  {/* Glow effect */}
                   <span
                     className="pointer-events-none absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-12 h-3 rounded-full blur-md opacity-60"
                     style={{ backgroundColor: action.glow }}
                   />
-                  <motion.div
-                    whileHover={{ rotate: [0, -12, 12, -6, 0], transition: { duration: 0.5 } }}
-                  >
-                    <action.icon className="h-6 w-6 mb-1" />
-                  </motion.div>
+                  <action.icon className="h-6 w-6 mb-1" />
                   <span className="text-xs font-medium">{action.title}</span>
                 </motion.button>
-              </MotionItem>
+              </motion.div>
             ))}
-          </MotionList>
-        </MotionSection>
+          </div>
+        </motion.section>
 
-        {/* Features List */}
-        <MotionSection delay={0.4}>
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+        {/* Features List - Cascading stagger */}
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+        >
+          <motion.h2 
+            className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.55, duration: 0.4 }}
+          >
             Explore
-          </h2>
-          <MotionList className="space-y-2" delay={0.45}>
+          </motion.h2>
+          <div className="space-y-2.5">
             {dashboardItems.map((item, i) => (
-              <MotionItem key={item.path}>
+              <motion.div
+                key={item.path}
+                initial={{ opacity: 0, y: 12, x: i % 2 === 0 ? -8 : 8 }}
+                animate={{ opacity: 1, y: 0, x: 0 }}
+                transition={{ 
+                  delay: 0.6 + i * 0.05,
+                  duration: 0.4,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+              >
                 <InteractiveCard 
                   className="border-0 shadow-sm cursor-pointer"
                   onClick={() => navigate(item.path)}
+                  hoverScale={1.01}
+                  tapScale={0.99}
                 >
                   <CardContent className="p-4 flex items-center gap-4">
                     <motion.div 
                       className="flex-shrink-0 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center"
-                      whileHover={{ rotate: [0, -10, 10, -5, 0], scale: 1.15, transition: { duration: 0.5 } }}
-                      whileTap={{ scale: 0.9, rotate: i % 2 === 0 ? -8 : 8 }}
+                      whileHover={{ rotate: [0, -8, 8, 0], scale: 1.1, transition: { duration: 0.4 } }}
+                      whileTap={{ scale: 0.92 }}
                     >
                       <item.icon className="h-5 w-5 text-primary" />
                     </motion.div>
@@ -254,30 +297,32 @@ const Dashboard = () => {
                       <h3 className="font-semibold text-sm">{item.title}</h3>
                       <p className="text-xs text-muted-foreground truncate">{item.description}</p>
                     </div>
-                    <motion.div
-                      whileHover={{ x: 4, transition: { type: "spring", stiffness: 400 } }}
-                    >
-                      <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                    </motion.div>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                   </CardContent>
                 </InteractiveCard>
-              </MotionItem>
+              </motion.div>
             ))}
-          </MotionList>
-        </MotionSection>
+          </div>
+        </motion.section>
 
-        {/* Admin Dashboard Card */}
+        {/* Admin Dashboard Card - Subtle slide in */}
         {isAdmin && (
-          <MotionFadeIn delay={0.6}>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.9, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
             <InteractiveCard 
               className="border-0 shadow-sm cursor-pointer bg-gradient-to-r from-destructive/10 to-primary/10"
               onClick={() => navigate("/admin")}
+              hoverScale={1.02}
+              tapScale={0.98}
             >
               <CardContent className="p-4 flex items-center gap-4">
                 <motion.div 
                   className="flex-shrink-0 w-11 h-11 rounded-xl bg-destructive/20 flex items-center justify-center"
-                  whileHover={{ rotate: [0, -15, 15, 0], scale: 1.15, transition: { duration: 0.4 } }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1, transition: { duration: 0.4 } }}
+                  whileTap={{ scale: 0.92 }}
                 >
                   <Shield className="h-5 w-5 text-destructive" />
                 </motion.div>
@@ -285,26 +330,30 @@ const Dashboard = () => {
                   <h3 className="font-semibold text-sm">Admin Dashboard</h3>
                   <p className="text-xs text-muted-foreground">Manage users, content & platform settings</p>
                 </div>
-                <motion.div whileHover={{ x: 4 }}>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                </motion.div>
+                <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
               </CardContent>
             </InteractiveCard>
-          </MotionFadeIn>
+          </motion.div>
         )}
 
         {/* Moderator Panel Card */}
         {hasElevatedRole && (
-          <MotionFadeIn delay={0.65}>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.95, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
             <InteractiveCard 
               className="border-0 shadow-sm cursor-pointer bg-gradient-to-r from-primary/10 to-secondary/10"
               onClick={() => navigate("/moderator")}
+              hoverScale={1.02}
+              tapScale={0.98}
             >
               <CardContent className="p-4 flex items-center gap-4">
                 <motion.div 
                   className="flex-shrink-0 w-11 h-11 rounded-xl bg-primary/20 flex items-center justify-center"
-                  whileHover={{ rotate: [0, -15, 15, 0], scale: 1.15, transition: { duration: 0.4 } }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1, transition: { duration: 0.4 } }}
+                  whileTap={{ scale: 0.92 }}
                 >
                   <Shield className="h-5 w-5 text-primary" />
                 </motion.div>
@@ -312,12 +361,10 @@ const Dashboard = () => {
                   <h3 className="font-semibold text-sm">Moderator Panel</h3>
                   <p className="text-xs text-muted-foreground">Review content, reports & manage community</p>
                 </div>
-                <motion.div whileHover={{ x: 4 }}>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                </motion.div>
+                <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
               </CardContent>
             </InteractiveCard>
-          </MotionFadeIn>
+          </motion.div>
         )}
 
       </main>
