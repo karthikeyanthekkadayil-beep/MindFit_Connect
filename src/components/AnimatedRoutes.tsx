@@ -61,6 +61,8 @@ const hideNavRoutes = ["/", "/auth", "/register/health", "/register/preferences"
 const RoutesInner = () => {
   const location = useLocation();
   const showNav = !hideNavRoutes.includes(location.pathname);
+  
+  useSwipeNavigation();
 
   return (
     <>
