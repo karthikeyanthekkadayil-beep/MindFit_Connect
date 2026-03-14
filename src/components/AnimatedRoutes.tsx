@@ -5,6 +5,7 @@ import { ScrollToTop } from "./ScrollToTop";
 import { PageTransition } from "./PageTransition";
 import { TransitionProvider, useTransitionOrigin } from "./TransitionContext";
 import { BottomNav } from "./BottomNav";
+import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
