@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { motion } from "framer-motion";
+
 
 import { cn } from "@/lib/utils";
 
@@ -10,20 +10,14 @@ const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
 >(({ className, ...props }, ref) => (
-  <motion.div
-    initial={{ opacity: 0, y: -8 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-  >
-    <TabsPrimitive.List
-      ref={ref}
-      className={cn(
-        "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-        className,
-      )}
-      {...props}
-    />
-  </motion.div>
+  <TabsPrimitive.List
+    ref={ref}
+    className={cn(
+      "inline-flex h-11 items-center justify-center rounded-2xl p-1 text-muted-foreground bg-card/60 backdrop-blur-2xl border border-border/30 shadow-md",
+      className,
+    )}
+    {...props}
+  />
 ));
 TabsList.displayName = TabsPrimitive.List.displayName;
 
@@ -34,7 +28,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all duration-200 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:scale-[1.03] data-[state=inactive]:hover:scale-[1.02] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      "inline-flex items-center justify-center whitespace-nowrap rounded-xl px-4 py-1.5 text-sm font-medium ring-offset-background transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
       className,
     )}
     {...props}
@@ -49,19 +43,12 @@ const TabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      "mt-4 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
       className,
     )}
     {...props}
   >
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-      key={props.value}
-    >
-      {children}
-    </motion.div>
+    {children}
   </TabsPrimitive.Content>
 ));
 TabsContent.displayName = TabsPrimitive.Content.displayName;
