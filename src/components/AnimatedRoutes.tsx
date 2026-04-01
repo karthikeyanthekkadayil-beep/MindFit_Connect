@@ -103,6 +103,7 @@ const RoutesInner = () => {
           </Routes>
         </AnimatePresence>
       </div>
+      {showNav && <FloatingActionButton />}
       {showNav && <BottomNav />}
     </>
   );
