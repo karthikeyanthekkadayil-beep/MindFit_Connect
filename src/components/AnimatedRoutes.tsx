@@ -1,9 +1,7 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
 import { ScrollToTop } from "./ScrollToTop";
 import { PageTransition } from "./PageTransition";
-import { TransitionProvider, useTransitionOrigin } from "./TransitionContext";
 import { BottomNav } from "./BottomNav";
 import { FloatingActionButton } from "./FloatingActionButton";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
@@ -39,22 +37,6 @@ import Leaderboard from "@/pages/Leaderboard";
 import ReportProblem from "@/pages/ReportProblem";
 import NotFound from "@/pages/NotFound";
 
-const ClickCapture = ({ children }: { children: React.ReactNode }) => {
-  const { captureOrigin } = useTransitionOrigin();
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest("a, button, [role='button'], [data-nav]")) {
-        captureOrigin(e);
-      }
-    };
-    window.addEventListener("click", handler, true);
-    return () => window.removeEventListener("click", handler, true);
-  }, [captureOrigin]);
-
-  return <>{children}</>;
-};
 
 // Routes that should NOT show the bottom nav
 const hideNavRoutes = ["/", "/auth", "/register/health", "/register/preferences"];
@@ -111,11 +93,10 @@ const RoutesInner = () => {
 
 export const AnimatedRoutes = () => {
   return (
-    <TransitionProvider>
+    <>
       <ScrollToTop />
-      <ClickCapture>
-        <RoutesInner />
-      </ClickCapture>
-    </TransitionProvider>
+      <RoutesInner />
+    </>
   );
 };
+
