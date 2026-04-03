@@ -39,22 +39,6 @@ import Leaderboard from "@/pages/Leaderboard";
 import ReportProblem from "@/pages/ReportProblem";
 import NotFound from "@/pages/NotFound";
 
-const ClickCapture = ({ children }: { children: React.ReactNode }) => {
-  const { captureOrigin } = useTransitionOrigin();
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest("a, button, [role='button'], [data-nav]")) {
-        captureOrigin(e);
-      }
-    };
-    window.addEventListener("click", handler, true);
-    return () => window.removeEventListener("click", handler, true);
-  }, [captureOrigin]);
-
-  return <>{children}</>;
-};
 
 // Routes that should NOT show the bottom nav
 const hideNavRoutes = ["/", "/auth", "/register/health", "/register/preferences"];
