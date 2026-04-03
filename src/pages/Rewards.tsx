@@ -122,15 +122,6 @@ const Rewards = () => {
                 <p className="text-white/90 text-xs sm:text-base">MindFit Connect • Track your progress</p>
               </div>
             </div>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => navigate('/leaderboard')}
-              className="gap-1 sm:gap-2"
-            >
-              <Crown className="h-4 w-4" />
-              <span className="hidden sm:inline">Leaderboard</span>
-            </Button>
           </div>
         </div>
       </MotionHeader>
