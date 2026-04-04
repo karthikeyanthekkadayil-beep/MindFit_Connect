@@ -258,13 +258,11 @@ export const useGamification = (userId: string | null) => {
         { count: meditationsCount },
         { count: communitiesCount },
         { count: eventsCount },
-        { count: moodEntriesCount },
       ] = await Promise.all([
         supabase.from('workout_sessions').select('*', { count: 'exact', head: true }).eq('user_id', userId).eq('status', 'completed'),
         supabase.from('user_meditation_sessions').select('*', { count: 'exact', head: true }).eq('user_id', userId).eq('completed', true),
         supabase.from('community_members').select('*', { count: 'exact', head: true }).eq('user_id', userId),
         supabase.from('event_rsvps').select('*', { count: 'exact', head: true }).eq('user_id', userId),
-        supabase.from('mood_stress_entries').select('*', { count: 'exact', head: true }).eq('user_id', userId),
       ]);
 
       const earnedIds = earnedAchievements.map(ea => ea.achievement_id);
