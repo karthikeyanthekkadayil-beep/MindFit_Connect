@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS public.mood_stress_entries CASCADE;
