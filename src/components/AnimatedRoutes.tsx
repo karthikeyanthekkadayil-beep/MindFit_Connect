@@ -29,7 +29,7 @@ import EventDetail from "@/pages/EventDetail";
 import Messages from "@/pages/Messages";
 import ChatThread from "@/pages/ChatThread";
 import Admin from "@/pages/Admin";
-import Balance from "@/pages/Balance";
+
 import Moderator from "@/pages/Moderator";
 import ModeratorRequest from "@/pages/ModeratorRequest";
 import Rewards from "@/pages/Rewards";
