@@ -135,7 +135,7 @@ const Dashboard = () => {
       </MotionHeader>
 
       {/* Main Content */}
-      <main className="max-w-lg mx-auto px-4 -mt-3 space-y-6 relative z-10">
+      <main className="max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto px-4 -mt-3 space-y-6 relative z-10">
         {/* Stats Card - Subtle scale + fade */}
         <motion.div
           initial={{ opacity: 0, y: 16, scale: 0.98 }}
