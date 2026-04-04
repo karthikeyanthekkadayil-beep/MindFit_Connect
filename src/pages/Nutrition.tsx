@@ -248,7 +248,7 @@ const SetupWizard = ({ onComplete }: { onComplete: (s: NutritionSettings) => voi
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="max-w-lg mx-auto px-4 pt-8 space-y-6">
+      <div className="max-w-lg md:max-w-3xl lg:max-w-5xl mx-auto px-4 pt-8 space-y-6">
         {/* Progress */}
         <div className="flex items-center gap-3">
           {[0, 1, 2].map(i => (
@@ -491,7 +491,7 @@ const Nutrition = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="max-w-lg mx-auto px-4 py-4 space-y-5">
+      <div className="max-w-lg md:max-w-3xl lg:max-w-5xl mx-auto px-4 py-4 space-y-5">
         {/* Header */}
         <MotionFadeIn className="flex items-center justify-between">
           <div>

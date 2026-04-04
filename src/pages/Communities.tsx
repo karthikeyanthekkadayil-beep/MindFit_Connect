@@ -113,7 +113,7 @@ export default function Communities() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-4xl">
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-4xl lg:max-w-6xl">
         <MotionFadeIn className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
           <div className="min-w-0">
             <h1 className="text-xl sm:text-3xl font-bold text-foreground">Communities</h1>
