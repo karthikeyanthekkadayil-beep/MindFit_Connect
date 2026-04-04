@@ -177,7 +177,7 @@ const ReportProblem = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <MotionHeader className="bg-gradient-hero text-white px-4 pt-12 pb-6 safe-area-top">
-        <div className="max-w-lg mx-auto">
+        <div className="max-w-lg md:max-w-3xl lg:max-w-5xl mx-auto">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="text-white hover:bg-white/20 rounded-full">
               <ArrowLeft className="h-5 w-5" />
