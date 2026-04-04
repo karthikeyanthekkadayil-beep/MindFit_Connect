@@ -287,7 +287,7 @@ export const useGamification = (userId: string | null) => {
             isEarned = (eventsCount || 0) >= achievement.requirement_value;
             break;
           case 'mood_entries':
-            isEarned = (moodEntriesCount || 0) >= achievement.requirement_value;
+            isEarned = false;
             break;
           case 'streak_days':
             isEarned = (userStats?.current_streak || 0) >= achievement.requirement_value;
