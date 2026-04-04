@@ -110,7 +110,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <MotionHeader className="bg-gradient-hero text-white px-4 pt-12 pb-6 safe-area-top">
-        <div className="max-w-lg mx-auto">
+        <div className="max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto">
           <div className="flex items-start justify-between">
             <MotionFadeIn className="flex items-center gap-2.5" delay={0.1}>
               <img src={logo} alt="MindFit Connect" className="w-9 h-9 rounded-lg shadow-md" />
@@ -135,7 +135,7 @@ const Dashboard = () => {
       </MotionHeader>
 
       {/* Main Content */}
-      <main className="max-w-lg mx-auto px-4 -mt-3 space-y-6 relative z-10">
+      <main className="max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto px-4 -mt-3 space-y-6 relative z-10">
         {/* Stats Card - Subtle scale + fade */}
         <motion.div
           initial={{ opacity: 0, y: 16, scale: 0.98 }}
@@ -267,7 +267,7 @@ const Dashboard = () => {
           >
             Explore
           </motion.h2>
-          <div className="space-y-2.5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
             {dashboardItems.map((item, i) => (
               <motion.div
                 key={item.path}
