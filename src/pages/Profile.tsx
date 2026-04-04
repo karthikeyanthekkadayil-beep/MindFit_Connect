@@ -572,7 +572,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="container max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3 sm:space-y-6">
+      <div className="container max-w-4xl lg:max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3 sm:space-y-6">
         <MotionScaleIn>
         <Card>
           <CardContent className="pt-3 sm:pt-6 p-3 sm:p-6">

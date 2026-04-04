@@ -190,7 +190,7 @@ const ReportProblem = () => {
         </div>
       </MotionHeader>
 
-      <main className="max-w-lg mx-auto px-4 py-4 space-y-4">
+      <main className="max-w-lg md:max-w-3xl lg:max-w-5xl mx-auto px-4 py-4 space-y-4">
         <Tabs defaultValue="new">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="new" className="text-xs sm:text-sm">New Report</TabsTrigger>

@@ -255,7 +255,7 @@ const Leaderboard = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 max-w-2xl">
+      <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 max-w-2xl lg:max-w-5xl">
         <MotionFadeIn className="mb-4 sm:mb-6">
           <h1 className="text-xl sm:text-3xl font-bold font-heading flex items-center gap-2">
             <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
