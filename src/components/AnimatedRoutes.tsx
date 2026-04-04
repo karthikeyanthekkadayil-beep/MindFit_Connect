@@ -75,7 +75,7 @@ const RoutesInner = () => {
             <Route path="/messages" element={<PageTransition><Messages /></PageTransition>} />
             <Route path="/messages/:id" element={<PageTransition><ChatThread /></PageTransition>} />
             <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
-            <Route path="/balance" element={<PageTransition><Balance /></PageTransition>} />
+            
             <Route path="/moderator" element={<PageTransition><Moderator /></PageTransition>} />
             <Route path="/moderator/request" element={<PageTransition><ModeratorRequest /></PageTransition>} />
             <Route path="/rewards" element={<PageTransition><Rewards /></PageTransition>} />
