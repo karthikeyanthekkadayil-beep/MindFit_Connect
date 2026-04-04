@@ -85,7 +85,7 @@ const Dashboard = () => {
 
   const dashboardItems = [
     { title: "Today's Activities", description: "Plan your daily wellness", icon: Calendar, path: "/planner" },
-    { title: "Wellness Balance", description: "Track holistic wellness", icon: TrendingUp, path: "/balance" },
+    
     { title: "Leaderboard", description: "Compete with friends", icon: Crown, path: "/leaderboard" },
     { title: "Upcoming Events", description: "Discover fitness events", icon: Calendar, path: "/events" },
     { title: "Communities", description: "Connect with others", icon: Users, path: "/communities" },
