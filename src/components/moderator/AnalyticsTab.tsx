@@ -281,6 +281,87 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
         </CardContent>
       </Card>
 
+      {/* Performance Metrics */}
+      <Card>
+        <CardHeader className="p-4 pb-2">
+          <CardTitle className="text-sm flex items-center gap-2">
+            <Zap className="h-4 w-4 text-accent" /> Performance Metrics
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 pt-2 space-y-4">
+          {/* Resolution Rate */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Target className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium">Resolution Rate</span>
+              </div>
+              <Badge variant={performanceMetrics.resolutionRate >= 80 ? "default" : performanceMetrics.resolutionRate >= 50 ? "secondary" : "destructive"} className="text-xs">
+                {performanceMetrics.resolutionRate}%
+              </Badge>
+            </div>
+            <Progress value={performanceMetrics.resolutionRate} className="h-2" />
+            <p className="text-[10px] text-muted-foreground">
+              {performanceMetrics.totalResolved} of {performanceMetrics.totalReports} reports resolved
+            </p>
+          </div>
+
+          {/* Response Time Breakdown */}
+          <div className="grid grid-cols-3 gap-2">
+            <div className="p-3 rounded-xl border bg-card text-center">
+              <Timer className="h-4 w-4 mx-auto text-green-500 mb-1" />
+              <div className="text-sm font-bold">{formatDuration(performanceMetrics.fastestResponseMinutes)}</div>
+              <div className="text-[10px] text-muted-foreground">Fastest</div>
+            </div>
+            <div className="p-3 rounded-xl border bg-card text-center">
+              <Clock className="h-4 w-4 mx-auto text-primary mb-1" />
+              <div className="text-sm font-bold">{formatDuration(performanceMetrics.avgResponseMinutes)}</div>
+              <div className="text-[10px] text-muted-foreground">Average</div>
+            </div>
+            <div className="p-3 rounded-xl border bg-card text-center">
+              <AlertTriangle className="h-4 w-4 mx-auto text-destructive mb-1" />
+              <div className="text-sm font-bold">{formatDuration(performanceMetrics.slowestResponseMinutes)}</div>
+              <div className="text-[10px] text-muted-foreground">Slowest</div>
+            </div>
+          </div>
+
+          {/* Total Moderator Actions */}
+          <div className="flex items-center justify-between p-3 rounded-xl border bg-card">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-primary" />
+              <span className="text-sm">Total Moderator Actions</span>
+            </div>
+            <span className="text-lg font-bold">{performanceMetrics.moderatorActions}</span>
+          </div>
+
+          {/* Weekly Resolution Trend */}
+          {performanceMetrics.weeklyTrend.length > 0 && (
+            <div>
+              <p className="text-xs font-medium mb-2 text-muted-foreground">Weekly Trend (Last 4 Weeks)</p>
+              <div className="h-[140px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={performanceMetrics.weeklyTrend} margin={{ top: 5, right: 5, left: -25, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="week" tick={{ fontSize: 10 }} />
+                    <YAxis tick={{ fontSize: 10 }} />
+                    <Tooltip
+                      contentStyle={{
+                        background: "hsl(var(--popover))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "12px",
+                        fontSize: "12px",
+                      }}
+                    />
+                    <Bar dataKey="reported" fill="hsl(var(--destructive))" name="Reported" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="resolved" fill="hsl(var(--primary))" name="Resolved" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Moderation Activity Chart (30 days) */}
       <Card>
         <CardHeader className="p-4 pb-2">
