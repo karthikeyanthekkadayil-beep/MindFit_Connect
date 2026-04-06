@@ -316,7 +316,7 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
           {/* Response Time Breakdown */}
           <div className="grid grid-cols-3 gap-2">
             <div className="p-3 rounded-xl border bg-card text-center">
-              <Timer className="h-4 w-4 mx-auto text-green-500 mb-1" />
+              <Timer className="h-4 w-4 mx-auto text-primary mb-1" />
               <div className="text-sm font-bold">{formatDuration(performanceMetrics.fastestResponseMinutes)}</div>
               <div className="text-[10px] text-muted-foreground">Fastest</div>
             </div>
