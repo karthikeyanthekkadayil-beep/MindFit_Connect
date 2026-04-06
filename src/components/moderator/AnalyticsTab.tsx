@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, Users, Clock, AlertTriangle, TrendingUp, Activity, ShieldAlert } from "lucide-react";
+import { BarChart3, Users, Clock, AlertTriangle, TrendingUp, Activity, ShieldAlert, Zap, Target, CheckCircle2, Timer } from "lucide-react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LineChart, Line, PieChart, Pie, Cell } from "recharts";
-import { format, subDays, startOfDay, differenceInHours } from "date-fns";
+import { format, subDays, startOfDay, differenceInHours, differenceInMinutes } from "date-fns";
+import { Progress } from "@/components/ui/progress";
 
 interface AnalyticsTabProps {
   moderatorId: string;
@@ -20,6 +21,16 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
   const [topReported, setTopReported] = useState<{ user_id: string; name: string; count: number; warnings: number }[]>([]);
   const [avgResponseTime, setAvgResponseTime] = useState<number | null>(null);
   const [reportsByType, setReportsByType] = useState<{ name: string; value: number }[]>([]);
+  const [performanceMetrics, setPerformanceMetrics] = useState({
+    resolutionRate: 0,
+    totalResolved: 0,
+    totalReports: 0,
+    avgResponseMinutes: 0,
+    fastestResponseMinutes: 0,
+    slowestResponseMinutes: 0,
+    weeklyTrend: [] as { week: string; resolved: number; reported: number }[],
+    moderatorActions: 0,
+  });
 
   useEffect(() => {
     loadAnalytics();
@@ -33,10 +44,67 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
         loadTopReported(),
         loadResponseTime(),
         loadReportsByType(),
+        loadPerformanceMetrics(),
       ]);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const loadPerformanceMetrics = async () => {
+    const [{ data: allReports }, { data: warnings }] = await Promise.all([
+      supabase.from("content_reports").select("created_at, reviewed_at, status"),
+      supabase.from("user_warnings").select("created_at"),
+    ]);
+
+    if (!allReports) return;
+
+    const totalReports = allReports.length;
+    const resolved = allReports.filter(r => r.status !== "pending");
+    const totalResolved = resolved.length;
+    const resolutionRate = totalReports > 0 ? Math.round((totalResolved / totalReports) * 100) : 0;
+
+    // Response time stats in minutes
+    const responseTimes = resolved
+      .filter(r => r.reviewed_at)
+      .map(r => differenceInMinutes(new Date(r.reviewed_at!), new Date(r.created_at)));
+
+    const avgResponseMinutes = responseTimes.length > 0
+      ? Math.round(responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length)
+      : 0;
+    const fastestResponseMinutes = responseTimes.length > 0 ? Math.min(...responseTimes) : 0;
+    const slowestResponseMinutes = responseTimes.length > 0 ? Math.max(...responseTimes) : 0;
+
+    // Weekly trend (last 4 weeks)
+    const weeklyTrend: { week: string; resolved: number; reported: number }[] = [];
+    for (let i = 3; i >= 0; i--) {
+      const weekStart = subDays(new Date(), (i + 1) * 7);
+      const weekEnd = subDays(new Date(), i * 7);
+      const weekLabel = `W${4 - i}`;
+      const reported = allReports.filter(r => {
+        const d = new Date(r.created_at);
+        return d >= weekStart && d < weekEnd;
+      }).length;
+      const resolvedCount = resolved.filter(r => {
+        if (!r.reviewed_at) return false;
+        const d = new Date(r.reviewed_at);
+        return d >= weekStart && d < weekEnd;
+      }).length;
+      weeklyTrend.push({ week: weekLabel, resolved: resolvedCount, reported });
+    }
+
+    const moderatorActions = totalResolved + (warnings?.length || 0);
+
+    setPerformanceMetrics({
+      resolutionRate,
+      totalResolved,
+      totalReports,
+      avgResponseMinutes,
+      fastestResponseMinutes,
+      slowestResponseMinutes,
+      weeklyTrend,
+      moderatorActions,
+    });
   };
 
   const loadActivityChart = async () => {
@@ -162,6 +230,13 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
 
   const COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "hsl(var(--accent))", "hsl(var(--destructive))"];
 
+  const formatDuration = (minutes: number) => {
+    if (minutes < 60) return `${minutes}m`;
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return m > 0 ? `${h}h ${m}m` : `${h}h`;
+  };
+
   if (isLoading) {
     return <div className="text-center py-8 text-sm text-muted-foreground">Loading analytics...</div>;
   }
@@ -210,6 +285,87 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
               <p className="text-[11px] text-muted-foreground">Based on last 50 resolved reports</p>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Performance Metrics */}
+      <Card>
+        <CardHeader className="p-4 pb-2">
+          <CardTitle className="text-sm flex items-center gap-2">
+            <Zap className="h-4 w-4 text-accent" /> Performance Metrics
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 pt-2 space-y-4">
+          {/* Resolution Rate */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Target className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium">Resolution Rate</span>
+              </div>
+              <Badge variant={performanceMetrics.resolutionRate >= 80 ? "default" : performanceMetrics.resolutionRate >= 50 ? "secondary" : "destructive"} className="text-xs">
+                {performanceMetrics.resolutionRate}%
+              </Badge>
+            </div>
+            <Progress value={performanceMetrics.resolutionRate} className="h-2" />
+            <p className="text-[10px] text-muted-foreground">
+              {performanceMetrics.totalResolved} of {performanceMetrics.totalReports} reports resolved
+            </p>
+          </div>
+
+          {/* Response Time Breakdown */}
+          <div className="grid grid-cols-3 gap-2">
+            <div className="p-3 rounded-xl border bg-card text-center">
+              <Timer className="h-4 w-4 mx-auto text-primary mb-1" />
+              <div className="text-sm font-bold">{formatDuration(performanceMetrics.fastestResponseMinutes)}</div>
+              <div className="text-[10px] text-muted-foreground">Fastest</div>
+            </div>
+            <div className="p-3 rounded-xl border bg-card text-center">
+              <Clock className="h-4 w-4 mx-auto text-primary mb-1" />
+              <div className="text-sm font-bold">{formatDuration(performanceMetrics.avgResponseMinutes)}</div>
+              <div className="text-[10px] text-muted-foreground">Average</div>
+            </div>
+            <div className="p-3 rounded-xl border bg-card text-center">
+              <AlertTriangle className="h-4 w-4 mx-auto text-destructive mb-1" />
+              <div className="text-sm font-bold">{formatDuration(performanceMetrics.slowestResponseMinutes)}</div>
+              <div className="text-[10px] text-muted-foreground">Slowest</div>
+            </div>
+          </div>
+
+          {/* Total Moderator Actions */}
+          <div className="flex items-center justify-between p-3 rounded-xl border bg-card">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-primary" />
+              <span className="text-sm">Total Moderator Actions</span>
+            </div>
+            <span className="text-lg font-bold">{performanceMetrics.moderatorActions}</span>
+          </div>
+
+          {/* Weekly Resolution Trend */}
+          {performanceMetrics.weeklyTrend.length > 0 && (
+            <div>
+              <p className="text-xs font-medium mb-2 text-muted-foreground">Weekly Trend (Last 4 Weeks)</p>
+              <div className="h-[140px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={performanceMetrics.weeklyTrend} margin={{ top: 5, right: 5, left: -25, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="week" tick={{ fontSize: 10 }} />
+                    <YAxis tick={{ fontSize: 10 }} />
+                    <Tooltip
+                      contentStyle={{
+                        background: "hsl(var(--popover))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "12px",
+                        fontSize: "12px",
+                      }}
+                    />
+                    <Bar dataKey="reported" fill="hsl(var(--destructive))" name="Reported" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="resolved" fill="hsl(var(--primary))" name="Resolved" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
