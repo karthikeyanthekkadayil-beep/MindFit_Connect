@@ -181,9 +181,6 @@ const Moderator = () => {
       const totalPosts = postsData?.length || 0;
       const totalEvents = eventsData?.length || 0;
       const totalComms = commData?.length || 0;
-      const actionsWeek = Math.round(totalPosts * 0.15 + totalEvents * 0.3);
-      const modScore = Math.min(100, Math.round((Math.min(totalPosts, 50) / 50) * 40 + (Math.min(totalEvents, 30) / 30) * 30 + (Math.min(totalComms, 30) / 30) * 30));
-      setBalanceData({ postsDeleted: 0, eventsReviewed: totalEvents, communitiesMonitored: totalComms, actionsThisWeek: actionsWeek, avgResponseTime: 2.4, balanceScore: modScore });
 
       const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       setActivityWeekData(days.map(day => ({ day, actions: Math.max(0, Math.round((actionsWeek / 7) * (0.6 + Math.random() * 0.8))) })));
