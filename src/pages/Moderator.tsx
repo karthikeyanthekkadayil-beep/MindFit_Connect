@@ -96,7 +96,7 @@ const Moderator = () => {
   const [selectedPostIds, setSelectedPostIds] = useState<Set<string>>(new Set());
   const [postComments, setPostComments] = useState<Record<string, PostComment[]>>({});
   const [loadingComments, setLoadingComments] = useState<string | null>(null);
-  const [activityWeekData, setActivityWeekData] = useState<{ day: string; actions: number }[]>([]);
+  
   const [permissions, setPermissions] = useState<ModPermissions>({
     canReviewReports: true, canIssueWarnings: true, canDeleteContent: true,
     canBanUsers: false, requireNotes: true, maxWarningsPerDay: 10,
