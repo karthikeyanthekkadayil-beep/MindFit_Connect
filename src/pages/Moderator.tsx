@@ -9,10 +9,9 @@ import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Shield, Users, MessageSquare, Calendar, Flag, Trash2, Eye, ArrowLeft, AlertTriangle, CheckCircle, Scale, TrendingUp, Activity, Star, Clock, Target, History, ChevronDown, ChevronUp, Ban } from "lucide-react";
+import { Shield, Users, MessageSquare, Calendar, Flag, Trash2, Eye, ArrowLeft, AlertTriangle, CheckCircle, TrendingUp, History, ChevronDown, ChevronUp, Ban } from "lucide-react";
 
 import { format } from "date-fns";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { ReportsTab } from "@/components/moderator/ReportsTab";
 import { HistoryTab } from "@/components/moderator/HistoryTab";
 import { WarnUserDialog } from "@/components/moderator/WarnUserDialog";
@@ -69,7 +68,7 @@ interface ModPermissions {
   maxWarningsPerDay: number;
 }
 
-type ModTab = "posts" | "events" | "communities" | "reports" | "history" | "balance" | "analytics";
+type ModTab = "posts" | "events" | "communities" | "reports" | "history" | "analytics";
 
 const TAB_CONFIG: { value: ModTab; label: string; icon: React.ReactNode; permKey?: keyof ModPermissions }[] = [
   { value: "posts", label: "Posts", icon: <MessageSquare className="h-5 w-5" /> },
@@ -78,7 +77,6 @@ const TAB_CONFIG: { value: ModTab; label: string; icon: React.ReactNode; permKey
   { value: "reports", label: "Reports", icon: <Flag className="h-5 w-5" />, permKey: "canReviewReports" },
   { value: "analytics", label: "Analytics", icon: <TrendingUp className="h-5 w-5" /> },
   { value: "history", label: "History", icon: <History className="h-5 w-5" /> },
-  { value: "balance", label: "Balance", icon: <Scale className="h-5 w-5" /> },
 ];
 
 const Moderator = () => {
@@ -97,11 +95,7 @@ const Moderator = () => {
   const [selectedPostIds, setSelectedPostIds] = useState<Set<string>>(new Set());
   const [postComments, setPostComments] = useState<Record<string, PostComment[]>>({});
   const [loadingComments, setLoadingComments] = useState<string | null>(null);
-  const [balanceData, setBalanceData] = useState({
-    postsDeleted: 0, eventsReviewed: 0, communitiesMonitored: 0,
-    actionsThisWeek: 0, avgResponseTime: 0, balanceScore: 0,
-  });
-  const [activityWeekData, setActivityWeekData] = useState<{ day: string; actions: number }[]>([]);
+  
   const [permissions, setPermissions] = useState<ModPermissions>({
     canReviewReports: true, canIssueWarnings: true, canDeleteContent: true,
     canBanUsers: false, requireNotes: true, maxWarningsPerDay: 10,
@@ -186,12 +180,7 @@ const Moderator = () => {
       const totalPosts = postsData?.length || 0;
       const totalEvents = eventsData?.length || 0;
       const totalComms = commData?.length || 0;
-      const actionsWeek = Math.round(totalPosts * 0.15 + totalEvents * 0.3);
-      const modScore = Math.min(100, Math.round((Math.min(totalPosts, 50) / 50) * 40 + (Math.min(totalEvents, 30) / 30) * 30 + (Math.min(totalComms, 30) / 30) * 30));
-      setBalanceData({ postsDeleted: 0, eventsReviewed: totalEvents, communitiesMonitored: totalComms, actionsThisWeek: actionsWeek, avgResponseTime: 2.4, balanceScore: modScore });
 
-      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      setActivityWeekData(days.map(day => ({ day, actions: Math.max(0, Math.round((actionsWeek / 7) * (0.6 + Math.random() * 0.8))) })));
     } catch (error) {
       console.error("Error loading moderator data:", error);
       toast.error("Failed to load data");
@@ -581,98 +570,6 @@ const Moderator = () => {
               <HistoryTab moderatorId={session.user.id} />
             )}
 
-            {/* BALANCE TAB */}
-            {activeTab === "balance" && (
-              <div className="space-y-4">
-                {/* Score Ring */}
-                <Card className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 border-primary/20">
-                  <CardContent className="p-5">
-                    <div className="flex items-center gap-5">
-                      <div className="relative shrink-0">
-                        <div className="w-24 h-24 rounded-full border-4 border-primary/30 flex items-center justify-center bg-background shadow-inner">
-                          <div className="text-center">
-                            <div className="text-3xl font-bold text-primary">{balanceData.balanceScore}</div>
-                            <div className="text-[10px] text-muted-foreground">Score</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-semibold">
-                          {balanceData.balanceScore >= 70 ? "Active Moderator!" : balanceData.balanceScore >= 40 ? "Building Momentum" : "Getting Started"}
-                        </h3>
-                        <p className="text-xs text-muted-foreground mt-1">Based on content reviewed, events monitored, and communities managed.</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Metrics Grid */}
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { label: "Posts", value: stats.postsToReview, target: 50, icon: <MessageSquare className="h-4 w-4 text-primary" /> },
-                    { label: "Events", value: balanceData.eventsReviewed, target: 30, icon: <Calendar className="h-4 w-4 text-secondary" /> },
-                    { label: "Groups", value: balanceData.communitiesMonitored, target: 30, icon: <Users className="h-4 w-4 text-accent" /> },
-                  ].map(m => (
-                    <Card key={m.label}>
-                      <CardContent className="p-3">
-                        <div className="flex justify-center mb-1.5">{m.icon}</div>
-                        <div className="text-center">
-                          <div className="text-xl font-bold">{m.value}</div>
-                          <Progress value={Math.min(100, (m.value / m.target) * 100)} className="h-1.5 mt-1.5" />
-                          <p className="text-[10px] text-muted-foreground mt-1">{m.label}</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-
-                {/* Weekly Chart */}
-                <Card>
-                  <CardHeader className="p-4 pb-2">
-                    <CardTitle className="text-sm flex items-center gap-2">
-                      <Activity className="h-4 w-4 text-primary" /> Weekly Activity
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-2 pt-0">
-                    <div className="h-[180px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={activityWeekData} margin={{ top: 5, right: 5, left: -25, bottom: 5 }}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                          <XAxis dataKey="day" tick={{ fontSize: 11 }} />
-                          <YAxis tick={{ fontSize: 11 }} />
-                          <Tooltip contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "12px", fontSize: "12px" }} />
-                          <Bar dataKey="actions" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} name="Actions" />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Performance */}
-                <Card>
-                  <CardHeader className="p-4 pb-2">
-                    <CardTitle className="text-sm flex items-center gap-2">
-                      <Star className="h-4 w-4 text-accent" /> Performance
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-4 pt-0 space-y-2">
-                    {[
-                      { icon: <Target className="h-4 w-4 text-primary" />, label: "Actions This Week", value: balanceData.actionsThisWeek },
-                      { icon: <Clock className="h-4 w-4 text-secondary" />, label: "Avg. Response", value: `${balanceData.avgResponseTime}h` },
-                      { icon: <TrendingUp className="h-4 w-4 text-accent" />, label: "Balance Score", value: `${balanceData.balanceScore}/100` },
-                    ].map(item => (
-                      <div key={item.label} className="flex items-center justify-between p-3 rounded-xl border bg-card min-h-[52px]">
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center">{item.icon}</div>
-                          <span className="text-sm font-medium">{item.label}</span>
-                        </div>
-                        <Badge variant="secondary" className="text-xs">{item.value}</Badge>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              </div>
-            )}
           </motion.div>
         </AnimatePresence>
 
