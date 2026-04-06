@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, Users, Clock, AlertTriangle, TrendingUp, Activity, ShieldAlert } from "lucide-react";
+import { BarChart3, Users, Clock, AlertTriangle, TrendingUp, Activity, ShieldAlert, Zap, Target, CheckCircle2, Timer } from "lucide-react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LineChart, Line, PieChart, Pie, Cell } from "recharts";
-import { format, subDays, startOfDay, differenceInHours } from "date-fns";
+import { format, subDays, startOfDay, differenceInHours, differenceInMinutes } from "date-fns";
+import { Progress } from "@/components/ui/progress";
 
 interface AnalyticsTabProps {
   moderatorId: string;
@@ -20,6 +21,16 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
   const [topReported, setTopReported] = useState<{ user_id: string; name: string; count: number; warnings: number }[]>([]);
   const [avgResponseTime, setAvgResponseTime] = useState<number | null>(null);
   const [reportsByType, setReportsByType] = useState<{ name: string; value: number }[]>([]);
+  const [performanceMetrics, setPerformanceMetrics] = useState({
+    resolutionRate: 0,
+    totalResolved: 0,
+    totalReports: 0,
+    avgResponseMinutes: 0,
+    fastestResponseMinutes: 0,
+    slowestResponseMinutes: 0,
+    weeklyTrend: [] as { week: string; resolved: number; reported: number }[],
+    moderatorActions: 0,
+  });
 
   useEffect(() => {
     loadAnalytics();
