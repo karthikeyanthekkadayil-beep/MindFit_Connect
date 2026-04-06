@@ -182,8 +182,6 @@ const Moderator = () => {
       const totalEvents = eventsData?.length || 0;
       const totalComms = commData?.length || 0;
 
-      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      setActivityWeekData(days.map(day => ({ day, actions: Math.max(0, Math.round((actionsWeek / 7) * (0.6 + Math.random() * 0.8))) })));
     } catch (error) {
       console.error("Error loading moderator data:", error);
       toast.error("Failed to load data");
