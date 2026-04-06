@@ -44,10 +44,67 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
         loadTopReported(),
         loadResponseTime(),
         loadReportsByType(),
+        loadPerformanceMetrics(),
       ]);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const loadPerformanceMetrics = async () => {
+    const [{ data: allReports }, { data: warnings }] = await Promise.all([
+      supabase.from("content_reports").select("created_at, reviewed_at, status"),
+      supabase.from("user_warnings").select("created_at"),
+    ]);
+
+    if (!allReports) return;
+
+    const totalReports = allReports.length;
+    const resolved = allReports.filter(r => r.status !== "pending");
+    const totalResolved = resolved.length;
+    const resolutionRate = totalReports > 0 ? Math.round((totalResolved / totalReports) * 100) : 0;
+
+    // Response time stats in minutes
+    const responseTimes = resolved
+      .filter(r => r.reviewed_at)
+      .map(r => differenceInMinutes(new Date(r.reviewed_at!), new Date(r.created_at)));
+
+    const avgResponseMinutes = responseTimes.length > 0
+      ? Math.round(responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length)
+      : 0;
+    const fastestResponseMinutes = responseTimes.length > 0 ? Math.min(...responseTimes) : 0;
+    const slowestResponseMinutes = responseTimes.length > 0 ? Math.max(...responseTimes) : 0;
+
+    // Weekly trend (last 4 weeks)
+    const weeklyTrend: { week: string; resolved: number; reported: number }[] = [];
+    for (let i = 3; i >= 0; i--) {
+      const weekStart = subDays(new Date(), (i + 1) * 7);
+      const weekEnd = subDays(new Date(), i * 7);
+      const weekLabel = `W${4 - i}`;
+      const reported = allReports.filter(r => {
+        const d = new Date(r.created_at);
+        return d >= weekStart && d < weekEnd;
+      }).length;
+      const resolvedCount = resolved.filter(r => {
+        if (!r.reviewed_at) return false;
+        const d = new Date(r.reviewed_at);
+        return d >= weekStart && d < weekEnd;
+      }).length;
+      weeklyTrend.push({ week: weekLabel, resolved: resolvedCount, reported });
+    }
+
+    const moderatorActions = totalResolved + (warnings?.length || 0);
+
+    setPerformanceMetrics({
+      resolutionRate,
+      totalResolved,
+      totalReports,
+      avgResponseMinutes,
+      fastestResponseMinutes,
+      slowestResponseMinutes,
+      weeklyTrend,
+      moderatorActions,
+    });
   };
 
   const loadActivityChart = async () => {
