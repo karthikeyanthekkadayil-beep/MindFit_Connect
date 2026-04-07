@@ -12,7 +12,8 @@ import { toast } from "sonner";
 import {
   Loader2, Sparkles, Utensils, Target, Flame, TrendingDown,
   TrendingUp, Minus, ChevronRight, Plus, X, Settings2,
-  ChefHat, Apple, Beef, Wheat, Droplets, Clock, ShoppingCart
+  ChefHat, Apple, Beef, Wheat, Droplets, Clock, ShoppingCart,
+  ClipboardList, Save, Trash2, ArrowLeft, Calendar
 } from "lucide-react";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
@@ -401,6 +402,30 @@ const AIMealCard = ({ meal, onAdd }: { meal: AIMealSuggestion; onAdd: (m: AIMeal
   );
 };
 
+// ──────────────── Diet Plan Types ────────────────
+interface DietPlanMeal {
+  name: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+}
+
+interface DietPlanDay {
+  meals: { [mealType: string]: DietPlanMeal | null };
+}
+
+const MEAL_SLOTS = ["breakfast", "lunch", "dinner", "snack"] as const;
+const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const MEAL_EMOJIS: Record<string, string> = { breakfast: "🌅", lunch: "☀️", dinner: "🌙", snack: "🍎" };
+
+const loadDietPlan = (): { [day: string]: DietPlanDay } => {
+  try {
+    const saved = localStorage.getItem("my-diet-plan");
+    return saved ? JSON.parse(saved) : {};
+  } catch { return {}; }
+};
+
 // ──────────────── Main Page ────────────────
 const Nutrition = () => {
   const [settings, setSettings] = useState<NutritionSettings>(loadSettings());
@@ -410,6 +435,11 @@ const Nutrition = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [newIngredient, setNewIngredient] = useState("");
   const [consumedMeals, setConsumedMeals] = useState<AIMealSuggestion[]>([]);
+  const [showDietPlan, setShowDietPlan] = useState(false);
+  const [dietPlan, setDietPlan] = useState<{ [day: string]: DietPlanDay }>(loadDietPlan());
+  const [dietPlanName, setDietPlanName] = useState(() => localStorage.getItem("my-diet-plan-name") || "My Weekly Diet");
+  const [editingSlot, setEditingSlot] = useState<{ day: string; meal: string } | null>(null);
+  const [mealInput, setMealInput] = useState<DietPlanMeal>({ name: "", calories: 0, protein: 0, carbs: 0, fat: 0 });
 
   // Computed totals
   const totals = consumedMeals.reduce((acc, m) => ({
@@ -489,6 +519,206 @@ const Nutrition = () => {
     { id: "snack", label: "Snack", emoji: "🍎" },
   ];
 
+  const hasDietPlan = Object.values(dietPlan).some(d => Object.values(d.meals).some(m => m !== null));
+
+  const saveDietPlan = () => {
+    localStorage.setItem("my-diet-plan", JSON.stringify(dietPlan));
+    localStorage.setItem("my-diet-plan-name", dietPlanName);
+    toast.success("Diet plan saved!");
+  };
+
+  const clearDietPlan = () => {
+    setDietPlan({});
+    setDietPlanName("My Weekly Diet");
+    localStorage.removeItem("my-diet-plan");
+    localStorage.removeItem("my-diet-plan-name");
+    toast.success("Diet plan cleared");
+  };
+
+  const addMealToSlot = () => {
+    if (!editingSlot || !mealInput.name.trim()) return;
+    const { day, meal } = editingSlot;
+    setDietPlan(prev => ({
+      ...prev,
+      [day]: {
+        meals: {
+          ...(prev[day]?.meals || {}),
+          [meal]: { ...mealInput },
+        },
+      },
+    }));
+    setEditingSlot(null);
+    setMealInput({ name: "", calories: 0, protein: 0, carbs: 0, fat: 0 });
+  };
+
+  const removeMealFromSlot = (day: string, meal: string) => {
+    setDietPlan(prev => ({
+      ...prev,
+      [day]: {
+        meals: { ...(prev[day]?.meals || {}), [meal]: null },
+      },
+    }));
+  };
+
+  const getDayTotals = (day: string) => {
+    const dayData = dietPlan[day];
+    if (!dayData) return { calories: 0, protein: 0, carbs: 0, fat: 0 };
+    return Object.values(dayData.meals).reduce((acc, m) => {
+      if (!m) return acc;
+      return { calories: acc.calories + m.calories, protein: acc.protein + m.protein, carbs: acc.carbs + m.carbs, fat: acc.fat + m.fat };
+    }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
+  };
+
+  // ── Diet Plan Creator View ──
+  if (showDietPlan) {
+    return (
+      <div className="min-h-screen bg-background pb-20">
+        <div className="max-w-lg md:max-w-3xl lg:max-w-5xl mx-auto px-4 py-4 space-y-4">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => setShowDietPlan(false)} className="shrink-0">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-2xl font-bold font-heading">Create Diet Plan</h1>
+              <p className="text-sm text-muted-foreground">Plan meals for each day of the week</p>
+            </div>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
+            <Card>
+              <CardContent className="p-4">
+                <label className="text-xs font-medium text-muted-foreground">Plan Name</label>
+                <Input value={dietPlanName} onChange={e => setDietPlanName(e.target.value)} placeholder="My Weekly Diet" className="mt-1 h-10" />
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Days */}
+          <div className="space-y-3">
+            {WEEKDAYS.map((day, di) => {
+              const dayTotals = getDayTotals(day);
+              return (
+                <motion.div key={day} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 + di * 0.04 }}>
+                  <Card>
+                    <CardContent className="p-3 sm:p-4 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-bold">{day}</h3>
+                        {dayTotals.calories > 0 && (
+                          <Badge variant="outline" className="text-[10px]">
+                            {dayTotals.calories} kcal
+                          </Badge>
+                        )}
+                      </div>
+
+                      {MEAL_SLOTS.map(slot => {
+                        const meal = dietPlan[day]?.meals?.[slot] || null;
+                        return (
+                          <div key={slot} className="flex items-center gap-2 p-2 rounded-lg bg-muted/30">
+                            <span className="text-sm">{MEAL_EMOJIS[slot]}</span>
+                            {meal ? (
+                              <div className="flex-1 min-w-0 flex items-center gap-2">
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-xs font-medium truncate">{meal.name}</p>
+                                  <p className="text-[10px] text-muted-foreground">{meal.calories} kcal</p>
+                                </div>
+                                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeMealFromSlot(day, slot)}>
+                                  <X className="h-3 w-3 text-destructive" />
+                                </Button>
+                              </div>
+                            ) : (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-xs h-7 text-muted-foreground"
+                                onClick={() => {
+                                  setEditingSlot({ day, meal: slot });
+                                  setMealInput({ name: "", calories: 0, protein: 0, carbs: 0, fat: 0 });
+                                }}
+                              >
+                                <Plus className="h-3 w-3 mr-1" /> Add {slot}
+                              </Button>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3">
+            {hasDietPlan && (
+              <Button variant="outline" onClick={clearDietPlan} className="flex-1">
+                <Trash2 className="h-4 w-4 mr-2" /> Clear
+              </Button>
+            )}
+            <Button onClick={saveDietPlan} disabled={!hasDietPlan} className="flex-1">
+              <Save className="h-4 w-4 mr-2" /> Save Plan
+            </Button>
+          </div>
+        </div>
+
+        {/* Add Meal Dialog */}
+        <AnimatePresence>
+          {editingSlot && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center"
+              onClick={() => setEditingSlot(null)}
+            >
+              <motion.div
+                initial={{ y: 100 }}
+                animate={{ y: 0 }}
+                exit={{ y: 100 }}
+                className="w-full max-w-md bg-card border rounded-t-2xl sm:rounded-2xl shadow-xl p-5 space-y-4"
+                onClick={e => e.stopPropagation()}
+              >
+                <h3 className="font-bold text-lg">
+                  Add {editingSlot.meal} — {editingSlot.day}
+                </h3>
+                <div className="space-y-3">
+                  <div>
+                    <Label className="text-xs">Meal Name *</Label>
+                    <Input value={mealInput.name} onChange={e => setMealInput(p => ({ ...p, name: e.target.value }))} placeholder="e.g. Grilled Chicken Salad" className="h-10 mt-1" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs">Calories</Label>
+                      <Input type="number" value={mealInput.calories || ""} onChange={e => setMealInput(p => ({ ...p, calories: +e.target.value }))} className="h-9 mt-1" />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Protein (g)</Label>
+                      <Input type="number" value={mealInput.protein || ""} onChange={e => setMealInput(p => ({ ...p, protein: +e.target.value }))} className="h-9 mt-1" />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Carbs (g)</Label>
+                      <Input type="number" value={mealInput.carbs || ""} onChange={e => setMealInput(p => ({ ...p, carbs: +e.target.value }))} className="h-9 mt-1" />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Fat (g)</Label>
+                      <Input type="number" value={mealInput.fat || ""} onChange={e => setMealInput(p => ({ ...p, fat: +e.target.value }))} className="h-9 mt-1" />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <Button variant="outline" onClick={() => setEditingSlot(null)} className="flex-1">Cancel</Button>
+                  <Button onClick={addMealToSlot} disabled={!mealInput.name.trim()} className="flex-1">
+                    <Plus className="h-4 w-4 mr-1" /> Add
+                  </Button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="max-w-lg md:max-w-3xl lg:max-w-5xl mx-auto px-4 py-4 space-y-5">
@@ -500,10 +730,48 @@ const Nutrition = () => {
               {settings.dietGoal === "cut" ? "Cutting" : settings.dietGoal === "bulk" ? "Bulking" : "Maintaining"} • {settings.targetCalories} kcal target
             </p>
           </div>
-          <Button variant="ghost" size="icon" onClick={() => setShowSettings(!showSettings)}>
-            <Settings2 className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button variant="outline" size="sm" className="text-xs h-8" onClick={() => setShowDietPlan(true)}>
+              <ClipboardList className="h-3.5 w-3.5 mr-1" />
+              {hasDietPlan ? "Edit Plan" : "Diet Plan"}
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => setShowSettings(!showSettings)}>
+              <Settings2 className="h-5 w-5" />
+            </Button>
+          </div>
         </MotionFadeIn>
+
+        {/* Saved Diet Plan Summary */}
+        {hasDietPlan && (
+          <MotionFadeIn delay={0.05}>
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold flex items-center gap-2">
+                    <ClipboardList className="h-4 w-4 text-primary" /> {dietPlanName}
+                  </h3>
+                  <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => setShowDietPlan(true)}>Edit</Button>
+                </div>
+                <div className="flex gap-1">
+                  {WEEKDAYS.map(day => {
+                    const dayTotals = getDayTotals(day);
+                    return (
+                      <div
+                        key={day}
+                        className={`flex-1 text-center py-1.5 rounded-lg text-[10px] font-medium ${
+                          dayTotals.calories > 0 ? "bg-primary/10 text-primary" : "bg-muted/50 text-muted-foreground"
+                        }`}
+                      >
+                        <p>{day.slice(0, 2)}</p>
+                        <p className="font-bold mt-0.5">{dayTotals.calories > 0 ? `${dayTotals.calories}` : "—"}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          </MotionFadeIn>
+        )}
 
         {/* Settings panel */}
         <AnimatePresence>

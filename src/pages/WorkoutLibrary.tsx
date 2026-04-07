@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { 
   Loader2, Search, Dumbbell, Heart, Plus, Flame, Zap, Target,
-  ChevronRight, Clock, Calendar, ArrowLeft, Play, CheckCircle2, Timer
+  ChevronRight, Clock, Calendar, ArrowLeft, Play, CheckCircle2, Timer,
+  ClipboardList, Trash2, Save
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -57,6 +58,14 @@ const WorkoutLibrary = () => {
   const [selectedSplit, setSelectedSplit] = useState<WorkoutSplit | null>(null);
   const [selectedDay, setSelectedDay] = useState<WorkoutDay | null>(null);
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
+  const [showPlanCreator, setShowPlanCreator] = useState(false);
+  const [workoutPlan, setWorkoutPlan] = useState<{ [day: string]: WorkoutSplit | null }>(() => {
+    try {
+      const saved = localStorage.getItem("my-workout-plan");
+      return saved ? JSON.parse(saved) : {};
+    } catch { return {}; }
+  });
+  const [planName, setPlanName] = useState(() => localStorage.getItem("my-workout-plan-name") || "My Weekly Plan");
 
   useEffect(() => {
     checkUserAndFetchData();
@@ -133,7 +142,160 @@ const WorkoutLibrary = () => {
     }
   };
 
-  // Exercise detail view within a day
+  const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+  const savePlan = () => {
+    localStorage.setItem("my-workout-plan", JSON.stringify(workoutPlan));
+    localStorage.setItem("my-workout-plan-name", planName);
+    toast.success("Workout plan saved!");
+  };
+
+  const clearPlan = () => {
+    setWorkoutPlan({});
+    setPlanName("My Weekly Plan");
+    localStorage.removeItem("my-workout-plan");
+    localStorage.removeItem("my-workout-plan-name");
+    toast.success("Plan cleared");
+  };
+
+  const assignSplitToDay = (day: string, split: WorkoutSplit | null) => {
+    setWorkoutPlan(prev => ({ ...prev, [day]: split }));
+  };
+
+  const hasPlan = Object.values(workoutPlan).some(v => v !== null);
+
+  // ── Plan Creator View ──
+  if (showPlanCreator) {
+    return (
+      <div className="min-h-screen bg-background pb-20">
+        <div className="container max-w-3xl mx-auto px-3 sm:px-4 py-4 space-y-4">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => setShowPlanCreator(false)} className="shrink-0">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-2xl font-bold">Create Workout Plan</h1>
+              <p className="text-sm text-muted-foreground">Assign workout splits to each day of the week</p>
+            </div>
+          </motion.div>
+
+          {/* Plan Name */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
+            <Card>
+              <CardContent className="p-4">
+                <label className="text-xs font-medium text-muted-foreground">Plan Name</label>
+                <Input
+                  value={planName}
+                  onChange={e => setPlanName(e.target.value)}
+                  placeholder="My Weekly Plan"
+                  className="mt-1 h-10"
+                />
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Day Assignments */}
+          <div className="space-y-2">
+            {WEEKDAYS.map((day, i) => {
+              const assigned = workoutPlan[day] || null;
+              return (
+                <motion.div
+                  key={day}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 + i * 0.05 }}
+                >
+                  <Card className={assigned ? "border-primary/30" : ""}>
+                    <CardContent className="p-3 sm:p-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 ${
+                          assigned ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+                        }`}>
+                          {day.slice(0, 3)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          {assigned ? (
+                            <div>
+                              <p className="text-sm font-semibold truncate">{assigned.name}</p>
+                              <p className="text-xs text-muted-foreground">{assigned.daysPerWeek}x/wk • {assigned.difficulty}</p>
+                            </div>
+                          ) : (
+                            <p className="text-sm text-muted-foreground">Rest Day</p>
+                          )}
+                        </div>
+                        {assigned ? (
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => assignSplitToDay(day, null)}>
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        ) : null}
+                      </div>
+
+                      {/* Split selector */}
+                      {!assigned && (
+                        <div className="mt-3 flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+                          {HOME_WORKOUT_SPLITS.map(split => (
+                            <Badge
+                              key={split.id}
+                              variant="outline"
+                              className="cursor-pointer hover:bg-primary/10 whitespace-nowrap text-xs px-2 py-1 shrink-0"
+                              onClick={() => assignSplitToDay(day, split)}
+                            >
+                              <Plus className="h-3 w-3 mr-1" /> {split.name}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3">
+            {hasPlan && (
+              <Button variant="outline" onClick={clearPlan} className="flex-1">
+                <Trash2 className="h-4 w-4 mr-2" /> Clear
+              </Button>
+            )}
+            <Button onClick={savePlan} disabled={!hasPlan} className="flex-1">
+              <Save className="h-4 w-4 mr-2" /> Save Plan
+            </Button>
+          </div>
+
+          {/* Preview summary */}
+          {hasPlan && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <Card className="bg-primary/5 border-primary/20">
+                <CardContent className="p-4">
+                  <h3 className="text-sm font-semibold mb-2 flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-primary" /> Weekly Overview
+                  </h3>
+                  <div className="flex gap-1">
+                    {WEEKDAYS.map(day => {
+                      const assigned = workoutPlan[day];
+                      return (
+                        <div
+                          key={day}
+                          className={`flex-1 text-center py-2 rounded-lg text-xs font-medium ${
+                            assigned ? "bg-primary/10 text-primary" : "bg-muted/50 text-muted-foreground"
+                          }`}
+                        >
+                          <p className="text-[10px]">{day.slice(0, 3)}</p>
+                          <p className="font-bold text-[10px] mt-0.5">{assigned ? "💪" : "Rest"}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+        </div>
+      </div>
+    );
+  }
   if (selectedDay && selectedSplit) {
     return (
       <div className="min-h-screen bg-background pb-20">
@@ -421,14 +583,63 @@ const WorkoutLibrary = () => {
               Home workouts • No equipment needed
             </p>
           </div>
-          <Button 
-            onClick={() => navigate("/workouts/builder")}
-            className="w-full sm:w-auto h-10"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Create Workout
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => navigate("/workouts/builder")}
+              className="flex-1 sm:flex-none h-10"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Create Workout
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowPlanCreator(true)}
+              className="flex-1 sm:flex-none h-10"
+            >
+              <ClipboardList className="mr-2 h-4 w-4" />
+              {hasPlan ? "Edit Plan" : "Create Plan"}
+            </Button>
+          </div>
         </MotionFadeIn>
+
+        {/* My Workout Plan (if saved) */}
+        {hasPlan && (
+          <MotionFadeIn delay={0.05}>
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-bold flex items-center gap-2">
+                    <ClipboardList className="h-4 w-4 text-primary" /> {planName}
+                  </h3>
+                  <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => setShowPlanCreator(true)}>
+                    Edit
+                  </Button>
+                </div>
+                <div className="flex gap-1">
+                  {WEEKDAYS.map(day => {
+                    const assigned = workoutPlan[day];
+                    return (
+                      <div
+                        key={day}
+                        className={`flex-1 text-center py-2 rounded-lg text-[10px] font-medium cursor-pointer transition-colors ${
+                          assigned ? "bg-primary/10 text-primary hover:bg-primary/20" : "bg-muted/50 text-muted-foreground"
+                        }`}
+                        onClick={() => {
+                          if (assigned) {
+                            setSelectedSplit(assigned);
+                          }
+                        }}
+                      >
+                        <p>{day.slice(0, 2)}</p>
+                        <p className="font-bold mt-0.5">{assigned ? "💪" : "—"}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          </MotionFadeIn>
+        )}
 
         {/* Home Workout Splits Section */}
         <section>
