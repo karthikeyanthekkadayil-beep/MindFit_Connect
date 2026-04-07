@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { 
   Loader2, Search, Dumbbell, Heart, Plus, Flame, Zap, Target,
-  ChevronRight, Clock, Calendar, ArrowLeft, Play, CheckCircle2, Timer
+  ChevronRight, Clock, Calendar, ArrowLeft, Play, CheckCircle2, Timer,
+  ClipboardList, Trash2, Save
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
