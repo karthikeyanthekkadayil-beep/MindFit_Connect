@@ -402,6 +402,30 @@ const AIMealCard = ({ meal, onAdd }: { meal: AIMealSuggestion; onAdd: (m: AIMeal
   );
 };
 
+// ──────────────── Diet Plan Types ────────────────
+interface DietPlanMeal {
+  name: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+}
+
+interface DietPlanDay {
+  meals: { [mealType: string]: DietPlanMeal | null };
+}
+
+const MEAL_SLOTS = ["breakfast", "lunch", "dinner", "snack"] as const;
+const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const MEAL_EMOJIS: Record<string, string> = { breakfast: "🌅", lunch: "☀️", dinner: "🌙", snack: "🍎" };
+
+const loadDietPlan = (): { [day: string]: DietPlanDay } => {
+  try {
+    const saved = localStorage.getItem("my-diet-plan");
+    return saved ? JSON.parse(saved) : {};
+  } catch { return {}; }
+};
+
 // ──────────────── Main Page ────────────────
 const Nutrition = () => {
   const [settings, setSettings] = useState<NutritionSettings>(loadSettings());
@@ -411,6 +435,11 @@ const Nutrition = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [newIngredient, setNewIngredient] = useState("");
   const [consumedMeals, setConsumedMeals] = useState<AIMealSuggestion[]>([]);
+  const [showDietPlan, setShowDietPlan] = useState(false);
+  const [dietPlan, setDietPlan] = useState<{ [day: string]: DietPlanDay }>(loadDietPlan());
+  const [dietPlanName, setDietPlanName] = useState(() => localStorage.getItem("my-diet-plan-name") || "My Weekly Diet");
+  const [editingSlot, setEditingSlot] = useState<{ day: string; meal: string } | null>(null);
+  const [mealInput, setMealInput] = useState<DietPlanMeal>({ name: "", calories: 0, protein: 0, carbs: 0, fat: 0 });
 
   // Computed totals
   const totals = consumedMeals.reduce((acc, m) => ({
