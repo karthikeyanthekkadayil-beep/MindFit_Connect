@@ -49,6 +49,7 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
         loadResponseTime(),
         loadReportsByType(),
         loadPerformanceMetrics(),
+        loadModeratorBreakdown(),
       ]);
     } finally {
       setIsLoading(false);
