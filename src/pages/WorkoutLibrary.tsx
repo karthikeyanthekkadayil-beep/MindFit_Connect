@@ -583,14 +583,63 @@ const WorkoutLibrary = () => {
               Home workouts • No equipment needed
             </p>
           </div>
-          <Button 
-            onClick={() => navigate("/workouts/builder")}
-            className="w-full sm:w-auto h-10"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Create Workout
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => navigate("/workouts/builder")}
+              className="flex-1 sm:flex-none h-10"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Create Workout
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowPlanCreator(true)}
+              className="flex-1 sm:flex-none h-10"
+            >
+              <ClipboardList className="mr-2 h-4 w-4" />
+              {hasPlan ? "Edit Plan" : "Create Plan"}
+            </Button>
+          </div>
         </MotionFadeIn>
+
+        {/* My Workout Plan (if saved) */}
+        {hasPlan && (
+          <MotionFadeIn delay={0.05}>
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-bold flex items-center gap-2">
+                    <ClipboardList className="h-4 w-4 text-primary" /> {planName}
+                  </h3>
+                  <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => setShowPlanCreator(true)}>
+                    Edit
+                  </Button>
+                </div>
+                <div className="flex gap-1">
+                  {WEEKDAYS.map(day => {
+                    const assigned = workoutPlan[day];
+                    return (
+                      <div
+                        key={day}
+                        className={`flex-1 text-center py-2 rounded-lg text-[10px] font-medium cursor-pointer transition-colors ${
+                          assigned ? "bg-primary/10 text-primary hover:bg-primary/20" : "bg-muted/50 text-muted-foreground"
+                        }`}
+                        onClick={() => {
+                          if (assigned) {
+                            setSelectedSplit(assigned);
+                          }
+                        }}
+                      >
+                        <p>{day.slice(0, 2)}</p>
+                        <p className="font-bold mt-0.5">{assigned ? "💪" : "—"}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          </MotionFadeIn>
+        )}
 
         {/* Home Workout Splits Section */}
         <section>
