@@ -22,6 +22,9 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
   const [topReported, setTopReported] = useState<{ user_id: string; name: string; count: number; warnings: number }[]>([]);
   const [avgResponseTime, setAvgResponseTime] = useState<number | null>(null);
   const [reportsByType, setReportsByType] = useState<{ name: string; value: number }[]>([]);
+  const [moderatorBreakdown, setModeratorBreakdown] = useState<{
+    id: string; name: string; resolved: number; warnings: number; avgMinutes: number;
+  }[]>([]);
   const [performanceMetrics, setPerformanceMetrics] = useState({
     resolutionRate: 0,
     totalResolved: 0,
