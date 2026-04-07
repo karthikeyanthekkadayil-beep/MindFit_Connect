@@ -58,6 +58,14 @@ const WorkoutLibrary = () => {
   const [selectedSplit, setSelectedSplit] = useState<WorkoutSplit | null>(null);
   const [selectedDay, setSelectedDay] = useState<WorkoutDay | null>(null);
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
+  const [showPlanCreator, setShowPlanCreator] = useState(false);
+  const [workoutPlan, setWorkoutPlan] = useState<{ [day: string]: WorkoutSplit | null }>(() => {
+    try {
+      const saved = localStorage.getItem("my-workout-plan");
+      return saved ? JSON.parse(saved) : {};
+    } catch { return {}; }
+  });
+  const [planName, setPlanName] = useState(() => localStorage.getItem("my-workout-plan-name") || "My Weekly Plan");
 
   useEffect(() => {
     checkUserAndFetchData();
