@@ -490,6 +490,55 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
         </Card>
       )}
 
+      {/* Per-Moderator Performance Breakdown */}
+      {moderatorBreakdown.length > 0 && (
+        <Card>
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <UserCheck className="h-4 w-4 text-primary" /> Moderator Performance
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-2 space-y-2">
+            {moderatorBreakdown.map((mod, i) => {
+              const totalActions = mod.resolved + mod.warnings;
+              const maxActions = Math.max(...moderatorBreakdown.map(m => m.resolved + m.warnings), 1);
+              return (
+                <div key={mod.id} className="p-3 rounded-xl border bg-card space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-7 w-7">
+                        <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-bold">
+                          {mod.name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium leading-none">{mod.name}</p>
+                        <p className="text-[10px] text-muted-foreground mt-0.5">
+                          {mod.resolved} resolved · {mod.warnings} warnings
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-bold">{totalActions}</p>
+                      <p className="text-[10px] text-muted-foreground">actions</p>
+                    </div>
+                  </div>
+                  <Progress value={(totalActions / maxActions) * 100} className="h-1.5" />
+                  <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" /> Avg: {formatDuration(mod.avgMinutes)}
+                    </span>
+                    <Badge variant={i === 0 ? "default" : "outline"} className="text-[9px] px-1.5 py-0">
+                      #{i + 1}
+                    </Badge>
+                  </div>
+                </div>
+              );
+            })}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Top Reported Users */}
       <Card>
         <CardHeader className="p-4 pb-2">
