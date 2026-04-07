@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, Users, Clock, AlertTriangle, TrendingUp, Activity, ShieldAlert, Zap, Target, CheckCircle2, Timer } from "lucide-react";
+import { BarChart3, Users, Clock, AlertTriangle, TrendingUp, Activity, ShieldAlert, Zap, Target, CheckCircle2, Timer, UserCheck } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LineChart, Line, PieChart, Pie, Cell } from "recharts";
 import { format, subDays, startOfDay, differenceInHours, differenceInMinutes } from "date-fns";
 import { Progress } from "@/components/ui/progress";
@@ -21,6 +22,9 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
   const [topReported, setTopReported] = useState<{ user_id: string; name: string; count: number; warnings: number }[]>([]);
   const [avgResponseTime, setAvgResponseTime] = useState<number | null>(null);
   const [reportsByType, setReportsByType] = useState<{ name: string; value: number }[]>([]);
+  const [moderatorBreakdown, setModeratorBreakdown] = useState<{
+    id: string; name: string; resolved: number; warnings: number; avgMinutes: number;
+  }[]>([]);
   const [performanceMetrics, setPerformanceMetrics] = useState({
     resolutionRate: 0,
     totalResolved: 0,
@@ -45,6 +49,7 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
         loadResponseTime(),
         loadReportsByType(),
         loadPerformanceMetrics(),
+        loadModeratorBreakdown(),
       ]);
     } finally {
       setIsLoading(false);
@@ -105,6 +110,51 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
       weeklyTrend,
       moderatorActions,
     });
+  };
+
+  const loadModeratorBreakdown = async () => {
+    const [{ data: reports }, { data: warnings }] = await Promise.all([
+      supabase.from("content_reports").select("reviewed_by, reviewed_at, created_at, status").not("reviewed_by", "is", null),
+      supabase.from("user_warnings").select("moderator_id, created_at"),
+    ]);
+
+    const modMap = new Map<string, { resolved: number; warnings: number; responseTimes: number[] }>();
+
+    reports?.forEach(r => {
+      const id = r.reviewed_by!;
+      if (!modMap.has(id)) modMap.set(id, { resolved: 0, warnings: 0, responseTimes: [] });
+      const entry = modMap.get(id)!;
+      entry.resolved++;
+      if (r.reviewed_at) {
+        entry.responseTimes.push(differenceInMinutes(new Date(r.reviewed_at), new Date(r.created_at)));
+      }
+    });
+
+    warnings?.forEach(w => {
+      const id = w.moderator_id;
+      if (!modMap.has(id)) modMap.set(id, { resolved: 0, warnings: 0, responseTimes: [] });
+      modMap.get(id)!.warnings++;
+    });
+
+    if (modMap.size === 0) { setModeratorBreakdown([]); return; }
+
+    const modIds = Array.from(modMap.keys());
+    const { data: profiles } = await supabase.rpc("get_public_profiles_info", { profile_ids: modIds });
+    const nameMap = new Map(profiles?.map((p: any) => [p.id, p.full_name]) || []);
+
+    const breakdown = Array.from(modMap.entries())
+      .map(([id, stats]) => ({
+        id,
+        name: nameMap.get(id) || "Unknown",
+        resolved: stats.resolved,
+        warnings: stats.warnings,
+        avgMinutes: stats.responseTimes.length > 0
+          ? Math.round(stats.responseTimes.reduce((a, b) => a + b, 0) / stats.responseTimes.length)
+          : 0,
+      }))
+      .sort((a, b) => (b.resolved + b.warnings) - (a.resolved + a.warnings));
+
+    setModeratorBreakdown(breakdown);
   };
 
   const loadActivityChart = async () => {
@@ -436,6 +486,55 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
                 ))}
               </div>
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Per-Moderator Performance Breakdown */}
+      {moderatorBreakdown.length > 0 && (
+        <Card>
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <UserCheck className="h-4 w-4 text-primary" /> Moderator Performance
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-2 space-y-2">
+            {moderatorBreakdown.map((mod, i) => {
+              const totalActions = mod.resolved + mod.warnings;
+              const maxActions = Math.max(...moderatorBreakdown.map(m => m.resolved + m.warnings), 1);
+              return (
+                <div key={mod.id} className="p-3 rounded-xl border bg-card space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-7 w-7">
+                        <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-bold">
+                          {mod.name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium leading-none">{mod.name}</p>
+                        <p className="text-[10px] text-muted-foreground mt-0.5">
+                          {mod.resolved} resolved · {mod.warnings} warnings
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-bold">{totalActions}</p>
+                      <p className="text-[10px] text-muted-foreground">actions</p>
+                    </div>
+                  </div>
+                  <Progress value={(totalActions / maxActions) * 100} className="h-1.5" />
+                  <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" /> Avg: {formatDuration(mod.avgMinutes)}
+                    </span>
+                    <Badge variant={i === 0 ? "default" : "outline"} className="text-[9px] px-1.5 py-0">
+                      #{i + 1}
+                    </Badge>
+                  </div>
+                </div>
+              );
+            })}
           </CardContent>
         </Card>
       )}
