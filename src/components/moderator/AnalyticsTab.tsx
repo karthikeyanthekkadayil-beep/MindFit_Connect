@@ -112,6 +112,51 @@ export const AnalyticsTab = ({ moderatorId }: AnalyticsTabProps) => {
     });
   };
 
+  const loadModeratorBreakdown = async () => {
+    const [{ data: reports }, { data: warnings }] = await Promise.all([
+      supabase.from("content_reports").select("reviewed_by, reviewed_at, created_at, status").not("reviewed_by", "is", null),
+      supabase.from("user_warnings").select("moderator_id, created_at"),
+    ]);
+
+    const modMap = new Map<string, { resolved: number; warnings: number; responseTimes: number[] }>();
+
+    reports?.forEach(r => {
+      const id = r.reviewed_by!;
+      if (!modMap.has(id)) modMap.set(id, { resolved: 0, warnings: 0, responseTimes: [] });
+      const entry = modMap.get(id)!;
+      entry.resolved++;
+      if (r.reviewed_at) {
+        entry.responseTimes.push(differenceInMinutes(new Date(r.reviewed_at), new Date(r.created_at)));
+      }
+    });
+
+    warnings?.forEach(w => {
+      const id = w.moderator_id;
+      if (!modMap.has(id)) modMap.set(id, { resolved: 0, warnings: 0, responseTimes: [] });
+      modMap.get(id)!.warnings++;
+    });
+
+    if (modMap.size === 0) { setModeratorBreakdown([]); return; }
+
+    const modIds = Array.from(modMap.keys());
+    const { data: profiles } = await supabase.rpc("get_public_profiles_info", { profile_ids: modIds });
+    const nameMap = new Map(profiles?.map((p: any) => [p.id, p.full_name]) || []);
+
+    const breakdown = Array.from(modMap.entries())
+      .map(([id, stats]) => ({
+        id,
+        name: nameMap.get(id) || "Unknown",
+        resolved: stats.resolved,
+        warnings: stats.warnings,
+        avgMinutes: stats.responseTimes.length > 0
+          ? Math.round(stats.responseTimes.reduce((a, b) => a + b, 0) / stats.responseTimes.length)
+          : 0,
+      }))
+      .sort((a, b) => (b.resolved + b.warnings) - (a.resolved + a.warnings));
+
+    setModeratorBreakdown(breakdown);
+  };
+
   const loadActivityChart = async () => {
     const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
 
