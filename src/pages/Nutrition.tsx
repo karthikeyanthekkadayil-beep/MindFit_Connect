@@ -730,10 +730,48 @@ const Nutrition = () => {
               {settings.dietGoal === "cut" ? "Cutting" : settings.dietGoal === "bulk" ? "Bulking" : "Maintaining"} • {settings.targetCalories} kcal target
             </p>
           </div>
-          <Button variant="ghost" size="icon" onClick={() => setShowSettings(!showSettings)}>
-            <Settings2 className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button variant="outline" size="sm" className="text-xs h-8" onClick={() => setShowDietPlan(true)}>
+              <ClipboardList className="h-3.5 w-3.5 mr-1" />
+              {hasDietPlan ? "Edit Plan" : "Diet Plan"}
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => setShowSettings(!showSettings)}>
+              <Settings2 className="h-5 w-5" />
+            </Button>
+          </div>
         </MotionFadeIn>
+
+        {/* Saved Diet Plan Summary */}
+        {hasDietPlan && (
+          <MotionFadeIn delay={0.05}>
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold flex items-center gap-2">
+                    <ClipboardList className="h-4 w-4 text-primary" /> {dietPlanName}
+                  </h3>
+                  <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => setShowDietPlan(true)}>Edit</Button>
+                </div>
+                <div className="flex gap-1">
+                  {WEEKDAYS.map(day => {
+                    const dayTotals = getDayTotals(day);
+                    return (
+                      <div
+                        key={day}
+                        className={`flex-1 text-center py-1.5 rounded-lg text-[10px] font-medium ${
+                          dayTotals.calories > 0 ? "bg-primary/10 text-primary" : "bg-muted/50 text-muted-foreground"
+                        }`}
+                      >
+                        <p>{day.slice(0, 2)}</p>
+                        <p className="font-bold mt-0.5">{dayTotals.calories > 0 ? `${dayTotals.calories}` : "—"}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          </MotionFadeIn>
+        )}
 
         {/* Settings panel */}
         <AnimatePresence>
