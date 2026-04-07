@@ -12,7 +12,8 @@ import { toast } from "sonner";
 import {
   Loader2, Sparkles, Utensils, Target, Flame, TrendingDown,
   TrendingUp, Minus, ChevronRight, Plus, X, Settings2,
-  ChefHat, Apple, Beef, Wheat, Droplets, Clock, ShoppingCart
+  ChefHat, Apple, Beef, Wheat, Droplets, Clock, ShoppingCart,
+  ClipboardList, Save, Trash2, ArrowLeft, Calendar
 } from "lucide-react";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
