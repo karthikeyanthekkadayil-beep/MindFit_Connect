@@ -547,18 +547,51 @@ const Nutrition = () => {
 
   const hasDietPlan = Object.values(dietPlan).some(d => Object.values(d.meals).some(m => m !== null));
 
-  const saveDietPlan = () => {
-    localStorage.setItem("my-diet-plan", JSON.stringify(dietPlan));
-    localStorage.setItem("my-diet-plan-name", dietPlanName);
-    toast.success("Diet plan saved!");
+  const saveDietPlan = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please log in"); return; }
+      // Delete existing and re-insert
+      await supabase.from("user_diet_plans").delete().eq("user_id", user.id);
+      const rows: any[] = [];
+      Object.entries(dietPlan).forEach(([day, dayData]) => {
+        Object.entries(dayData.meals).forEach(([slot, meal]) => {
+          if (meal) {
+            rows.push({
+              user_id: user.id,
+              day_of_week: day,
+              meal_slot: slot,
+              meal_name: meal.name,
+              calories: meal.calories,
+              protein: meal.protein,
+              carbs: meal.carbs,
+              fat: meal.fat,
+            });
+          }
+        });
+      });
+      if (rows.length > 0) {
+        const { error } = await supabase.from("user_diet_plans").insert(rows);
+        if (error) throw error;
+      }
+      toast.success("Diet plan saved!");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to save diet plan");
+    }
   };
 
-  const clearDietPlan = () => {
-    setDietPlan({});
-    setDietPlanName("My Weekly Diet");
-    localStorage.removeItem("my-diet-plan");
-    localStorage.removeItem("my-diet-plan-name");
-    toast.success("Diet plan cleared");
+  const clearDietPlan = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase.from("user_diet_plans").delete().eq("user_id", user.id);
+      }
+      setDietPlan({});
+      setDietPlanName("My Weekly Diet");
+      toast.success("Diet plan cleared");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to clear diet plan");
+    }
   };
 
   const addMealToSlot = () => {
