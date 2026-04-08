@@ -2,3 +2,6 @@ project_id = "qkxjhtmnxtmpctqlkdrt"
 
 [functions.generate-mindfulness-recommendations]
 verify_jwt = true
+
+[functions.generate-weekly-diet-plan]
+verify_jwt = true
