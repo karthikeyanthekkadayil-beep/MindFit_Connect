@@ -629,6 +629,59 @@ const Nutrition = () => {
     }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
   };
 
+  const autoFillWithAI = async () => {
+    setIsAutoFilling(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      const { data: profile } = await supabase.from("profiles").select("dietary_preferences, health_goals, medical_conditions").eq("id", user.id).single();
+
+      const { data, error } = await supabase.functions.invoke("generate-weekly-diet-plan", {
+        body: {
+          calorieTarget: settings.targetCalories,
+          dietGoal: settings.dietGoal,
+          availableIngredients: settings.availableIngredients,
+          dietaryPreferences: profile?.dietary_preferences,
+          healthGoals: profile?.health_goals,
+          medicalConditions: profile?.medical_conditions,
+        },
+      });
+
+      if (error) throw error;
+
+      const weeklyPlan = data.weeklyPlan;
+      const newPlan: { [day: string]: DietPlanDay } = {};
+
+      WEEKDAYS.forEach(day => {
+        if (weeklyPlan[day]) {
+          const meals: { [slot: string]: DietPlanMeal | null } = {};
+          MEAL_SLOTS.forEach(slot => {
+            const m = weeklyPlan[day][slot];
+            if (m) {
+              meals[slot] = {
+                name: m.name,
+                calories: Math.round(m.calories || 0),
+                protein: Math.round(m.protein || 0),
+                carbs: Math.round(m.carbs || 0),
+                fat: Math.round(m.fat || 0),
+              };
+            }
+          });
+          newPlan[day] = { meals };
+        }
+      });
+
+      setDietPlan(newPlan);
+      toast.success("AI generated your weekly diet plan! Review and save when ready.");
+    } catch (e: any) {
+      console.error("AI auto-fill error:", e);
+      toast.error(e.message || "Failed to generate diet plan");
+    } finally {
+      setIsAutoFilling(false);
+    }
+  };
+
   // ── Diet Plan Creator View ──
   if (showDietPlan) {
     return (
