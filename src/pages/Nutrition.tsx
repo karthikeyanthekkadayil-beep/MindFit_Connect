@@ -451,10 +451,21 @@ const Nutrition = () => {
   const [newIngredient, setNewIngredient] = useState("");
   const [consumedMeals, setConsumedMeals] = useState<AIMealSuggestion[]>([]);
   const [showDietPlan, setShowDietPlan] = useState(false);
-  const [dietPlan, setDietPlan] = useState<{ [day: string]: DietPlanDay }>(loadDietPlan());
-  const [dietPlanName, setDietPlanName] = useState(() => localStorage.getItem("my-diet-plan-name") || "My Weekly Diet");
+  const [dietPlan, setDietPlan] = useState<{ [day: string]: DietPlanDay }>({});
+  const [dietPlanName, setDietPlanName] = useState("My Weekly Diet");
   const [editingSlot, setEditingSlot] = useState<{ day: string; meal: string } | null>(null);
   const [mealInput, setMealInput] = useState<DietPlanMeal>({ name: "", calories: 0, protein: 0, carbs: 0, fat: 0 });
+
+  // Load diet plan from Supabase on mount
+  useEffect(() => {
+    const load = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const result = await loadDietPlan(user.id);
+      setDietPlan(result.plan);
+    };
+    load();
+  }, []);
 
   // Computed totals
   const totals = consumedMeals.reduce((acc, m) => ({
