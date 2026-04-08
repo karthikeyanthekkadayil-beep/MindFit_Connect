@@ -706,6 +706,42 @@ const Nutrition = () => {
             </Card>
           </motion.div>
 
+          {/* AI Auto-Fill */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold">AI Auto-Fill</h3>
+                    <p className="text-xs text-muted-foreground">
+                      Generate a full week of meals based on your {settings.targetCalories} kcal target
+                      {settings.availableIngredients.length > 0 && ` & ${settings.availableIngredients.length} ingredients`}
+                    </p>
+                  </div>
+                  <Button
+                    size="sm"
+                    onClick={autoFillWithAI}
+                    disabled={isAutoFilling}
+                    className="shrink-0"
+                  >
+                    {isAutoFilling ? (
+                      <>
+                        <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" /> Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-3.5 w-3.5 mr-1" /> Fill Week
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
           {/* Days */}
           <div className="space-y-3">
             {WEEKDAYS.map((day, di) => {
