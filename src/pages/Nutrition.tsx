@@ -419,11 +419,26 @@ const MEAL_SLOTS = ["breakfast", "lunch", "dinner", "snack"] as const;
 const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const MEAL_EMOJIS: Record<string, string> = { breakfast: "🌅", lunch: "☀️", dinner: "🌙", snack: "🍎" };
 
-const loadDietPlan = (): { [day: string]: DietPlanDay } => {
+const loadDietPlan = async (userId: string): Promise<{ plan: { [day: string]: DietPlanDay }; name: string }> => {
   try {
-    const saved = localStorage.getItem("my-diet-plan");
-    return saved ? JSON.parse(saved) : {};
-  } catch { return {}; }
+    const { data } = await supabase
+      .from("user_diet_plans")
+      .select("*")
+      .eq("user_id", userId);
+    if (!data || data.length === 0) return { plan: {}, name: "My Weekly Diet" };
+    const plan: { [day: string]: DietPlanDay } = {};
+    data.forEach((row: any) => {
+      if (!plan[row.day_of_week]) plan[row.day_of_week] = { meals: {} };
+      plan[row.day_of_week].meals[row.meal_slot] = {
+        name: row.meal_name,
+        calories: row.calories,
+        protein: Number(row.protein),
+        carbs: Number(row.carbs),
+        fat: Number(row.fat),
+      };
+    });
+    return { plan, name: "My Weekly Diet" };
+  } catch { return { plan: {}, name: "My Weekly Diet" }; }
 };
 
 // ──────────────── Main Page ────────────────
