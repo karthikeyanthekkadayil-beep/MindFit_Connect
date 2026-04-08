@@ -171,18 +171,43 @@ const WorkoutLibrary = () => {
 
   const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-  const savePlan = () => {
-    localStorage.setItem("my-workout-plan", JSON.stringify(workoutPlan));
-    localStorage.setItem("my-workout-plan-name", planName);
-    toast.success("Workout plan saved!");
+  const savePlan = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please log in"); return; }
+      const row: any = {
+        user_id: user.id,
+        plan_name: planName,
+        monday: workoutPlan["Monday"]?.id || null,
+        tuesday: workoutPlan["Tuesday"]?.id || null,
+        wednesday: workoutPlan["Wednesday"]?.id || null,
+        thursday: workoutPlan["Thursday"]?.id || null,
+        friday: workoutPlan["Friday"]?.id || null,
+        saturday: workoutPlan["Saturday"]?.id || null,
+        sunday: workoutPlan["Sunday"]?.id || null,
+      };
+      const { error } = await supabase
+        .from("user_workout_plans")
+        .upsert(row, { onConflict: "user_id" });
+      if (error) throw error;
+      toast.success("Workout plan saved!");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to save plan");
+    }
   };
 
-  const clearPlan = () => {
-    setWorkoutPlan({});
-    setPlanName("My Weekly Plan");
-    localStorage.removeItem("my-workout-plan");
-    localStorage.removeItem("my-workout-plan-name");
-    toast.success("Plan cleared");
+  const clearPlan = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase.from("user_workout_plans").delete().eq("user_id", user.id);
+      }
+      setWorkoutPlan({});
+      setPlanName("My Weekly Plan");
+      toast.success("Plan cleared");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to clear plan");
+    }
   };
 
   const assignSplitToDay = (day: string, split: WorkoutSplit | null) => {
