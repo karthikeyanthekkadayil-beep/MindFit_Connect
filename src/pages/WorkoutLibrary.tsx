@@ -65,7 +65,38 @@ const WorkoutLibrary = () => {
 
   useEffect(() => {
     checkUserAndFetchData();
+    loadWorkoutPlan();
   }, []);
+
+  const loadWorkoutPlan = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase
+        .from("user_workout_plans")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (data) {
+        const plan: { [day: string]: WorkoutSplit | null } = {};
+        const WEEKDAYS_MAP = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+        const WEEKDAYS_DISPLAY = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        WEEKDAYS_MAP.forEach((col, i) => {
+          const splitId = (data as any)[col];
+          if (splitId) {
+            const found = HOME_WORKOUT_SPLITS.find(s => s.id === splitId);
+            plan[WEEKDAYS_DISPLAY[i]] = found || null;
+          }
+        });
+        setWorkoutPlan(plan);
+        setPlanName(data.plan_name || "My Weekly Plan");
+      }
+    } catch (e) {
+      console.error("Error loading workout plan:", e);
+    } finally {
+      setPlanLoading(false);
+    }
+  };
 
   const checkUserAndFetchData = async () => {
     const { data: { session } } = await supabase.auth.getSession();
