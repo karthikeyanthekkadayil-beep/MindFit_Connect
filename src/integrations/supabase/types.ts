@@ -1416,6 +1416,48 @@ export type Database = {
           },
         ]
       }
+      user_diet_plans: {
+        Row: {
+          calories: number
+          carbs: number
+          created_at: string
+          day_of_week: string
+          fat: number
+          id: string
+          meal_name: string
+          meal_slot: string
+          protein: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          calories?: number
+          carbs?: number
+          created_at?: string
+          day_of_week: string
+          fat?: number
+          id?: string
+          meal_name: string
+          meal_slot: string
+          protein?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          calories?: number
+          carbs?: number
+          created_at?: string
+          day_of_week?: string
+          fat?: number
+          id?: string
+          meal_name?: string
+          meal_slot?: string
+          protein?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_gamification: {
         Row: {
           created_at: string
@@ -1658,6 +1700,51 @@ export type Database = {
           reason?: string
           user_id?: string
           warning_type?: string
+        }
+        Relationships: []
+      }
+      user_workout_plans: {
+        Row: {
+          created_at: string
+          friday: string | null
+          id: string
+          monday: string | null
+          plan_name: string
+          saturday: string | null
+          sunday: string | null
+          thursday: string | null
+          tuesday: string | null
+          updated_at: string
+          user_id: string
+          wednesday: string | null
+        }
+        Insert: {
+          created_at?: string
+          friday?: string | null
+          id?: string
+          monday?: string | null
+          plan_name?: string
+          saturday?: string | null
+          sunday?: string | null
+          thursday?: string | null
+          tuesday?: string | null
+          updated_at?: string
+          user_id: string
+          wednesday?: string | null
+        }
+        Update: {
+          created_at?: string
+          friday?: string | null
+          id?: string
+          monday?: string | null
+          plan_name?: string
+          saturday?: string | null
+          sunday?: string | null
+          thursday?: string | null
+          tuesday?: string | null
+          updated_at?: string
+          user_id?: string
+          wednesday?: string | null
         }
         Relationships: []
       }
