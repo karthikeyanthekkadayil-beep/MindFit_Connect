@@ -455,6 +455,7 @@ const Nutrition = () => {
   const [dietPlanName, setDietPlanName] = useState("My Weekly Diet");
   const [editingSlot, setEditingSlot] = useState<{ day: string; meal: string } | null>(null);
   const [mealInput, setMealInput] = useState<DietPlanMeal>({ name: "", calories: 0, protein: 0, carbs: 0, fat: 0 });
+  const [isAutoFilling, setIsAutoFilling] = useState(false);
 
   // Load diet plan from Supabase on mount
   useEffect(() => {
