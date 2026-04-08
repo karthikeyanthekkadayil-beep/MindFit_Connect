@@ -419,11 +419,26 @@ const MEAL_SLOTS = ["breakfast", "lunch", "dinner", "snack"] as const;
 const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const MEAL_EMOJIS: Record<string, string> = { breakfast: "🌅", lunch: "☀️", dinner: "🌙", snack: "🍎" };
 
-const loadDietPlan = (): { [day: string]: DietPlanDay } => {
+const loadDietPlan = async (userId: string): Promise<{ plan: { [day: string]: DietPlanDay }; name: string }> => {
   try {
-    const saved = localStorage.getItem("my-diet-plan");
-    return saved ? JSON.parse(saved) : {};
-  } catch { return {}; }
+    const { data } = await supabase
+      .from("user_diet_plans")
+      .select("*")
+      .eq("user_id", userId);
+    if (!data || data.length === 0) return { plan: {}, name: "My Weekly Diet" };
+    const plan: { [day: string]: DietPlanDay } = {};
+    data.forEach((row: any) => {
+      if (!plan[row.day_of_week]) plan[row.day_of_week] = { meals: {} };
+      plan[row.day_of_week].meals[row.meal_slot] = {
+        name: row.meal_name,
+        calories: row.calories,
+        protein: Number(row.protein),
+        carbs: Number(row.carbs),
+        fat: Number(row.fat),
+      };
+    });
+    return { plan, name: "My Weekly Diet" };
+  } catch { return { plan: {}, name: "My Weekly Diet" }; }
 };
 
 // ──────────────── Main Page ────────────────
@@ -436,10 +451,21 @@ const Nutrition = () => {
   const [newIngredient, setNewIngredient] = useState("");
   const [consumedMeals, setConsumedMeals] = useState<AIMealSuggestion[]>([]);
   const [showDietPlan, setShowDietPlan] = useState(false);
-  const [dietPlan, setDietPlan] = useState<{ [day: string]: DietPlanDay }>(loadDietPlan());
-  const [dietPlanName, setDietPlanName] = useState(() => localStorage.getItem("my-diet-plan-name") || "My Weekly Diet");
+  const [dietPlan, setDietPlan] = useState<{ [day: string]: DietPlanDay }>({});
+  const [dietPlanName, setDietPlanName] = useState("My Weekly Diet");
   const [editingSlot, setEditingSlot] = useState<{ day: string; meal: string } | null>(null);
   const [mealInput, setMealInput] = useState<DietPlanMeal>({ name: "", calories: 0, protein: 0, carbs: 0, fat: 0 });
+
+  // Load diet plan from Supabase on mount
+  useEffect(() => {
+    const load = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const result = await loadDietPlan(user.id);
+      setDietPlan(result.plan);
+    };
+    load();
+  }, []);
 
   // Computed totals
   const totals = consumedMeals.reduce((acc, m) => ({
@@ -521,18 +547,51 @@ const Nutrition = () => {
 
   const hasDietPlan = Object.values(dietPlan).some(d => Object.values(d.meals).some(m => m !== null));
 
-  const saveDietPlan = () => {
-    localStorage.setItem("my-diet-plan", JSON.stringify(dietPlan));
-    localStorage.setItem("my-diet-plan-name", dietPlanName);
-    toast.success("Diet plan saved!");
+  const saveDietPlan = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please log in"); return; }
+      // Delete existing and re-insert
+      await supabase.from("user_diet_plans").delete().eq("user_id", user.id);
+      const rows: any[] = [];
+      Object.entries(dietPlan).forEach(([day, dayData]) => {
+        Object.entries(dayData.meals).forEach(([slot, meal]) => {
+          if (meal) {
+            rows.push({
+              user_id: user.id,
+              day_of_week: day,
+              meal_slot: slot,
+              meal_name: meal.name,
+              calories: meal.calories,
+              protein: meal.protein,
+              carbs: meal.carbs,
+              fat: meal.fat,
+            });
+          }
+        });
+      });
+      if (rows.length > 0) {
+        const { error } = await supabase.from("user_diet_plans").insert(rows);
+        if (error) throw error;
+      }
+      toast.success("Diet plan saved!");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to save diet plan");
+    }
   };
 
-  const clearDietPlan = () => {
-    setDietPlan({});
-    setDietPlanName("My Weekly Diet");
-    localStorage.removeItem("my-diet-plan");
-    localStorage.removeItem("my-diet-plan-name");
-    toast.success("Diet plan cleared");
+  const clearDietPlan = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase.from("user_diet_plans").delete().eq("user_id", user.id);
+      }
+      setDietPlan({});
+      setDietPlanName("My Weekly Diet");
+      toast.success("Diet plan cleared");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to clear diet plan");
+    }
   };
 
   const addMealToSlot = () => {

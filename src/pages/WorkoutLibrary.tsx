@@ -59,17 +59,44 @@ const WorkoutLibrary = () => {
   const [selectedDay, setSelectedDay] = useState<WorkoutDay | null>(null);
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
   const [showPlanCreator, setShowPlanCreator] = useState(false);
-  const [workoutPlan, setWorkoutPlan] = useState<{ [day: string]: WorkoutSplit | null }>(() => {
-    try {
-      const saved = localStorage.getItem("my-workout-plan");
-      return saved ? JSON.parse(saved) : {};
-    } catch { return {}; }
-  });
-  const [planName, setPlanName] = useState(() => localStorage.getItem("my-workout-plan-name") || "My Weekly Plan");
+  const [workoutPlan, setWorkoutPlan] = useState<{ [day: string]: WorkoutSplit | null }>({});
+  const [planName, setPlanName] = useState("My Weekly Plan");
+  const [planLoading, setPlanLoading] = useState(true);
 
   useEffect(() => {
     checkUserAndFetchData();
+    loadWorkoutPlan();
   }, []);
+
+  const loadWorkoutPlan = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase
+        .from("user_workout_plans")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (data) {
+        const plan: { [day: string]: WorkoutSplit | null } = {};
+        const WEEKDAYS_MAP = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+        const WEEKDAYS_DISPLAY = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        WEEKDAYS_MAP.forEach((col, i) => {
+          const splitId = (data as any)[col];
+          if (splitId) {
+            const found = HOME_WORKOUT_SPLITS.find(s => s.id === splitId);
+            plan[WEEKDAYS_DISPLAY[i]] = found || null;
+          }
+        });
+        setWorkoutPlan(plan);
+        setPlanName(data.plan_name || "My Weekly Plan");
+      }
+    } catch (e) {
+      console.error("Error loading workout plan:", e);
+    } finally {
+      setPlanLoading(false);
+    }
+  };
 
   const checkUserAndFetchData = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -144,18 +171,43 @@ const WorkoutLibrary = () => {
 
   const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-  const savePlan = () => {
-    localStorage.setItem("my-workout-plan", JSON.stringify(workoutPlan));
-    localStorage.setItem("my-workout-plan-name", planName);
-    toast.success("Workout plan saved!");
+  const savePlan = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please log in"); return; }
+      const row: any = {
+        user_id: user.id,
+        plan_name: planName,
+        monday: workoutPlan["Monday"]?.id || null,
+        tuesday: workoutPlan["Tuesday"]?.id || null,
+        wednesday: workoutPlan["Wednesday"]?.id || null,
+        thursday: workoutPlan["Thursday"]?.id || null,
+        friday: workoutPlan["Friday"]?.id || null,
+        saturday: workoutPlan["Saturday"]?.id || null,
+        sunday: workoutPlan["Sunday"]?.id || null,
+      };
+      const { error } = await supabase
+        .from("user_workout_plans")
+        .upsert(row, { onConflict: "user_id" });
+      if (error) throw error;
+      toast.success("Workout plan saved!");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to save plan");
+    }
   };
 
-  const clearPlan = () => {
-    setWorkoutPlan({});
-    setPlanName("My Weekly Plan");
-    localStorage.removeItem("my-workout-plan");
-    localStorage.removeItem("my-workout-plan-name");
-    toast.success("Plan cleared");
+  const clearPlan = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase.from("user_workout_plans").delete().eq("user_id", user.id);
+      }
+      setWorkoutPlan({});
+      setPlanName("My Weekly Plan");
+      toast.success("Plan cleared");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to clear plan");
+    }
   };
 
   const assignSplitToDay = (day: string, split: WorkoutSplit | null) => {
