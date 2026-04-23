@@ -12,7 +12,13 @@ import { useNavigate } from "react-router-dom";
 import { NewConversationDialog } from "@/components/NewConversationDialog";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
-import { MotionFadeIn, MotionScaleIn, MotionList, MotionItem, MotionSection } from "@/components/motion/MotionWrappers";
+import {
+  MotionFadeIn,
+  MotionScaleIn,
+  MotionList,
+  MotionItem,
+  MotionSection,
+} from "@/components/motion/MotionWrappers";
 import { InteractiveCard } from "@/components/ui/card";
 import {
   AlertDialog,
@@ -49,7 +55,7 @@ export default function Messages() {
 
       if (error) throw error;
 
-      const conversationIds = memberData.map(m => m.conversation_id);
+      const conversationIds = memberData.map((m) => m.conversation_id);
       if (conversationIds.length === 0) return [];
 
       const { data: conversationData } = await supabase
@@ -80,8 +86,10 @@ export default function Messages() {
               .neq("user_id", currentUserId!);
 
             if (members && members.length > 0) {
-              const { data: profile } = await supabase
-                .rpc("get_public_profile_info", { profile_id: members[0].user_id });
+              const { data: profile } = await supabase.rpc(
+                "get_public_profile_info",
+                { profile_id: members[0].user_id },
+              );
 
               otherUser = profile?.[0] || null;
             }
@@ -104,7 +112,7 @@ export default function Messages() {
             latestMessage,
             community,
           };
-        })
+        }),
       );
 
       // Filter by search query
@@ -112,7 +120,9 @@ export default function Messages() {
         return conversationsWithData.filter((conv) => {
           const searchTerm = searchQuery.toLowerCase();
           if (conv.type === "direct") {
-            return conv.otherUser?.full_name?.toLowerCase().includes(searchTerm);
+            return conv.otherUser?.full_name
+              ?.toLowerCase()
+              .includes(searchTerm);
           }
           return conv.name?.toLowerCase().includes(searchTerm);
         });
@@ -180,10 +190,17 @@ export default function Messages() {
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-4xl lg:max-w-6xl">
         <MotionFadeIn className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-3xl font-bold text-foreground">Messages</h1>
-            <p className="text-muted-foreground text-xs sm:text-base">Your conversations</p>
+            <h1 className="text-xl sm:text-3xl font-bold text-foreground">
+              Messages
+            </h1>
+            <p className="text-muted-foreground text-xs sm:text-base">
+              Your conversations
+            </p>
           </div>
-          <Button onClick={() => setIsNewConversationOpen(true)} className="gap-1 sm:gap-2 shrink-0 h-9 sm:h-10 text-xs sm:text-sm px-3 sm:px-4">
+          <Button
+            onClick={() => setIsNewConversationOpen(true)}
+            className="gap-1 sm:gap-2 shrink-0 h-9 sm:h-10 text-xs sm:text-sm px-3 sm:px-4"
+          >
             <Plus className="h-4 w-4" />
             <span className="hidden sm:inline">New</span>
           </Button>
@@ -202,12 +219,14 @@ export default function Messages() {
         </MotionFadeIn>
 
         {isLoading ? (
-          <div className="text-center py-6 sm:py-8 text-muted-foreground text-xs sm:text-sm">Loading conversations...</div>
+          <div className="text-center py-6 sm:py-8 text-muted-foreground text-xs sm:text-sm">
+            Loading conversations...
+          </div>
         ) : conversations && conversations.length > 0 ? (
           <MotionList className="space-y-2" delay={0.15}>
             {conversations.map((conversation) => {
               const unreadCount = getUnreadCount(conversation);
-              
+
               return (
                 <MotionItem key={conversation.id}>
                   <InteractiveCard
@@ -216,7 +235,9 @@ export default function Messages() {
                   >
                     <div className="flex items-center gap-3">
                       <Avatar className="h-10 w-10 sm:h-12 sm:w-12 shrink-0">
-                        <AvatarImage src={getConversationAvatar(conversation)} />
+                        <AvatarImage
+                          src={getConversationAvatar(conversation)}
+                        />
                         <AvatarFallback>
                           {conversation.type === "direct"
                             ? getConversationTitle(conversation)[0]
@@ -230,18 +251,25 @@ export default function Messages() {
                           </h3>
                           {conversation.latestMessage && (
                             <span className="text-[10px] sm:text-xs text-muted-foreground shrink-0">
-                              {formatDistanceToNow(new Date(conversation.latestMessage.created_at), {
-                                addSuffix: true,
-                              })}
+                              {formatDistanceToNow(
+                                new Date(conversation.latestMessage.created_at),
+                                {
+                                  addSuffix: true,
+                                },
+                              )}
                             </span>
                           )}
                         </div>
                         <div className="flex items-center justify-between gap-2">
                           <p className="text-xs sm:text-sm text-muted-foreground truncate">
-                            {conversation.latestMessage?.content || "No messages yet"}
+                            {conversation.latestMessage?.content ||
+                              "No messages yet"}
                           </p>
                           {unreadCount > 0 && (
-                            <Badge variant="default" className="ml-2 shrink-0 text-[10px] sm:text-xs">
+                            <Badge
+                              variant="default"
+                              className="ml-2 shrink-0 text-[10px] sm:text-xs"
+                            >
                               {unreadCount}
                             </Badge>
                           )}
@@ -273,11 +301,16 @@ export default function Messages() {
           <MotionScaleIn delay={0.2}>
             <div className="text-center py-8 sm:py-12">
               <MessageCircle className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-base sm:text-lg font-semibold mb-2">No conversations yet</h3>
+              <h3 className="text-base sm:text-lg font-semibold mb-2">
+                No conversations yet
+              </h3>
               <p className="text-muted-foreground mb-4 text-sm">
                 Start a conversation to connect with others
               </p>
-              <Button onClick={() => setIsNewConversationOpen(true)} className="h-10">
+              <Button
+                onClick={() => setIsNewConversationOpen(true)}
+                className="h-10"
+              >
                 New Conversation
               </Button>
             </div>
@@ -291,12 +324,16 @@ export default function Messages() {
       </div>
 
       {/* Delete Chat Confirmation */}
-      <AlertDialog open={!!chatToDelete} onOpenChange={(open) => !open && setChatToDelete(null)}>
+      <AlertDialog
+        open={!!chatToDelete}
+        onOpenChange={(open) => !open && setChatToDelete(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Chat</AlertDialogTitle>
             <AlertDialogDescription>
-              This will remove you from this conversation and delete your messages. This action cannot be undone.
+              This will remove you from this conversation and delete your
+              messages. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -304,7 +341,8 @@ export default function Messages() {
             <AlertDialogAction
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               onClick={() => {
-                if (chatToDelete) deleteConversationMutation.mutate(chatToDelete);
+                if (chatToDelete)
+                  deleteConversationMutation.mutate(chatToDelete);
                 setChatToDelete(null);
               }}
             >
